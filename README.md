@@ -1,4 +1,4 @@
-ms-msmseeder
+ms-ensembler
 ============
 
-Manuscript for MSMSeeder v1
+Manuscript for Ensembler v1
