@@ -1,0 +1,10 @@
+init:
+  datestamp: 2015-01-29 01:40:03 UTC
+  ensembler_commit: 20625d7ee3217e53670da163e766ac8434493369
+  ensembler_version: '0.2'
+  init_path: /Users/partond/tmp/kinome-ensembler/gridfigure
+  iteration: 0
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.9.2 (x86_64)| (default, Dec 15 2014, 10:37:34) \n[GCC 4.2.1
+    (Apple Inc. build 5577)]"
+  python_version: 2.7.9

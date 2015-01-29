@@ -1,0 +1,176 @@
+init:
+  datestamp: 2014-12-24 22:55:48 UTC
+  ensembler_commit: 367038846eb07b4fd3ed46202ca1f7349e07b59b
+  ensembler_version: '0.2'
+  init_path: /cbio/jclab/projects/parton/kinome-ensembler
+  iteration: 0
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+gather_targets:
+  datestamp: 2014-12-24 22:56:50 UTC
+  ensembler_commit: 367038846eb07b4fd3ed46202ca1f7349e07b59b
+  ensembler_version: '0.2'
+  gather_from_uniprot:
+    uniprot_domain_regex: ^Protein kinase(?!; truncated)(?!; inactive)
+    uniprot_query_string: domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes
+  iteration: 0
+  method: UniProt
+  ntargets: '504'
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+gather_templates:
+  datestamp: 2015-01-09 02:29:09 UTC
+  ensembler_commit: b63a0971fed05bde41746657671ab6c81cf992a1
+  ensembler_version: '0.2'
+  gather_from_uniprot:
+    uniprot_domain_regex: ^Protein kinase(?!; truncated)(?!; inactive)
+    uniprot_query_string: domain:"Protein kinase" AND reviewed:yes
+  iteration: 2
+  method: UniProt
+  ntemplates: '4433'
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+  structure_dirs:
+  - /cbio/jclab/projects/parton/kinome-MSMSeeder-2014-12-16/structures/pdb
+  - /cbio/jclab/projects/parton/kinome-MSMSeeder-2014-12-16/structures/sifts
+build_models:
+  biopython_version: '1.63'
+  datestamp: 2015-01-16 16:09:41 UTC
+  ensembler_commit: b81489a20f06ae51efc2ab86776d9db16ceab60d
+  ensembler_version: '0.2'
+  iteration: 2
+  modeller_version: '9.11'
+  nsuccessful_models: 4250
+  process_only_these_targets:
+  - EGFR_HUMAN_D0
+  - ERBB2_HUMAN_D0
+  - ERBB4_HUMAN_D0
+  - ABL1_HUMAN_D0
+  - ABL2_HUMAN_D0
+  - ACK1_HUMAN_D0
+  - ALK_HUMAN_D0
+  - BLK_HUMAN_D0
+  - BMX_HUMAN_D0
+  - BTK_HUMAN_D0
+  - CSF1R_HUMAN_D0
+  - CSK_HUMAN_D0
+  - DDR1_HUMAN_D0
+  - DDR2_HUMAN_D0
+  - EPHA1_HUMAN_D0
+  - EPHA2_HUMAN_D0
+  - EPHA3_HUMAN_D0
+  - EPHA4_HUMAN_D0
+  - EPHA5_HUMAN_D0
+  - EPHA6_HUMAN_D0
+  - EPHA7_HUMAN_D0
+  - EPHA8_HUMAN_D0
+  - EPHAA_HUMAN_D0
+  - EPHB1_HUMAN_D0
+  - EPHB2_HUMAN_D0
+  - EPHB3_HUMAN_D0
+  - EPHB4_HUMAN_D0
+  - EPHB6_HUMAN_D0
+  - ERBB3_HUMAN_D0
+  - FAK1_HUMAN_D0
+  - FAK2_HUMAN_D0
+  - FER_HUMAN_D0
+  - FES_HUMAN_D0
+  - FGFR1_HUMAN_D0
+  - FGFR2_HUMAN_D0
+  - FGFR3_HUMAN_D0
+  - FGFR4_HUMAN_D0
+  - FGR_HUMAN_D0
+  - FLT3_HUMAN_D0
+  - FRK_HUMAN_D0
+  - FYN_HUMAN_D0
+  - HCK_HUMAN_D0
+  - IGF1R_HUMAN_D0
+  - INSRR_HUMAN_D0
+  - INSR_HUMAN_D0
+  - ITK_HUMAN_D0
+  - JAK1_HUMAN_D0
+  - JAK2_HUMAN_D0
+  - JAK3_HUMAN_D0
+  - KIT_HUMAN_D0
+  - KSYK_HUMAN_D0
+  - LCK_HUMAN_D0
+  - LMTK1_HUMAN_D0
+  - LMTK2_HUMAN_D0
+  - LMTK3_HUMAN_D0
+  - LTK_HUMAN_D0
+  - LYN_HUMAN_D0
+  - MATK_HUMAN_D0
+  - MERTK_HUMAN_D0
+  - MET_HUMAN_D0
+  - MUSK_HUMAN_D0
+  - NTRK1_HUMAN_D0
+  - NTRK2_HUMAN_D0
+  - NTRK3_HUMAN_D0
+  - PGFRA_HUMAN_D0
+  - PGFRB_HUMAN_D0
+  - PTK6_HUMAN_D0
+  - RET_HUMAN_D0
+  - RON_HUMAN_D0
+  - ROR1_HUMAN_D0
+  - ROR2_HUMAN_D0
+  - ROS1_HUMAN_D0
+  - RYK_HUMAN_D0
+  - SRC_HUMAN_D0
+  - SRMS_HUMAN_D0
+  - STYK1_HUMAN_D0
+  - TEC_HUMAN_D0
+  - TIE1_HUMAN_D0
+  - TIE2_HUMAN_D0
+  - TNK1_HUMAN_D0
+  - TXK_HUMAN_D0
+  - TYK2_HUMAN_D0
+  - TYK2_HUMAN_D1
+  - TYRO3_HUMAN_D0
+  - UFO_HUMAN_D0
+  - VGFR1_HUMAN_D0
+  - VGFR2_HUMAN_D0
+  - VGFR3_HUMAN_D0
+  - YES_HUMAN_D0
+  - ZAP70_HUMAN_D0
+  process_only_these_templates: false
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+  target_id: ABL1_HUMAN_D0
+  timing: 0:0:4
+cluster_models:
+  biopython_version: '1.63'
+  datestamp: 2015-01-18 21:30:36 UTC
+  ensembler_commit: b81489a20f06ae51efc2ab86776d9db16ceab60d
+  ensembler_version: '0.2'
+  iteration: 0
+  mdtraj_commit: Unknown
+  mdtraj_version: 1.0.0
+  nunique_models: 4247
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+  target_id: ABL1_HUMAN_D0
+refine_implicit_md:
+  biopython_version: '1.63'
+  datestamp: 2015-01-19 20:25:24 UTC
+  ensembler_commit: b81489a20f06ae51efc2ab86776d9db16ceab60d
+  ensembler_version: '0.2'
+  iteration: 0
+  nsuccessful_refinements: 4241
+  openmm_commit: 751ff079581206154d2c371c7ff1df24183d1915
+  openmm_version: 6.1.0
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+  target_id: ABL1_HUMAN_D0
+  timing: '22:43:57'

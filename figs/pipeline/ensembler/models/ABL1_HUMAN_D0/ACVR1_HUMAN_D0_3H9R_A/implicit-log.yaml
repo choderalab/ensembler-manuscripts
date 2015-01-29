@@ -1,0 +1,2 @@
+{datestamp: '2015-01-18 22:14:56 UTC', finished: true, gpuid: 0, hostname: gpu-1-15.local,
+  mpi_rank: 4, openmm_platform: CUDA, sim_length: 100.0 ps, successful: true, timing: '0:2:30'}

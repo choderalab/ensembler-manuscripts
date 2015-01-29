@@ -1,0 +1,9 @@
+datestamp: 2015-01-29 22:26:57 UTC
+finished: true
+gpuid: 0
+hostname: LSKI1505
+mpi_rank: 0
+openmm_platform: CPU
+sim_length: 1.0 ps
+successful: true
+timing: 0:2:13

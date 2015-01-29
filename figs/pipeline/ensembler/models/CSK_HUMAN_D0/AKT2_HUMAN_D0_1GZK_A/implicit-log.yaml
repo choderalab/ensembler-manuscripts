@@ -1,0 +1,9 @@
+datestamp: 2015-01-26 00:39:39 UTC
+finished: true
+gpuid: 0
+hostname: gpu-2-15.local
+mpi_rank: 51
+openmm_platform: CUDA
+sim_length: 100.0 ps
+successful: true
+timing: 0:1:29

@@ -1,0 +1,42 @@
+init:
+  datestamp: 2014-12-24 22:55:48 UTC
+  ensembler_commit: 367038846eb07b4fd3ed46202ca1f7349e07b59b
+  ensembler_version: '0.2'
+  init_path: /cbio/jclab/projects/parton/kinome-ensembler
+  iteration: 0
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+gather_targets:
+  datestamp: 2014-12-24 22:56:50 UTC
+  ensembler_commit: 367038846eb07b4fd3ed46202ca1f7349e07b59b
+  ensembler_version: '0.2'
+  gather_from_uniprot:
+    uniprot_domain_regex: ^Protein kinase(?!; truncated)(?!; inactive)
+    uniprot_query_string: domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes
+  iteration: 0
+  method: UniProt
+  ntargets: '504'
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+gather_templates:
+  datestamp: 2014-12-24 23:16:14 UTC
+  ensembler_commit: 367038846eb07b4fd3ed46202ca1f7349e07b59b
+  ensembler_version: '0.2'
+  gather_from_uniprot:
+    uniprot_domain_regex: ^Protein kinase(?!; truncated)(?!; inactive)
+    uniprot_query_string: domain:"Protein kinase" AND reviewed:yes
+  iteration: 0
+  loopmodel: false
+  method: UniProt
+  ntemplates: '4367'
+  python_full_version: !!python/object/new:ensembler.core.literal_str
+  - "2.7.9 |Anaconda 1.7.0 (64-bit)| (default, Dec 15 2014, 10:33:51) \n[GCC 4.4.7
+    20120313 (Red Hat 4.4.7-1)]"
+  python_version: 2.7.9
+  structure_dirs:
+  - /cbio/jclab/projects/parton/kinome-MSMSeeder-2014-12-16/structures/pdb
+  - /cbio/jclab/projects/parton/kinome-MSMSeeder-2014-12-16/structures/sifts
