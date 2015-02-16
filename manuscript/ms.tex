@@ -102,14 +102,12 @@ The latest release can be installed via the {\tt conda} package manager, and the
 % Python
 % Can be used via command-line tool Ensembler, or via the Python API
 
-Ensembler is written in Python, and can be used via a command-line tool ({\tt
-ensembler}), or via the flexible Python API.
+Ensembler is written in Python, and can be used via a command-line tool ({\tt ensembler}), or via the flexible Python API.
 
 % Pipeline architecture, with a series of stages which must be performed in order.
 
-The Ensembler modeling pipeline entails a series of stages which are performed
-in a defined order. A visual overview of the pipeline is shown in Fig.
-\ref{figpipeline}, and a detailed description follows.
+The Ensembler modeling pipeline entails a series of stages which are performed in a defined order. 
+A visual overview of the pipeline is shown in Fig.~\ref{figpipeline}, and a detailed description follows.
 
 \begin{figure*}[h]
   \centering
@@ -120,28 +118,16 @@ in a defined order. A visual overview of the pipeline is shown in Fig.
 
 \subsubsection{Target selection}
 
-The output from this stage is simply a FASTA-formatted sequence file containing
-the selected target sequences and identifiers. The {\tt ensembler} command-line
-tool provides methods for selecting targets from either UniProt (a freely
-accessible resource for protein sequence and functional
-data---\href{http://www.uniprot.org/}{uniprot.org}) or TargetExplorer (a
-database framework for aggregating various types of biological data; work to be
-published). This allows the user to easily select a single protein, many
-proteins, or an entire superfamily. Alternatively, the targets file can be
-generated using any other software, and stored at the appropriate filepath.
+The output from this stage is simply a FASTA-formatted sequence file containing the selected target sequences and identifiers. 
+The {\tt ensembler} command-line tool provides methods for selecting targets from either UniProt (a freely accessible resource for protein sequence and functional data---\href{http://www.uniprot.org/}{uniprot.org}) or TargetExplorer (a database framework for aggregating various types of biological data; work to be published). 
+This allows the user to easily select a single protein, many proteins, or an entire superfamily. Alternatively, the targets file can be generated using any other software, and stored at the appropriate filepath.
 
-The method for selecting targets from UniProt is described here. A query string
-is required as input, using the same syntax as the search function on the
-UniProt website. For example, {\tt'domain:"Protein kinase" AND taxonomy:9606
-AND reviewed:yes'} would select all human protein kinases which have been
-reviewed by a human curator. Ensembler is designed to work with protein
-\emph{domains}, rather than full-length proteins, and the desired protein
-domain(s) can be selected using a regular expression. For example, the string
-{\tt'\^{}Protein kinase(?!; truncated)(?!; inactive)'} would match domains
-annotated as "Protein kinase", "Protein kinase; 1" or "Protein kinase; 2", but
-would exclude the domains "Protein kinase; truncated" and "Protein kinase;
-inactive". The program then extracts sequences and identifiers from the UniProt
-data, and saves these to a FASTA-format text file.
+The method for selecting targets from UniProt is described here. 
+A query string is required as input, using the same syntax as the search function on the UniProt website. 
+For example, {\tt'domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator. 
+Ensembler is designed to work with protein \emph{domains}, rather than full-length proteins, and the desired protein domain(s) can be selected using a regular expression. 
+For example, the string {\tt'\^{}Protein kinase(?!; truncated)(?!; inactive)'} would match domains annotated as "Protein kinase", "Protein kinase; 1" or "Protein kinase; 2", but would exclude the domains "Protein kinase; truncated" and "Protein kinase; inactive". 
+The program then extracts sequences and identifiers from the UniProt data, and saves these to a FASTA-format text file.
 
 % The selected targets are
 % given identifiers of the form {\tt [UniProt mnemonic]\_D[domain index]}, which
