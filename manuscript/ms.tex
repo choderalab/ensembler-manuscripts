@@ -94,6 +94,28 @@ The latest release can be installed via the {\tt conda} package manager, and the
 \section{Introduction}
 \label{section:introduction}
 
+Proteins play a diverse variety of roles in biology, and the understanding of their function---and how mutations can cause dysfunction and disease---is the preoccupation of much of modern biology. 
+The diminishing cost of nucleic acid sequencing technologies has produced an enormous wealth of sequence data, yielding a large collection of protein-coding open reading frames that provide basic information about these proteins (at the level of primary amino acid sequences) for numerous organisms [CITE]. 
+Complementing this, large-scale structural biology efforts such as the Protein Structure Initiative (PSI) and Structural Genomics Consortium (SGC) have yielded a great number of protein structures, allowing comparative modeling to provide insight into the static structures many of these proteins adopt [CITE review of structural biology efforts or current comparative modeling?].
+
+Static structures, however, provide only a snapshot of the rich dynamical behavior of proteins.
+Many functional properties---such as the ability to bind small molecules or interact with signaling partners---require conformational changes.
+
+Molecular dynamics simulations have proven to be a useful tool for revealing the dynamics of individual proteins, with a number of software packages and forcefields available for biomolecular simulation.
+Advances in computing architectures---especially the availability of GPUs, which provide a hundredfold increase in computational power per unit cost for a variety of applications---and the proliferation of scalable computing technologies (such as those that drive the Folding@home distributed computing resource [CITE]) now provide new hardware platforms on which to study the dynamics of these proteins.
+In parallel, techniques for aggregating molecular dynamics simulation data to survey the kinetic landscape of biomolecules, such as Markov state modeling approaches [CITE MSM reviews], are now reaching maturity.
+
+Despite this, a critical gap remains in the ability to bridge genome-scale sequence information and molecular simulations to enable the study of entire families or superfamilies of proteins in a single organism or across organisms. 
+Molecular simulations must largely be set up by hand, with little in the way of automation available to provide practitioners a way of studying many members of a family where only a subset may have structural data.
+Complicating matters further, in families of proteins known to be conformationally labile or able to adopt a diversity of structures---such as kinases---existing structural data may only exist for one or two conformations for any individual member of the superfamily for which there is structural data, leading to difficulties in trying to construct consistent kinetic models for comparison among different members of the same superfamily.
+
+Here, we present the first steps toward a resolution of this problem: A fully automated open source framework for building simulation-ready protein models scalable to the superfamily scale.
+
+\ldots
+
+We demonstrate the utility of this tool by constructing models for the entire set of human tyrosine kinase catalytic domains, and demonstrate that the resulting models provide good coverage of the known functional regions of structure space.
+This tool forms the foundation for a new era of superfamily-scale molecular simulations for the Folding@home project.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DESIGN AND IMPLEMENTATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
