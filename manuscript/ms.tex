@@ -97,7 +97,7 @@ The latest release can be installed via the {\tt conda} package manager, and the
 Proteins play a diverse variety of roles in biology, and the understanding of their function---and how mutations can cause dysfunction and disease---is the preoccupation of much of modern biology. 
 The diminishing cost of nucleic acid sequencing technologies has produced an enormous wealth of sequence data, yielding a large collection of protein-coding open reading frames that provide basic information about these proteins (at the level of primary amino acid sequences) for numerous organisms [CITE]. 
 Complementing this, large-scale structural biology efforts such as the Protein Structure Initiative (PSI) and Structural Genomics Consortium (SGC) have yielded a great number of protein structures, allowing comparative modeling to provide insight into the static structures many of these proteins adopt [CITE review of structural biology efforts or current comparative modeling?].
-% TODO Do we need to mention comparative modeling here? If not, this could be changed to:
+% TODO Maybe it is not necessary to mention comparative modeling here? If so, this could be changed to:
 % Complementing this, large-scale structural biology efforts such as the Protein Structure Initiative (PSI) and Structural Genomics Consortium (SGC) have provided insight into the static structures which these proteins can adopt [CITE review of structural biology efforts?].
 
 Static structures, however, provide only a snapshot of the rich dynamical behavior of proteins.
@@ -109,12 +109,11 @@ In parallel, techniques for aggregating molecular dynamics simulation data to su
 
 Despite this, a critical gap remains in the ability to bridge genome-scale sequence information and molecular simulations to enable the study of entire families or superfamilies of proteins in a single organism or across organisms. 
 Molecular simulations must largely be set up by hand, with little in the way of automation available to provide practitioners a way of studying many members of a family where only a subset may have structural data.
-Complicating matters further, in families of proteins known to be conformationally labile or able to adopt a diversity of structures---such as kinases---existing structural data may only exist for one or two conformations for any individual member of the superfamily for which there is structural data, leading to difficulties in trying to construct consistent kinetic models for comparison among different members of the same superfamily.
 
-Here, we present the first steps toward a resolution of this problem: A fully automated open source framework for building simulation-ready protein models scalable to the superfamily scale.
+Complicating matters further, in protein families known to be able to adopt multiple conformations---such as kinases---structural data may only exist for one or two conformations for any individual member of the family for which there is structural data.
+This poses a challenge for biomolecular simulation methods such as Markov state models, which can provide detailed insight, but require global coverage of the conformational landscape to realize their full potential.
 
-\ldots
-
+Here, we present the first steps toward a resolution of this problem: a fully automated open source framework for building simulation-ready protein models scalable to the superfamily scale.
 We demonstrate the utility of this tool by constructing models for the entire set of human tyrosine kinase catalytic domains, and demonstrate that the resulting models provide good coverage of the known functional regions of structure space.
 This tool forms the foundation for a new era of superfamily-scale molecular simulations for the Folding@home project.
 
