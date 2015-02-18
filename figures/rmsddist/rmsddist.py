@@ -55,3 +55,14 @@ plt.xlim(0,40)
 plt.xlabel('RMSD ($\AA$)')
 sns.despine(left=True)
 plt.savefig('rmsddist.png')
+
+plt.close()
+
+# Plot sequence identity distribution
+
+sns.set(style="white")
+sns.kdeplot(df_has_model.seqid)
+sns.despine(left=True)
+plt.setp(plt.gca(), yticks=[])
+plt.xlim(0,102)
+plt.savefig('seqid_dist.png')
