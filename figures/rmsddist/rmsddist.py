@@ -55,27 +55,3 @@ plt.xlim(0,40)
 plt.xlabel('RMSD ($\AA$)')
 sns.despine(left=True)
 plt.savefig('rmsddist.png')
-
-plt.close()
-
-# Plot sequence identity distribution
-
-fig, ax1 = plt.subplots()
-
-palette = sns.color_palette('deep', 2)
-
-sns.set(style="white")
-sns.kdeplot(df_has_model.seqid, bw=1., ax=ax1, color=palette[0])
-ax1.set_ylabel('probability density', color=palette[0])
-ax1.legend_.remove()
-ax1.set_xlabel('sequence identity (%)')
-ax2 = ax1.twinx().twiny()
-sns.kdeplot(100.-df_has_model.seqid, bw=1., cumulative=True, ax=ax2, color=palette[1])
-ax2.legend_.remove()
-# sns.despine(left=True)
-# plt.setp(plt.gca(), yticks=[])
-ax1.set_xlim(100,0)
-ax2.set_xlim(0,100)
-ax2.set_ylabel('CDF', color=palette[1])
-plt.setp(ax2, xticks=[])
-plt.savefig('seqid_dist.png')
