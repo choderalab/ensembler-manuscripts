@@ -60,9 +60,19 @@ plt.close()
 
 # Plot sequence identity distribution
 
+fig, ax1 = plt.subplots()
+
+palette = sns.color_palette('deep', 2)
+
 sns.set(style="white")
-sns.kdeplot(df_has_model.seqid)
-sns.despine(left=True)
-plt.setp(plt.gca(), yticks=[])
-plt.xlim(0,102)
+sns.kdeplot(df_has_model.seqid, bw=1., ax=ax1, color=palette[0])
+ax1.set_ylabel('probability density', color=palette[0])
+ax1.legend_.remove()
+ax2 = ax1.twinx()
+sns.kdeplot(df_has_model.seqid, bw=1., cumulative=True, ax=ax2, color=palette[1])
+ax2.set_ylabel('cumulative probability density', color=palette[1])
+ax2.legend_.remove()
+# sns.despine(left=True)
+# plt.setp(plt.gca(), yticks=[])
+plt.xlim(0,100)
 plt.savefig('seqid_dist.png')
