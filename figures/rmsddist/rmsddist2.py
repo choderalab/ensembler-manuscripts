@@ -38,7 +38,7 @@ for i, seqid_range in enumerate(seqid_ranges):
     label = '%.0f-%.0f ($n=$%d)' % (seqid_range[0], seqid_range[1], len(df_seqid_bin))
 
     # sns.distplot(df_seqid_bin.rmsd, label=labels[i], hist=False)
-    sns.kdeplot(df_seqid_bin.rmsd*10, label=label, color=palette[i], bw=2.5)
+    sns.kdeplot(df_seqid_bin.rmsd*10, label=label, color=palette[i], bw=2.5, shade=True)
 
     # if i == 4:
     #     sns.rugplot(df_seqid_bin.rmsd*10, color=palette[i])
