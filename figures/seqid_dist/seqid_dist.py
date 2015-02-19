@@ -28,10 +28,11 @@ fig, ax1 = plt.subplots()
 palette = sns.color_palette('deep', 2)
 
 sns.kdeplot(df_has_model.seqid, bw=1., ax=ax1, color='black', shade=True)
-ax1.set_ylabel('probability density')
+# ax1.set_ylabel('probability density')
 ax1.legend_.remove()
 ax1.set_xlabel('sequence identity (%)')
 ax1.set_xlim(100,0)
+plt.setp(ax1, yticks=[])
 
 ax2 = ax1.twinx().twiny()
 sns.kdeplot(100.-df_has_model.seqid[::100], bw=1., cumulative=True, ax=ax2, color='black', linestyle='--')
@@ -41,8 +42,7 @@ ax2.legend_.remove()
 ax2.set_xlim(0,100)
 plt.setp(ax2, xticks=[])
 
-# ax3 = plt.axes([0,0,1,1], axisbg=(1,1,1,0))
-x1  = [-8.2, -8.2]
+x1  = [-3.0, -3.0]
 y1  = [0.68, 0.78]
 line1 = lines.Line2D(x1, y1, color='k')
 line1.set_clip_on(False)
@@ -52,6 +52,7 @@ line2 = lines.Line2D(x2, y2, color='k', linestyle='--')
 line2.set_clip_on(False)
 ax2.add_line(line1)
 ax2.add_line(line2)
+ax2.text(-3., 0.5, 'probability density', rotation='vertical', ha='center', va='center')
 ax2.text(107.5, 0.5, 'CDF', rotation='vertical', ha='center', va='center')
 
 # plt.tight_layout()
