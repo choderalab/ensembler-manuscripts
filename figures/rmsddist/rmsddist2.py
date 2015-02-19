@@ -1,5 +1,6 @@
 import os
 import ensembler
+from copy import deepcopy
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -28,7 +29,7 @@ seqid_ranges = [
     [55., 100.],
 ]
 
-seqid_ranges_labels = seqid_ranges
+seqid_ranges_labels = deepcopy(seqid_ranges)
 
 seqid_ranges[-1][-1] = 101.
 
