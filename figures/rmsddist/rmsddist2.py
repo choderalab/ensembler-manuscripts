@@ -19,11 +19,18 @@ for target in targets[1:]:
 
 df_has_model = combined_dfs[combined_dfs.has_model]
 
-seqid_mins = np.arange(0., 100., 100./3.)
-seqid_maxs = np.arange(100./3., 101., 100./3.)
-seqid_ranges = zip(seqid_mins, seqid_maxs)
+# seqid_mins = np.arange(0., 100., 100./3.)
+# seqid_maxs = np.arange(100./3., 101., 100./3.)
+# seqid_ranges = zip(seqid_mins, seqid_maxs)
+seqid_ranges = [
+    [0., 35.],
+    [35., 55.],
+    [55., 100.],
+]
 
-seqid_maxs[-1] = 101.
+seqid_ranges_labels = seqid_ranges
+
+seqid_ranges[-1][-1] = 101.
 
 sns.set(style="white")
 
@@ -35,7 +42,7 @@ palette = sns.color_palette('GnBu_d', n_colors=3)[::-1]
 for i, seqid_range in enumerate(seqid_ranges):
     df_seqid_bin = df_has_model[df_has_model.seqid >= seqid_range[0]][df_has_model.seqid < seqid_range[1]]
     print seqid_range, len(df_seqid_bin)
-    label = '%.0f-%.0f ($n=$%d)' % (seqid_range[0], seqid_range[1], len(df_seqid_bin))
+    label = '%.0f-%.0f ($n=$%d)' % (seqid_ranges_labels[i][0], seqid_ranges_labels[i][1], len(df_seqid_bin))
 
     # sns.distplot(df_seqid_bin.rmsd, label=labels[i], hist=False)
     sns.kdeplot(df_seqid_bin.rmsd*10, label=label, color=palette[i], bw=2.5, shade=True)
