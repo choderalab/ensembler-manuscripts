@@ -1,0 +1,51 @@
+# Loopmodel (all runs, including those for templates with no missing residues and unsuccessful runs)
+(in seconds)
+count     4434.000000
+mean     10796.390392
+std      14672.056696
+min          0.000000
+25%        197.250000
+50%       3812.000000
+75%      16824.250000
+max      85363.000000
+
+# Loopmodel (successful==True, no_missing_residues==False)
+count     3134.000000
+mean     13407.207084
+std      14643.194124
+min        103.000000
+25%       2670.750000
+50%       7231.500000
+75%      21250.750000
+max      83151.000000
+
+# Loopmodel (no_missing_residues==True)
+0
+
+# Loopmodel (successful==False)
+count      533.000000
+mean     10981.253283
+std      17965.982257
+min          2.000000
+25%         28.000000
+50%        137.000000
+75%      17371.000000
+max      85363.000000
+
+# BuildModels (SRC)
+count 4248
+mean 00:01:18.637647
+std 00:00:12.708
+min 00:00:41
+50% 00:01:18
+max 00:02:05
+
+# ImplicitRefinement (SRC)
+count 4093
+mean 00:01:57.757635
+std 00:00:12.708
+min 00:00:08
+50% 00:02:09
+max 00:02:19
+
+(seems to be about 00:01:30 for GTX Titans, and 00:02:10 for GTX 680s)
