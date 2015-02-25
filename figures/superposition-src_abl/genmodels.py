@@ -30,8 +30,7 @@ nmodels = len(model_indices)
 seqids = [df.seqid.values[m] for m in model_indices]
 
 print 'Number of models selected:', nmodels
-print model_indices
-print seqids
+print '\n'.join(['{:6d} {:6.1f}'.format(x[0], x[1]) for x in zip(model_indices, seqids)])
 
 for m,f in enumerate(model_indices):
     frame = traj[f]
