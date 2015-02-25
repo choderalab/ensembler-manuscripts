@@ -41,9 +41,9 @@ for m,f in enumerate(model_indices):
 transparency_floats = [(1. - seqid*0.01) for seqid in seqids]
 transparency_text = '\n'.join(['set cartoon_transparency, {0}, {1}'.format(transparency_floats[m], m) for m in range(nmodels)])
 
-palette = sns.color_palette('deep', nmodels)
-set_color_text = '\n'.join(['set_color {0}= [{1}, {2}, {3}]'.format(m, palette[m][0], palette[m][1], palette[m][2]) for m in range(nmodels)])
-color_text = '\n'.join(['color {0}, {0}'.format(m) for m in range(nmodels)])
+palette = sns.color_palette('GnBu_d', nmodels)
+set_color_text = '\n'.join(['set_color color{0}, [{1}, {2}, {3}]'.format(m, palette[m][0], palette[m][1], palette[m][2]) for m in range(nmodels)])
+color_text = '\n'.join(['color color{0}, {0}'.format(m) for m in range(nmodels)])
 
 renderscripttext = """\
 bg white
@@ -64,7 +64,7 @@ show cartoon
 
 {2}
 
-color black
+# color black
 
 zoom all
 
