@@ -1,3 +1,5 @@
+# Pick models across a wide range of sequence identities
+
 import os
 import shutil
 import tempfile
@@ -41,7 +43,7 @@ for m,f in enumerate(model_indices):
 transparency_floats = [(1. - seqid*0.01) for seqid in seqids]
 transparency_text = '\n'.join(['set cartoon_transparency, {0}, {1}'.format(transparency_floats[m], m) for m in range(nmodels)])
 
-palette = sns.color_palette('RdBu', nmodels)[::-1]
+palette = sns.color_palette('Bluered', nmodels)[::-1]
 set_color_text = '\n'.join(['set_color color{0}, [{1}, {2}, {3}]'.format(m, palette[m][0], palette[m][1], palette[m][2]) for m in range(nmodels)])
 color_text = '\n'.join(['color color{0}, {0}'.format(m) for m in range(nmodels)])
 

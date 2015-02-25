@@ -1,3 +1,5 @@
+# Randomly pick models from each of three sequence identity classes
+
 import os
 import shutil
 import tempfile
@@ -9,11 +11,11 @@ import seaborn as sns
 
 srcdir = '../../data/models/SRC_HUMAN_D0'
 
+nmodels_per_class = 3
+
 df = pd.read_csv(os.path.join(srcdir, 'modelstraj-data.csv'))
 
 traj = mdtraj.load(os.path.join(srcdir, 'modelstraj.xtc'), top=os.path.join(srcdir, 'modelstraj-topol.pdb'))
-
-nmodels = 20
 
 modelsdir = 'models'
 if os.path.exists(modelsdir):
@@ -22,19 +24,17 @@ if os.path.exists(modelsdir):
 else:
     os.mkdir(modelsdir)
 
-# model_indices = np.arange(nmodels) * (len(traj) / nmodels)
-
-seqid_classes = [[0., 35.], [35., 55.], [55., 101.]]
-nmodels_per_class = 3
+seqid_classes = [[0., 35.], [35., 55.], [55., 101.]][::-1]
 model_indices = []
 seqids = []
 for seqid_class in seqid_classes:
-    df_class = df[df.seqid >= seqid[0]][df.seqid < seqid[1]]
+    df_class = df[df.seqid >= seqid_class[0]][df.seqid < seqid_class[1]]
     selected_model_indices = random.sample(df_class.index, nmodels_per_class)
-    selected_models = df_class[selected_model_indices].sort()
+    selected_models = df_class.loc[selected_model_indices].sort()
     model_indices += list(selected_models.index)
-    seqids += selected_models.seqid.values
+    seqids += list(selected_models.seqid.values)
 
+nmodels = len(model_indices)
 
 print 'Number of models selected:', nmodels
 print '\n'.join(['{:6d} {:6.1f}'.format(x[0], x[1]) for x in zip(model_indices, seqids)])
