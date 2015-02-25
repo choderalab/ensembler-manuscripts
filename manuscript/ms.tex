@@ -135,7 +135,7 @@ A visual overview of the pipeline is shown in Fig.~\ref{figpipeline}, and a deta
 
 \begin{figure*}[h]
   \centering
-    \includegraphics[width=0.6\textwidth]{pipeline2}
+    \includegraphics[width=1.0\textwidth]{pipeline2}
   \caption{Ensembler pipeline}
   \label{figpipeline}
 \end{figure*}
@@ -228,34 +228,34 @@ Each pipeline function also outputs a metadata file, which helps to link data to
 \section{Results}
 \label{section:results}
 
-\begin{table}
-\begin{tabular}{l|c|c|c}
-
-    & SRC & ABL & All 90 TKs \\
-    \hline
-    Templates & \num{4433} & \num{4433} & \num{398970} \\
-    Models & \num{4248} & \num{4250} & \num{382568} \\
-    Unique models & \num{4093} & \num{4247} & \num{378839} \\
-    Refined models & \num{4023} & \num{4241} & \num{373513} \\
-
-\end{tabular}
-\label{tab:model_counts}
-\caption{Model counts for the kinase domains of human SRC and ABL, and for all of the 90 human TK targets, at various stages of the Ensembler pipeline.}
-\end{table}
-
-\begin{table}
-\begin{tabular}{l|c}
-
-    & Timing ($h$:$m$:$s$) \\
-    \hline
-    Template reconstruction & 03:00:00 \\
-    Modeling & 00:01:19 \\
-    Refinement (100 ps implicit solvent MD) & 00:01:58 \\
-
-\end{tabular}
-\label{tab:timings}
-\caption{Average timings per template/model for the compute-intensive stages of the Ensembler pipeline.}
-\end{table}
+% \begin{table}
+% \begin{tabular}{l|c|c|c}
+%
+%     & SRC & ABL & All 90 TKs \\
+%     \hline
+%     Templates & \num{4433} & \num{4433} & \num{398970} \\
+%     Models & \num{4248} & \num{4250} & \num{382568} \\
+%     Unique models & \num{4093} & \num{4247} & \num{378839} \\
+%     Refined models & \num{4023} & \num{4241} & \num{373513} \\
+%
+% \end{tabular}
+% \label{tab:model_counts}
+% \caption{Model counts for the kinase domains of human SRC and ABL, and for all of the 90 human TK targets, at various stages of the Ensembler pipeline.}
+% \end{table}
+%
+% \begin{table}
+% \begin{tabular}{l|c}
+%
+%     & Timing ($h$:$m$:$s$) \\
+%     \hline
+%     Template reconstruction & 03:00:00 \\
+%     Modeling & 00:01:19 \\
+%     Refinement (100 ps implicit solvent MD) & 00:01:58 \\
+%
+% \end{tabular}
+% \label{tab:timings}
+% \caption{Average timings per template/model for the compute-intensive stages of the Ensembler pipeline.}
+% \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DISCUSSION
