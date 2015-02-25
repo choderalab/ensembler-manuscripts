@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+import random
 import numpy as np
 import pandas as pd
 import mdtraj
@@ -23,11 +24,17 @@ else:
 
 # model_indices = np.arange(nmodels) * (len(traj) / nmodels)
 
-desired_seqid_values = 100. - np.arange(0., 100., 100./nmodels)
-model_indices = [np.abs(df.seqid.values-seqid_value).argmin() for seqid_value in desired_seqid_values]
-model_indices = sorted(list(set(model_indices)))
-nmodels = len(model_indices)
-seqids = [df.seqid.values[m] for m in model_indices]
+seqid_classes = [[0., 35.], [35., 55.], [55., 101.]]
+nmodels_per_class = 3
+model_indices = []
+seqids = []
+for seqid_class in seqid_classes:
+    df_class = df[df.seqid >= seqid[0]][df.seqid < seqid[1]]
+    selected_model_indices = random.sample(df_class.index, nmodels_per_class)
+    selected_models = df_class[selected_model_indices].sort()
+    model_indices += list(selected_models.index)
+    seqids += selected_models.seqid.values
+
 
 print 'Number of models selected:', nmodels
 print '\n'.join(['{:6d} {:6.1f}'.format(x[0], x[1]) for x in zip(model_indices, seqids)])
