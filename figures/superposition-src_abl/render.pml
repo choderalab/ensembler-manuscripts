@@ -11,24 +11,22 @@ hide
 show cartoon
 
 set cartoon_transparency, 0.0, 0
-set cartoon_transparency, 0.0, 1
-set cartoon_transparency, 0.008, 2
-set cartoon_transparency, 0.583, 3
-set cartoon_transparency, 0.587, 4
-set cartoon_transparency, 0.626, 5
-set cartoon_transparency, 0.74, 6
-set cartoon_transparency, 0.744, 7
-set cartoon_transparency, 0.756, 8
+set cartoon_transparency, 0.008, 1
+set cartoon_transparency, 0.323, 2
+set cartoon_transparency, 0.559, 3
+set cartoon_transparency, 0.583, 4
+set cartoon_transparency, 0.74, 5
+set cartoon_transparency, 0.764, 6
+set cartoon_transparency, 0.777, 7
 
-set_color color0, [0.127258753696, 0.395847756781, 0.668742810394]
-set_color color1, [0.262745112181, 0.57647061348, 0.764705896378]
-set_color color2, [0.566474458166, 0.768704358269, 0.868512118564]
-set_color color3, [0.819607853889, 0.898039221764, 0.941176474094]
-set_color color4, [0.96570549993, 0.967243369888, 0.968089198365]
-set_color color5, [0.992156863213, 0.858823537827, 0.780392169952]
-set_color color6, [0.954555942732, 0.641753192626, 0.505728594813]
-set_color color7, [0.839215695858, 0.376470595598, 0.301960796118]
-set_color color8, [0.692272220756, 0.0922722048035, 0.167704733709]
+set_color color0, [0.142483668, 0.417301045913, 0.683352575583]
+set_color color1, [0.323490981378, 0.614917362438, 0.785467140815]
+set_color color2, [0.654901981354, 0.814379096031, 0.89411765337]
+set_color color3, [0.883890818147, 0.928489046938, 0.953018072773]
+set_color color4, [0.982006921488, 0.906189932543, 0.861591703752]
+set_color color5, [0.96862745285, 0.717647075653, 0.600000023842]
+set_color color6, [0.862283745233, 0.429527115004, 0.342714355857]
+set_color color7, [0.711880063309, 0.121799310341, 0.181699351937]
 
 color color0, 0
 color color1, 1
@@ -38,7 +36,6 @@ color color4, 4
 color color5, 5
 color color6, 6
 color color7, 7
-color color8, 8
 
 # color black
 

@@ -1,4 +1,4 @@
-# Randomly pick models from each of three sequence identity classes
+# Performs RMSD-based clustering on all models and picks centroids
 
 import os
 import shutil
@@ -6,16 +6,44 @@ import tempfile
 import random
 import numpy as np
 import pandas as pd
-import mdtraj
+import mdtraj as md
+import msmbuilder.cluster
 import seaborn as sns
 
 srcdir = '../../data/models/SRC_HUMAN_D0'
 
-nmodels_per_class = 3
+nmodels = 8
 
 df = pd.read_csv(os.path.join(srcdir, 'modelstraj-data.csv'))
 
-traj = mdtraj.load(os.path.join(srcdir, 'modelstraj.xtc'), top=os.path.join(srcdir, 'modelstraj-topol.pdb'))
+traj = md.load(os.path.join(srcdir, 'modelstraj.xtc'), top=os.path.join(srcdir, 'modelstraj-topol.pdb'))
+
+atom_indices = traj.topology.select_atom_indices('alpha')
+traj_for_clustering = traj.atom_slice(atom_indices)
+
+X = [traj_for_clustering]
+
+clusterer = msmbuilder.cluster.KMedoids(n_clusters=nmodels, metric='rmsd')
+clusterer.fit(X)
+
+model_indices = clusterer.cluster_ids_
+model_indices.sort()
+seqids = df.loc[model_indices].seqid.values
+
+# seqid_classes = [[0., 35.], [35., 55.], [55., 101.]][::-1]
+# model_indices = []
+# seqids = []
+# for seqid_class in seqid_classes:
+#     df_class = df[df.seqid >= seqid_class[0]][df.seqid < seqid_class[1]]
+#     selected_model_indices = random.sample(df_class.index, nmodels_per_class)
+#     selected_models = df_class.loc[selected_model_indices].sort()
+#     model_indices += list(selected_models.index)
+#     seqids += list(selected_models.seqid.values)
+#
+# nmodels = len(model_indices)
+
+print 'Number of models selected:', nmodels
+print '\n'.join(['{:6d} {:6.1f}'.format(x[0], x[1]) for x in zip(model_indices, seqids)])
 
 modelsdir = 'models'
 if os.path.exists(modelsdir):
@@ -23,21 +51,6 @@ if os.path.exists(modelsdir):
     os.mkdir(modelsdir)
 else:
     os.mkdir(modelsdir)
-
-seqid_classes = [[0., 35.], [35., 55.], [55., 101.]][::-1]
-model_indices = []
-seqids = []
-for seqid_class in seqid_classes:
-    df_class = df[df.seqid >= seqid_class[0]][df.seqid < seqid_class[1]]
-    selected_model_indices = random.sample(df_class.index, nmodels_per_class)
-    selected_models = df_class.loc[selected_model_indices].sort()
-    model_indices += list(selected_models.index)
-    seqids += list(selected_models.seqid.values)
-
-nmodels = len(model_indices)
-
-print 'Number of models selected:', nmodels
-print '\n'.join(['{:6d} {:6.1f}'.format(x[0], x[1]) for x in zip(model_indices, seqids)])
 
 for m,f in enumerate(model_indices):
     frame = traj[f]
@@ -71,7 +84,7 @@ show cartoon
 
 {2}
 
-color black
+# color black
 
 zoom all
 
