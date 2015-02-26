@@ -10,16 +10,6 @@ set cartoon_fancy_helices, 1
 hide
 show cartoon
 
-# set cartoon_transparency, 0.008, 0
-# set cartoon_transparency, 0.319, 1
-# set cartoon_transparency, 0.323, 2
-# set cartoon_transparency, 0.587, 3
-# set cartoon_transparency, 0.626, 4
-# set cartoon_transparency, 0.634, 5
-# set cartoon_transparency, 0.654, 6
-# set cartoon_transparency, 0.728, 7
-# set cartoon_transparency, 0.791, 8
-
 set_color color0, [0.127258753696, 0.395847756781, 0.668742810394]
 set_color color1, [0.262745112181, 0.57647061348, 0.764705896378]
 set_color color2, [0.566474458166, 0.768704358269, 0.868512118564]
