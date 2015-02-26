@@ -71,7 +71,7 @@ show cartoon
 
 {2}
 
-color black
+# color black
 
 zoom all
 
