@@ -49,3 +49,11 @@ min 00:00:08
 max 00:02:19
 
 (seems to be about 00:01:30 for GTX Titans, and 00:02:10 for GTX 680s)
+
+# ExplicitRefinement 1 ps (SRC)
+count 4023
+mean 00:01:05.543127
+std 00:00:26.029
+min 00:00:29
+50% 00:00:54
+max 00:13:09

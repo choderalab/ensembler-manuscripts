@@ -1,0 +1,13 @@
+# from Vijay's talk, via John's notes: K271-E286 (1), F382-I293 (2)
+# F382 is from the DFG motif
+>ABL1_HUMAN
+ITMKHKLGGGQYGEVYEGVWKKYSLTVAVKTLKEDTMEVEEFLKEAAVMKEIKHPNLVQLLGVCTREPPFYIITEFMTYGNLLDYLRECNRQEVNAVVLLYMATQISSAMEYLEKKNFIHRDLAARNCLVGENHLVKVADFGLSRLMTGDTYTAHAGAKFPIKWTAPESLAYNKFSIKSDVWAFGVLLWEIATYGMSPYPGIDLSQVYELLEKDYRMERPEGCPEKVYELMRACWQWNPSDRPSFAEIHQAF----
+                             1              1      2                                                                                        2
+# Equivalent of pair 1: K298-E313
+# (Shukla, Pande paper - K295-E310)
+# Direct equivalent of pair 2: F408-L320
+# (Shukla, Pande paper by inference from pair 1: F405-L317)
+# Pair 3 (the second pair which is actually mentioned in the Shukla, Pande paper) - E310-R409. In UniProt numbering this is E313-R412)
+>SRC_HUMAN
+LRLEVKLGQGCFGEVWMGTWNGT-TRVAIKTLKPGTMSPEAFLQEAQVMKKLRHEKLVQLYAVVS-EEPIYIVTEYMSKGSLLDFLKGETGKYLRLPQLVDMAAQIASGMAYVERMNYVHRDLRAANILVGENLVCKVADFGLARLIEDNEYTARQGAKFPIKWTAPEAALYGRFTIKSDVWSFGILLTELTTKGRVPYPGMVNREVLDQVERGYRMPCPPECPESLHDLMCQCWRKEPEERPTFEYLQAFLEDYF
+                                            3                                                                                                   3
