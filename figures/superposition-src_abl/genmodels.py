@@ -10,9 +10,9 @@ import seaborn as sns
 
 srcdir = '../../data/models/SRC_HUMAN_D0'
 
-df = pd.read_csv(os.path.join(srcdir, 'modelstraj-data.csv'))
+df = pd.read_csv(os.path.join(srcdir, 'traj-refine_implicit_md-data.csv'))
 
-traj = mdtraj.load(os.path.join(srcdir, 'modelstraj.xtc'), top=os.path.join(srcdir, 'modelstraj-topol.pdb'))
+traj = mdtraj.load(os.path.join(srcdir, 'traj-refine_implicit_md.xtc'), top=os.path.join(srcdir, 'traj-refine_implicit_md-topol.pdb'))
 
 nmodels = 20
 

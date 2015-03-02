@@ -16,9 +16,9 @@ nmodels_per_class = 3
 
 seqid_classes = [[0., 35.], [35., 55.], [55., 101.]][::-1]
 
-traj = md.load(os.path.join(srcdir, 'modelstraj.xtc'), top=os.path.join(srcdir, 'modelstraj-topol.pdb'))
+traj = md.load(os.path.join(srcdir, 'traj-refine_implicit_md.xtc'), top=os.path.join(srcdir, 'traj-refine_implicit_md-topol.pdb'))
 
-df = pd.read_csv(os.path.join(srcdir, 'modelstraj-data.csv'))
+df = pd.read_csv(os.path.join(srcdir, 'traj-refine_implicit_md-data.csv'))
 
 model_indices = []
 seqids = []

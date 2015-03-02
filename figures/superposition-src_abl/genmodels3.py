@@ -14,9 +14,9 @@ srcdir = '../../data/models/SRC_HUMAN_D0'
 
 nmodels = 8
 
-df = pd.read_csv(os.path.join(srcdir, 'modelstraj-data.csv'))
+df = pd.read_csv(os.path.join(srcdir, 'traj-refine_implicit_md-data.csv'))
 
-traj = md.load(os.path.join(srcdir, 'modelstraj.xtc'), top=os.path.join(srcdir, 'modelstraj-topol.pdb'))
+traj = md.load(os.path.join(srcdir, 'traj-refine_implicit_md.xtc'), top=os.path.join(srcdir, 'traj-refine_implicit_md-topol.pdb'))
 
 atom_indices = traj.topology.select_atom_indices('alpha')
 traj_for_clustering = traj.atom_slice(atom_indices)
