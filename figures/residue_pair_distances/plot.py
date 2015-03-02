@@ -82,5 +82,8 @@ sns.plt.scatter(pairs_dict[pairs[0]]['ref_distance_inactive'], pairs_dict[pairs[
 sns.plt.xlabel('-'.join(pairs[0]) + ' (nm)')
 sns.plt.ylabel('-'.join(pairs[1]) + ' (nm)')
 sns.plt.legend()
+sns.plt.xlim(0,5.5)
+sns.plt.ylim(0,5.5)
+sns.plt.axes().set_aspect('equal')
 
 sns.plt.savefig('distances.png')
