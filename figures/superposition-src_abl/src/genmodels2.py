@@ -9,7 +9,7 @@ import pandas as pd
 import mdtraj
 import seaborn as sns
 
-srcdir = '../../data/models/SRC_HUMAN_D0'
+srcdir = '../../../data/models/SRC_HUMAN_D0'
 
 nmodels_per_class = 3
 

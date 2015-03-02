@@ -1,20 +1,49 @@
-# Pick models across a wide range of sequence identities
+# Performs RMSD-based clustering on all models and picks centroids
 
 import os
 import shutil
 import tempfile
+import random
 import numpy as np
 import pandas as pd
-import mdtraj
+import mdtraj as md
+import msmbuilder.cluster
 import seaborn as sns
 
-srcdir = '../../data/models/SRC_HUMAN_D0'
+srcdir = '../../../data/models/SRC_HUMAN_D0'
+
+nmodels = 8
 
 df = pd.read_csv(os.path.join(srcdir, 'traj-refine_implicit_md-data.csv'))
 
-traj = mdtraj.load(os.path.join(srcdir, 'traj-refine_implicit_md.xtc'), top=os.path.join(srcdir, 'traj-refine_implicit_md-topol.pdb'))
+traj = md.load(os.path.join(srcdir, 'traj-refine_implicit_md.xtc'), top=os.path.join(srcdir, 'traj-refine_implicit_md-topol.pdb'))
 
-nmodels = 20
+atom_indices = traj.topology.select_atom_indices('alpha')
+traj_for_clustering = traj.atom_slice(atom_indices)
+
+X = [traj_for_clustering]
+
+clusterer = msmbuilder.cluster.KMedoids(n_clusters=nmodels, metric='rmsd')
+clusterer.fit(X)
+
+model_indices = clusterer.cluster_ids_
+model_indices.sort()
+seqids = df.loc[model_indices].seqid.values
+
+# seqid_classes = [[0., 35.], [35., 55.], [55., 101.]][::-1]
+# model_indices = []
+# seqids = []
+# for seqid_class in seqid_classes:
+#     df_class = df[df.seqid >= seqid_class[0]][df.seqid < seqid_class[1]]
+#     selected_model_indices = random.sample(df_class.index, nmodels_per_class)
+#     selected_models = df_class.loc[selected_model_indices].sort()
+#     model_indices += list(selected_models.index)
+#     seqids += list(selected_models.seqid.values)
+#
+# nmodels = len(model_indices)
+
+print 'Number of models selected:', nmodels
+print '\n'.join(['{:6d} {:6.1f}'.format(x[0], x[1]) for x in zip(model_indices, seqids)])
 
 modelsdir = 'models'
 if os.path.exists(modelsdir):
@@ -22,17 +51,6 @@ if os.path.exists(modelsdir):
     os.mkdir(modelsdir)
 else:
     os.mkdir(modelsdir)
-
-# model_indices = np.arange(nmodels) * (len(traj) / nmodels)
-
-desired_seqid_values = 100. - np.arange(0., 100., 100./nmodels)
-model_indices = [np.abs(df.seqid.values-seqid_value).argmin() for seqid_value in desired_seqid_values]
-model_indices = sorted(list(set(model_indices)))
-nmodels = len(model_indices)
-seqids = [df.seqid.values[m] for m in model_indices]
-
-print 'Number of models selected:', nmodels
-print '\n'.join(['{:6d} {:6.1f}'.format(x[0], x[1]) for x in zip(model_indices, seqids)])
 
 for m,f in enumerate(model_indices):
     frame = traj[f]
@@ -43,7 +61,7 @@ for m,f in enumerate(model_indices):
 transparency_floats = [(1. - seqid*0.01) for seqid in seqids]
 transparency_text = '\n'.join(['set cartoon_transparency, {0}, {1}'.format(transparency_floats[m], m) for m in range(nmodels)])
 
-palette = sns.color_palette('Bluered', nmodels)[::-1]
+palette = sns.color_palette('RdBu', nmodels)[::-1]
 set_color_text = '\n'.join(['set_color color{0}, [{1}, {2}, {3}]'.format(m, palette[m][0], palette[m][1], palette[m][2]) for m in range(nmodels)])
 color_text = '\n'.join(['color color{0}, {0}'.format(m) for m in range(nmodels)])
 
