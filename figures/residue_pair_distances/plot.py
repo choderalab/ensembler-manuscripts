@@ -66,9 +66,16 @@ for pair in pairs:
 
 # plot
 
-palette = sns.color_palette('RdBu', len(pairs_dict[pairs[0]]['distances']))
+# palette = sns.color_palette('RdBu', len(pairs_dict[pairs[0]]['distances']))
 
-sns.plt.scatter(pairs_dict[pairs[0]]['distances'][::-1], pairs_dict[pairs[1]]['distances'][::-1], c=palette[::-1], marker='o', alpha=0.7)
+seqids = df.seqid
+
+# ax_models = sns.plt.scatter(pairs_dict[pairs[0]]['distances'][::-1], pairs_dict[pairs[1]]['distances'][::-1], c=palette[::-1], marker='o', alpha=0.7)
+ax_models = sns.plt.scatter(pairs_dict[pairs[0]]['distances'][::-1], pairs_dict[pairs[1]]['distances'][::-1], cmap=sns.plt.cm.coolwarm, marker='o', alpha=0.7, c=seqids[::-1])
+cb = sns.plt.colorbar(ax_models, label='sequence identity (%)')
+cb.solids.set_edgecolor("face")   # makes sure colorbar is smooth
+# for line in cb.lines: 
+#    line.set_alpha(1.)
 sns.plt.scatter(pairs_dict[pairs[0]]['ref_distance_active'], pairs_dict[pairs[1]]['ref_distance_active'], facecolor='g', marker='*', s=200., linewidth=1., label='2SRC (active)')
 sns.plt.scatter(pairs_dict[pairs[0]]['ref_distance_inactive'], pairs_dict[pairs[1]]['ref_distance_inactive'], facecolor='r', marker='*', s=200., linewidth=1., label='1Y57 (inactive)')
 
