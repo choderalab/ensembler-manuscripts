@@ -12,7 +12,7 @@ import msmbuilder.cluster
 import seaborn as sns
 import matplotlib as mpl
 
-srcdir = '../../../data/models/SRC_HUMAN_D0'
+srcdir = '../../../data/models/ABL1_HUMAN_D0'
 
 # draw colorbar
 cmap = sns.plt.cm.coolwarm_r
