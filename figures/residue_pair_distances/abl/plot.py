@@ -16,10 +16,11 @@ active_structure = mdtraj.load('2SRC.pdb')
 inactive_structure = mdtraj.load('1Y57.pdb')
 inactive_abl_structure = mdtraj.load('2F4J.pdb')
 
-# K295 = 29
-# E310 = 44
-# R409 = 143
-residue_labels = ['K295', 'E310', 'R409']
+# Src  Abl
+# K295 K271
+# E310 E286
+# R409 R386
+residue_labels = ['K271', 'E286', 'R386']
 # traj_resids = [29, 44, 143]
 # ref_structure_residue_ids = [295, 310, 409]
 traj_residue_selections = [
@@ -44,42 +45,9 @@ inactive_abl_structure_residue_pair_indices = np.array([[44, 59], [59, 159]])
 
 
 
-# data_dict = {label: {'traj_residue_selection': traj_residue_selections[i], 'ref_residue_selection': ref_residue_selections[i]} for i, label in enumerate(residue_labels)}
-#
-# for label in residue_labels:
-#     residue_dict = data_dict[label]
-#     traj_residue_selection = residue_dict['traj_residue_selection']
-#     ref_residue_selection = residue_dict['ref_residue_selection']
-#     # TODO work out which atom indices you want to keep - prob the last three
-#     residue_dict['indices'] = traj.top.select(traj_residue_selection)
-#
-#     residue_dict['atom_slice_traj'] = traj.atom_slice(residue_dict['indices'])
-#
-#     residue_dict['com'] = mdtraj.compute_center_of_mass(residue_dict['atom_slice_traj'])
-#
-#     residue_dict['ref_indices_active'] = active_structure.top.select(ref_residue_selection)
-#     residue_dict['ref_indices_inactive'] = active_structure.top.select(ref_residue_selection)
-#     residue_dict['ref_atom_slice_active'] = active_structure.atom_slice(residue_dict['ref_indices_active'])
-#     residue_dict['ref_atom_slice_inactive'] = inactive_structure.atom_slice(residue_dict['ref_indices_inactive'])
-#     residue_dict['ref_com_active'] = mdtraj.compute_center_of_mass(residue_dict['ref_atom_slice_active'])
-#     residue_dict['ref_com_inactive'] = mdtraj.compute_center_of_mass(residue_dict['ref_atom_slice_inactive'])
-#
-pairs = [('K295', 'E310'), ('E310', 'R409')]
+pairs = [('K271', 'E286'), ('E286', 'R386')]
 
 pairs_dict = {pair: {'indices_traj': traj_residue_pair_indices[x]} for x, pair in enumerate(pairs)}
-
-# for pair in pairs:
-#     residue0 = data_dict[pair[0]]
-#     residue1 = data_dict[pair[1]]
-#
-#     pairs_dict[pair]['distances'] = np.linalg.norm(residue0['com'] - residue1['com'], axis=1)
-#
-#     pairs_dict[pair]['ref_distance_active'] = np.linalg.norm(residue0['ref_com_active'] - residue1['ref_com_active'], axis=1)
-#     pairs_dict[pair]['ref_distance_inactive'] = np.linalg.norm(residue0['ref_com_inactive'] - residue1['ref_com_inactive'], axis=1)
-
-# for pair in pairs:
-#     residue_pair_indices = pairs_dict[pair]['indices_traj']
-#     pairs_dict[pair]['distances'] = mdtraj.compute_contacts(traj, contacts=residue_pair_indices)[0]
 
 contacts = mdtraj.compute_contacts(traj, contacts=traj_residue_pair_indices)[0].T
 
@@ -92,7 +60,6 @@ inactive_abl_structure_contacts = mdtraj.compute_contacts(inactive_abl_structure
 
 seqids = df.seqid
 
-# ax_models = sns.plt.scatter(pairs_dict[pairs[0]]['distances'][::-1], pairs_dict[pairs[1]]['distances'][::-1], c=seqids[::-1], cmap=sns.plt.cm.coolwarm_r, marker='o', alpha=0.7, vmin=0, vmax=100)
 ax_models = sns.plt.scatter(contacts[0][::-1], contacts[1][::-1], c=seqids[::-1], cmap=sns.plt.cm.coolwarm_r, marker='o', alpha=0.7, vmin=0, vmax=100)
 cb = sns.plt.colorbar(ax_models, label='sequence identity (%)')
 cb.solids.set_edgecolor("face")   # makes sure colorbar is smooth
