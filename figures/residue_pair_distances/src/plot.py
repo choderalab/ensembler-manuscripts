@@ -6,7 +6,7 @@ import pandas as pd
 import mdtraj
 import seaborn as sns
 
-srcdir = '../../data/models/SRC_HUMAN_D0'
+srcdir = '../../../data/models/SRC_HUMAN_D0'
 
 df = pd.read_csv(os.path.join(srcdir, 'traj-refine_implicit_md-data.csv'))
 
@@ -93,14 +93,14 @@ ax_models = sns.plt.scatter(contacts[0][::-1], contacts[1][::-1], c=seqids[::-1]
 cb = sns.plt.colorbar(ax_models, label='sequence identity (%)')
 cb.solids.set_edgecolor("face")   # makes sure colorbar is smooth
 
-sns.plt.scatter(active_structure_contacts[0], active_structure_contacts[1], facecolor='g', marker='*', s=200., linewidth=1., label='2SRC (active)')
-sns.plt.scatter(inactive_structure_contacts[0], inactive_structure_contacts[1], facecolor='r', marker='*', s=200., linewidth=1., label='1Y57 (inactive)')
+sns.plt.scatter(active_structure_contacts[0], active_structure_contacts[1], facecolor='g', marker='*', s=200., linewidth=1., label='2SRC (SRC, active)')
+sns.plt.scatter(inactive_structure_contacts[0], inactive_structure_contacts[1], facecolor='r', marker='*', s=200., linewidth=1., label='1Y57 (SRC, inactive)')
 
 sns.plt.xlabel('-'.join(pairs[0]) + ' (nm)')
 sns.plt.ylabel('-'.join(pairs[1]) + ' (nm)')
 sns.plt.legend()
-sns.plt.xlim(0,4.5)
-sns.plt.ylim(0,4.5)
+sns.plt.xlim(0,5)
+sns.plt.ylim(0,5)
 sns.plt.axes().set_aspect('equal')
 
 sns.plt.savefig('distances.png')
