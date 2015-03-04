@@ -12,8 +12,8 @@ df = pd.read_csv(os.path.join(srcdir, 'traj-refine_implicit_md-data.csv'))
 
 traj = mdtraj.load(os.path.join(srcdir, 'traj-refine_implicit_md.xtc'), top=os.path.join(srcdir, 'traj-refine_implicit_md-topol.pdb'))
 
-active_structure = mdtraj.load('2SRC.pdb')
-inactive_structure = mdtraj.load('1Y57.pdb')
+inactive_structure = mdtraj.load('2SRC.pdb')
+active_structure = mdtraj.load('1Y57.pdb')
 inactive_abl_structure = mdtraj.load('2F4J.pdb')
 
 # Src  Abl
@@ -34,13 +34,13 @@ ref_residue_selections = [
     'residue 310 and (name "OE1" or name CD or name "OE2")',
     'residue 409 and (name "NH1" or name CZ or name "NH2")',
 ]
-active_structure_residue_indices = [211, 226, 325]   # 0-based
-inactive_structure_residue_indices = [213, 228, 327]   # 0-based
+inactive_structure_residue_indices = [211, 226, 325]   # 0-based
+active_structure_residue_indices = [213, 228, 327]   # 0-based
 inactive_abl_structure_residue_indices = [44, 59, 159]   # 0-based
 
 traj_residue_pair_indices = np.array([[29, 44], [44, 144]])
-active_structure_residue_pair_indices = np.array([[211, 226], [226, 325]])
-inactive_structure_residue_pair_indices = np.array([[213, 228], [228, 327]])
+inactive_structure_residue_pair_indices = np.array([[211, 226], [226, 325]])
+active_structure_residue_pair_indices = np.array([[213, 228], [228, 327]])
 inactive_abl_structure_residue_pair_indices = np.array([[44, 59], [59, 159]])
 
 
@@ -51,8 +51,8 @@ pairs_dict = {pair: {'indices_traj': traj_residue_pair_indices[x]} for x, pair i
 
 contacts = mdtraj.compute_contacts(traj, contacts=traj_residue_pair_indices)[0].T
 
-active_structure_contacts = mdtraj.compute_contacts(active_structure, contacts=active_structure_residue_pair_indices)[0].T
 inactive_structure_contacts = mdtraj.compute_contacts(inactive_structure, contacts=inactive_structure_residue_pair_indices)[0].T
+active_structure_contacts = mdtraj.compute_contacts(active_structure, contacts=active_structure_residue_pair_indices)[0].T
 inactive_abl_structure_contacts = mdtraj.compute_contacts(inactive_abl_structure, contacts=inactive_abl_structure_residue_pair_indices)[0].T
 
 
@@ -64,9 +64,9 @@ ax_models = sns.plt.scatter(contacts[0][::-1], contacts[1][::-1], c=seqids[::-1]
 cb = sns.plt.colorbar(ax_models, label='sequence identity (%)')
 cb.solids.set_edgecolor("face")   # makes sure colorbar is smooth
 
-sns.plt.scatter(active_structure_contacts[0], active_structure_contacts[1], facecolor='g', marker='*', s=200., linewidth=1., label='2SRC (SRC, active)')
-# sns.plt.scatter(inactive_structure_contacts[0], inactive_structure_contacts[1], facecolor='r', marker='*', s=200., linewidth=1., label='1Y57 (SRC, inactive)')
-sns.plt.scatter(inactive_abl_structure_contacts[0], inactive_abl_structure_contacts[1], facecolor='r', marker='D', s=50., linewidth=1., label='2F4J (ABL1, inactive)')
+sns.plt.scatter(active_structure_contacts[0], active_structure_contacts[1], facecolor='g', marker='*', s=200., linewidth=1., label='1Y57 (SRC, active)')
+sns.plt.scatter(inactive_structure_contacts[0], inactive_structure_contacts[1], facecolor='r', marker='*', s=200., linewidth=1., label='2SRC (SRC, inactive)')
+# sns.plt.scatter(inactive_abl_structure_contacts[0], inactive_abl_structure_contacts[1], facecolor='r', marker='D', s=50., linewidth=1., label='2F4J (ABL1, inactive)')
 
 sns.plt.xlabel('-'.join(pairs[0]) + ' (nm)')
 sns.plt.ylabel('-'.join(pairs[1]) + ' (nm)')
