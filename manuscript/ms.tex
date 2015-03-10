@@ -106,7 +106,7 @@ Static structures, however, provide only a snapshot of the rich dynamical behavi
 Many functional properties---such as the ability to bind small molecules or interact with signaling partners---often require conformational changes at many levels, from reorganization of sidechains at binding interfaces to loop motions to large scale folding-unfolding events.
 
 Molecular dynamics simulations have proven to be a useful tool for revealing the dynamics of individual proteins, with a number of mature software packages and forcefields available for biomolecular simulation.
-Advances in computing architectures---especially the recent emergence of GPUs as a technology for providing a hundredfold increase in computational power per unit cost for a variety of applications---and the proliferation of scalable computing technologies (such as distributed computing platforms like Folding@home [CITE], GPUGrid [CITE], and Compernicus [CITE]) now provide unprecedented hardware platforms on which to study the dynamics of these proteins.
+Advances in computing architectures---especially the recent emergence of GPUs as a technology for providing a hundredfold increase in computational power per unit cost for a variety of applications---and the proliferation of scalable computing technologies (such as distributed computing platforms like Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE]) now provide unprecedented hardware platforms on which to study the dynamics of these proteins.
 In parallel, techniques for aggregating molecular dynamics simulation data to survey the conformational and kinetic landscapes of biomolecules, such as Markov state modeling (MSM) approaches [CITE MSM reviews], are now reaching maturity.
 
 Despite this, a critical gap remains in our ability to bridge genome-scale sequence information and molecular simulations to enable the study of entire families or superfamilies of proteins in a single organism or across organisms. 
@@ -124,18 +124,14 @@ While this tool was originally constructed to form the foundation for a new era 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Design and Implementation}
 
-% Python
-% Can be used via command-line tool Ensembler, or via the Python API
-
 {\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API.
 
-% Pipeline architecture, with a series of stages which must be performed in order.
-
-The {\bf Ensembler} modeling pipeline entails a series of stages which are performed in a defined order. 
+The {\bf Ensembler} modeling pipeline comprises a series of stages which are performed in a defined order. 
 A visual overview of the pipeline is shown in Fig.~\ref{figpipeline}.
 The various stages of this pipeline are described in detail below.
 
 {\color{red}[JDC: We could really help the reader if we preface each section here with a bit of an introduction of what we're trying to accomplish in each stage.  Otherwise, I worry that each section is a long list of things we do without reference to an overall concept of what the stage is trying to accomplish or why certain decisions were made.]}
+{\color{blue}[DLP: Good point. I've added in brief introductions for each section.]}
 
 \begin{figure*}[tb]
   \centering
@@ -150,67 +146,94 @@ The various stages of this pipeline are described in detail below.
 
 \subsubsection{Target selection}
 
-The {\tt ensembler} command-line tool provides methods for selecting targets from either UniProt (a freely accessible resource for protein sequence and functional data---\href{http://www.uniprot.org/}{uniprot.org}) or TargetExplorer (a database framework for aggregating various types of biological data; work to be published). 
-{\color{red}[JDC: Does it make sense to omit discussion of TargetExplorer since it's not clear how useful this will be to users?]}
-This tool allows the user to easily select a single protein, many proteins, or an entire superfamily. 
-{\color{red}[JDC: Can you give a clearer picture of how this is done?  Does the user just specify different flags for these categories, or would they have to construct different Uniprot searches?]}
-The output from this stage is a FASTA-formatted text file containing the selected target sequences and identifiers {\color{red}[JDC: What kind of identifiers?  Arbitrary, Uniprot, etc?]}, such that the output of other software that produces FASTA-formatted sequence files can be used as input to the next stage. 
+The first stage entails the selection of a set of target protein sequences.
 
-To select targets from UniProt, a query string must be constructed by the user that conforms to the same syntax as the search function on the UniProt website. 
-{\color{red}[JDC: What command-line flag or API call is used to select targets from UniProt?]}
-For example, {\tt'domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator. 
-{\bf Ensembler} is designed to work with protein \emph{domains}, rather than full-length proteins, and the desired protein domain(s) can be selected using a regular expression. 
-For example, the string {\tt'\^{}Protein kinase(?!; truncated)(?!; inactive)'} would match domains annotated as "Protein kinase", "Protein kinase; 1" or "Protein kinase; 2", but would exclude the domains "Protein kinase; truncated" and "Protein kinase; inactive". 
-The program then performs this search on UniProt, retrieves the data, extracts sequences and identifiers {\color{red}[JDC: UniProt identifiers?]}, and saves these to a FASTA-format text file.
+These targets can be defined manually, simply by providing a FASTA-formatted text file containing the desired target sequences with arbitrary identifiers.
+The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}), using the subcommand {\tt gather\_targets}.
+% {\color{red}[JDC: Does it make sense to omit discussion of TargetExplorer since it's not clear how useful this will be to users?]}
+% {\color{blue}[DLP: Yes, I think TargetExplorer is primarily an internal tool for the moment, so let's omit discussion of that.]}
+The user specifies a query string with the {\tt -{}-query} flag, which conforms to the same syntax as the search function available on the UniProt website.
+% {\color{red}[JDC: What command-line flag or API call is used to select targets from UniProt?]}
+% {\color{red}[DLP: the command-line flag is now described]}
+For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
+In this way, the user may select a single protein, many proteins, or an entire superfamily.
+The program outputs a FASTA file, setting the UniProt mnemonic (e.g. {\tt SRC\_HUMAN}) as the identifier for each target protein.
+% {\color{red}[JDC: Can you give a clearer picture of how this is done?  Does the user just specify different flags for these categories, or would they have to construct different Uniprot searches?]}
+% {\color{blue}[DLP: This is explained more clearly now.]}
 
-% The selected targets are
-% given identifiers of the form {\tt [UniProt mnemonic]\_D[domain index]}, which
-% consists of the UniProt name for the target protein and a 0-based index for the
-% domain (since a single target protein may contain multiple domains of
-% interest). Example: {\tt EGFR\_HUMAN\_D0}.
+In many cases, it will be desirable to build models of an isolated protein domain, rather than the full-length protein.
+The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-domains} flag. 
+For example, the above {\tt -{}-query} flag for selecting all human protein kinases returns UniProt entries with domain annotations including "Protein kinase", "Protein kinase 1", "Protein kinase 2", "Protein kinase; truncated", "Protein kinase; inactive", "SH2", "SH3", etc.
+To select only domains of the first three types, the following regular expression could be used: {\tt`\^{}Protein kinase(?!; truncated)(?!; inactive)'}.
+In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain.
+This is necessary because a single target protein may contain multiple domains of interest.
+Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
 
 \subsubsection{Template selection}
 
-As for target selection, the {\tt ensembler} tool provides methods for selecting template structures (from which models will be built) from various sources---UniProt {\color{red}[CITE]}, the Protein Data Bank (PDB; \href{http://www.pdb.org}{pdb.org}) {\color{red}[JDC: Do you use the RCSB or some other PDB site?]}, or a TargetExplorer database {\color{red}[JDC: Again, not sure if it is helpful to leave this in unless it will be immediately useful to the reader]}.
-From the user perspective, selection of templates from UniProt proceeds in a similar fashion as described above; a used-specified UniProt query string is used to retrieve the list of PDB entries and residue spans associated with each UniProt entry mathing the query.
-{\color{red}[JDC: Can you be more precise what is meant by ``residue span'' here?]}
-Structures that include the desired domain {\color{red}[JDC: Can you elaborate on how this is determined?]} are retrieved from the RCSB in PDB format.
-Data from the SIFTS service (\href{http://www.ebi.ac.uk/pdbe/docs/sifts/}{www.ebi.ac.uk/pdbe/docs/sifts}) (CITE: Velankar Nucleic Acids Res 2013), which provides residue-level mappings between PDB and UniProt entries, is then used to filter out PDB chains with $<$ 70\% resolved residues within the domain span.
-Template sequences and structures are then extracted and written as FASTA-format sequence and PDB-format coordinate files, respectively.
+The second stage entails the selection of templates and storage of associated structures, sequences and identifiers.
 
-Selection of template structures from the RCSB simply requires specifying a list of PDB IDs.
-{\color{red}[JDC: Who specifies the list of PDB IDs?  How are they specified?  Can this be built automatically, or does the user need to specify these?]}
-These are matched to UniProt entries via the SIFTS service, and the same procedure is then followed to extract template sequences and structures.
+This data can be provided manually, by storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
+The structure residues must also match those in the sequence file.
+
+The {\tt ensembler gather\_templates} subcommand also provides methods for selecting template structures from either UniProt or the Protein Data Bank (PDB; \href{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
+
+% {\color{red}[JDC: Do you use the RCSB or some other PDB site?]} - DLP: I use the RCSB, but all PDB sites are updated simultaneously so I think it shouldn't matter. However, I've updated the link so that it points to the RCSB PDB.
+% {\color{red}[JDC: Again, not sure if it is helpful to leave this in unless it will be immediately useful to the reader]} - DLP: references to TargetExplorer removed
+
+Selection of templates from the PDB simply requires passing a list of PDB IDs as a comma-separated string, e.g. {\tt -{}-query 2H8H,1Y57}.
+% {\color{red}[JDC: Who specifies the list of PDB IDs?  How are they specified?  Can this be built automatically, or does the user need to specify these?]} DLP: these are specified by the user as a comma-separated list, as is now described above.
+Specific PDB chain IDs can optionally also be selected via the {\tt -{}-chainids} flag.
+The program retrieves structures from the PDB server, as well as associated data from the SIFTS service (\href{http://www.ebi.ac.uk/pdbe/docs/sifts/}{www.ebi.ac.uk/pdbe/docs/sifts}) (CITE: Velankar Nucleic Acids Res 2013), which provides residue-level mappings between PDB and UniProt entries.
+The SIFTS data is used to extract template sequences, retaining only residues which are resolved and match the equivalent residue in the UniProt sequence---non-wildtype residues are thus removed from the template structures.
+Furthermore, PDB chains with less than a given percentage of resolved residues (default: 70\%) are filtered out.
+Sequences are stored in a FASTA file, with identifiers of the form {\tt [UniProt mnemonic]\_D[UniProt domain index]\_[PDB ID]\_[PDB chain ID]}, e.g. {\tt SRC\_HUMAN\_D0\_2H8H\_A}.
+Template structures with residues matching the sequence data are then extracted and stored as PDB-format coordinate files.
+
+Selection of templates from UniProt proceeds in a similar fashion as for target selection; the {\tt -{}-query} flag is used to select full-length proteins from UniProt, while the optional {\tt -{}-domains} flag allows selection of individual domains with a regular expression string.
+The returned UniProt data for each protein includes a list of associated PDB chains and their residue spans, and this information is used to select template structures, using the same method as for template selection from the PDB.
+If the {\tt -{}-domains} flag is used, then templates are truncated at the start and end of the domain sequence.
 
 Unresolved template loops can optionally be remodeled with a kinematic closure algorithm {\color{red}[CITE]}, which is provided via the loopmodel tool of the Rosetta software suite (CITE: Rosetta and/or loopmodel).
-Because shorter loops need to be built by the subsequent model-building stage, prebuilding template loops tends to provide higher-quality models following the subsequent modeling process.
+Because fewer loops need to be built during the subsequent model-building stage, prebuilding template loops tends to provide higher-quality models following the subsequent modeling process.
 
 \subsubsection{Modeling}
 
-In this stage, models are generated for each target-template pair, using the Modeller automodel function {\color{red}[CITE: Modeller]}, which implements comparative structure modeling by satisfaction of spatial restraints {\color{red}[CITE: Sali Blundell J Mol Biol 1993; Fiser Sali Prot Sci 9 2000]}.
+This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are filtered out using a RMSD-based clustering scheme.
+
+Modeling is performed with the Modeller automodel function {\color{red}[CITE: Modeller]}, which implements comparative structure modeling by satisfaction of spatial restraints {\color{red}[CITE: Sali Blundell J Mol Biol 1993; Fiser Sali Prot Sci 9 2000]}.
 While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module (CITE: BioPython)---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~{\color{red}[CITE: Gaston Gonnet Science 1992]}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
 
 All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
 Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
-The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD with a fast quaternion characteristic polynomial (QCP)~{\color{red}[JDC: Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
+The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
-{\color{red}[JDC: Which atoms are used in the RMSD comparison?  All atoms, heavy atoms, or CA only?]}
+% {\color{red}[JDC: Which atoms are used in the RMSD comparison?  All atoms, heavy atoms, or CA only?]} - DLP: CA only. This is now specified in the text.
 
 \subsubsection{Refinement}
 
-Models are then refined with a steepest descent energy minimization {\color{red}[JDC: I think OpenMM uses L-BFGS]} and a short molecular dynamics (MD) simulation in implicit solvent.
+This stage entails the use of molecular dynamics simulations to refine the models built in the previous step.
+This helps to improve model quality and also prepares models for subsequent production simulation, including solvation with explicit water molecules, if desired.
+
+Models are first subjected to energy minimization (using the L-BFGS algorithm {\color{red}[CITE]}), followed by a short molecular dynamics (MD) simulation with an implicit solvent representation.
 This is implemented using the OpenMM molecular simulation toolkit (link and CITE: OpenMM), chosen for its flexible Python API, and high performance GPU-acclerated simulation code.
-The Amber99SB-ILDN force field is used {\color{red}[CITE: amber99sbildn refs]} with a modified generalized Born solvent model (GBSA-OBC) (CITE: GBSA-OBC).
+By default, the Amber99SB-ILDN force field is used {\color{red}[CITE: amber99sbildn refs]} with a modified generalized Born solvent model (GBSA-OBC) (CITE: GBSA-OBC).
+The {\bf Ensembler} API allows the use of any of the other force fields implemented in OpenMM.
 The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
 {\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
+{\color{blue}[DLP: We currently just filter out models which throw exceptions or NaNs.]}
 
 While protein-only models may be sufficient for structural analysis or implicit solvent simulations, {\bf Ensembler} also provides a stage for solvating models with explicit water and performing a round of explicit-solvent MD refinement/equilibration under isothermal-isobaric (NPT) conditions.
 The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, such as the construction of MSMs.
 The target number of waters is selected by first solvating each model with a specified padding distance (default: 10 \AA), then taking a percentile value from the distribution (default: 68th percentile).
 {\color{red}[JDC: Would be useful to explain why we are doing this.]}
+{\color{blue}[DLP: Addressed.]}
+This helps to prevent models with particularly long, extended loops---such as those arising from template structures with unresolved termini---from imposing very large box sizes on the entire set of models.
 Models are resolvated with the target number of waters by first solvating with zero padding, then incrementally increasing the box size and resolvating until the target is exceeded, then finally deleting sufficient waters to match the target value.
-The explicit solvent MD simulation is also implemented using OpenMM, with the Amber99SB-ILDN force field and TIP3P water {\color{red}[JDC: CITE]}.
+The explicit solvent MD simulation is also implemented using OpenMM, using the Amber99SB-ILDN force field and TIP3P water {\color{red}[JDC: CITE]} by default.
+Other force fields or water models such as TIP4P-Ew {\color{red}[CITE]}) can be specified via the {\bf Ensembler} API.
 {\color{red}[JDC: We should allow other water models in OpenMM too, such as TIP4P-Ew?]}
+{\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a --water\_model flag to the CLI, for example.]}
 
 {\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g. structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
 
@@ -226,7 +249,7 @@ To aid the user in tracking the provenance of each model, each pipeline function
 
 % quickmodel function performs the entire pipeline in one go, for a single target and a small number of templates.
 For users interested in simply using {\bf Ensembler} to rapidly generate a set of models for a single template sequence, {\bf Ensembler} provides a command-line tool {\tt quickmodel}, which performs the entire pipeline for a single target with a small number of templates.
-For larger numbers of models (such as entire protein families), modeling time is greatly reduced by using the main modeling pipeline parallelized via MPI, which distributes computation across each model (or across each template, in the case of the loop reconstruction code), scaling (in a ``pleasantly parallel'' manner) up to the number of models generated.
+For larger numbers of models (such as entire protein families), modeling time is greatly reduced by using the main modeling pipeline, which is parallelized via MPI, distributing computation across each model (or across each template, in the case of the loop reconstruction code), and scaling (in a ``pleasantly parallel'' manner) up to the number of models generated.
 
 
 % ? The API is highly flexible, allowing control over many important parameters. Appropriate choices have been set as default values.
