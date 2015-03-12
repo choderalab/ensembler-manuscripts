@@ -96,28 +96,35 @@ The latest release can be installed via the {\tt conda} package manager, and the
 \section{Introduction}
 \label{section:introduction}
 
-Proteins play a diverse variety of roles in living organisms, and the understanding of their function---and how mutations can cause dysfunction and disease---is the preoccupation of much of modern biology. 
-The diminishing cost of nucleic acid sequencing technologies has produced an enormous wealth of genomic data, yielding a large collection of protein-coding open reading frames that provide basic information about these proteins (at the level of primary amino acid sequences) for numerous organisms [CITE]. 
-Complementing this, large-scale structural biology efforts such as the Protein Structure Initiative (PSI) and Structural Genomics Consortium (SGC) have yielded a great number of protein structures, allowing comparative modeling to provide insight into the static structures many of these proteins adopt [CITE review of structural biology efforts or current comparative modeling?].
-% TODO Maybe it is not necessary to mention comparative modeling here? The structures themselves provide insight. If so, this could be changed to:
-% Complementing this, large-scale structural biology efforts such as the Protein Structure Initiative (PSI) and Structural Genomics Consortium (SGC) have provided insight into the static structures which these proteins can adopt [CITE review of structural biology efforts?].
+Recent advances in genomics and structural biology have helped generate an enormous wealth of protein data at the level of amino-acid sequence and three-dimensional structure.
+However, proteins typically exist as an ensemble of thermally accessible conformational states, and static structures provide only a snapshot of their rich dynamical behavior.
+Many functional properties---such as the ability to bind small molecules or interact with signaling partners---require transitions between states, encompassing anything from reorganization of sidechains at binding interfaces to domain motions to large scale folding-unfolding events.
+Drug discovery could also benefit from a more extensive consideration of protein dynamics, whereby small molecules might be selected based on their predicted ability to bind and trap a protein target in an inactive state [CITE Lee Craik Science 2009].
 
-Static structures, however, provide only a snapshot of the rich dynamical behavior of proteins.
-Many functional properties---such as the ability to bind small molecules or interact with signaling partners---often require conformational changes at many levels, from reorganization of sidechains at binding interfaces to loop motions to large scale folding-unfolding events.
+Molecular dynamics (MD) simulations have the capability, in principle, to describe the time evolution of a protein in atomistic detail, and have proven themselves to be a useful tool in the study of protein dynamics.
+A number of mature software packages and forcefields are available, and much recent progress has been driven by advances in computing architecture.
+For example, many MD packages are now able to exploit GPUs, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE] allow scalability on an unprecedented level.
+In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity [CITE MSM reviews].
+MSM methods in particular have the advantage of being able to aggregate data from multiple independent MD trajectories, facilitating parallelization of production simulations and thus greatly alleviating overall computational cost.
+There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates [CITE Modeller and Rosetta and a recent homology modeling review].
 
-Molecular dynamics simulations have proven to be a useful tool for revealing the dynamics of individual proteins, with a number of mature software packages and forcefields available for biomolecular simulation.
-Advances in computing architectures---especially the recent emergence of GPUs as a technology for providing a hundredfold increase in computational power per unit cost for a variety of applications---and the proliferation of scalable computing technologies (such as distributed computing platforms like Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE]) now provide unprecedented hardware platforms on which to study the dynamics of these proteins.
-In parallel, techniques for aggregating molecular dynamics simulation data to survey the conformational and kinetic landscapes of biomolecules, such as Markov state modeling (MSM) approaches [CITE MSM reviews], are now reaching maturity.
+However, it remains difficult for researchers to exploit the full variety of available protein sequence and structural data in simulation studies, largely due to limitations in software architecture.
+For example, the set up of a biomolecular simulation is typically performed manually, encompassing a series of fairly standard (yet time-consuming) steps such as the choice of protein sequence construct and starting structure, addition of missing residues and atoms, solvation with explicit water and salt buffer, choice of simulation parameters, and system relaxation with energy minimization and one or more short MD simulations.
+For this reason, simulation studies typically consider only one or a few proteins and starting configurations.
 
-Despite this, a critical gap remains in our ability to bridge genome-scale sequence information and molecular simulations to enable the study of entire families or superfamilies of proteins in a single organism or across organisms. 
-Molecular simulations must largely be set up by hand, with little in the way of automation available to provide practitioners a way of studying many members of a family in a manner that exploits their similarity, and especially in cases where only a subset of members may have structural data.
+The ability to fully exploit the large base of available protein sequence and structural data in biomolecular simulation studies could open up many interesting avenues for research, enabling the study of entire protein families or superfamilies across multiple organisms.
+The similarity between members of a given protein family could be exploited to generate arrays of conformational models, which could be used as starting configurations to aid sampling in MD simulations.
+This approach would be highly beneficial for many MD methods, such as Markov state modeling, which require global coverage of the conformational landscape to realize their full potential, and would also be particularly useful in cases where structural data is present for only a subset of the members of a protein family.
+It would also aid in studying protein families known to have multiple metastable conformations---such as kinases---, for which the combined body of structural data for the family may cover a large range of these conformations, while the available structures for any individual member might encompass only one or two distinct conformations.
 
-Complicating matters further, in protein families known to be able to adopt multiple conformations---such as kinases---structural data may only exist for one or two conformations for any individual member of the family for which there is structural data.
-This poses a challenge for biomolecular simulation and analysis methods such as MSMs, which can provide detailed insight but require global coverage of the conformational landscape to realize their full potential.
-
-Here, we present the first steps toward a resolution of this problem: a fully automated open source framework for building simulation-ready protein models scalable from single sequences to entire superfamilies.
-We demonstrate the utility of this tool by constructing models for the entire set of human tyrosine kinase catalytic domains, and show that the resulting models provide good coverage of known functionally relevant regions of structure space.
-While this tool was originally constructed to form the foundation for a new era of superfamily-scale molecular simulations for the Folding@home project, we anticipate its utility is far broader.
+Here, we present the first steps toward bridging the gap between biomolecular simulation software and \emph{omics}-scale sequence and structural data: a fully automated open source framework for building simulation-ready protein models scalable from single sequences to entire superfamilies.
+{\bf Ensembler} provides functions for selecting target sequences and homologous template structures, and (by interfacing with a number of external packages) performs pairwise alignments, comparative modeling of target-template pairs, and several stages of model refinement.
+As an example application, we have constructed models for the entire set of human tyrosine kinase catalytic domains, using all available structures of protein kinase domains (from any species) as templates.
+This results in a total of almost 400,000 models, and we demonstrate that these provide wide-ranging coverage of known functionally relevant regions of structure.
+By using these models as starting configurations for highly parallel MD simulations, we expect their structural diversity to greatly aid in sampling of conformational space.
+We anticipate that the tool will prove to be useful in a number of other ways.
+For example, the generated models could represent valuable data sets even without subsequent production simulation, allowing exploration of the conformational diversity present within the available structural data for a given protein family.
+Furthermore, the automation of simulation set up provides an excellent opportunity to make concrete certain "best practices", such as the choice of simulation parameters.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DESIGN AND IMPLEMENTATION
@@ -165,8 +172,7 @@ In many cases, it will be desirable to build models of an isolated protein domai
 The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-domains} flag. 
 For example, the above {\tt -{}-query} flag for selecting all human protein kinases returns UniProt entries with domain annotations including "Protein kinase", "Protein kinase 1", "Protein kinase 2", "Protein kinase; truncated", "Protein kinase; inactive", "SH2", "SH3", etc.
 To select only domains of the first three types, the following regular expression could be used: {\tt`\^{}Protein kinase(?!; truncated)(?!; inactive)'}.
-In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain.
-This is necessary because a single target protein may contain multiple domains of interest.
+In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest.
 Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
 
 \subsubsection{Template selection}
