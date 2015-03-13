@@ -75,4 +75,4 @@ sns.plt.xlim(0,5)
 sns.plt.ylim(0,5)
 sns.plt.axes().set_aspect('equal')
 
-sns.plt.savefig('distances.png')
+sns.plt.savefig('distances.png', bbox_inches='tight')

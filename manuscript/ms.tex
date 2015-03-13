@@ -3,6 +3,9 @@
 % Two-column style (for submission/review/editing)
 %\documentclass[aps,prl,preprint,nofootinbib,superscriptaddress,linenumbers]{revtex4-1}
 
+\pdfoutput=1
+\usepackage[pdftex]{graphicx}
+
 %\usepackage{palatino}
 
 %\usepackage{palatino}
@@ -26,10 +29,9 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
-\pdfoutput=1
-\usepackage[pdftex]{graphicx}
 %\usepackage[mathbf,mathcal]{euler}
 %\usepackage{citesort}
+\usepackage{subcaption}
 \usepackage{dcolumn}
 \usepackage{boxedminipage}
 \usepackage{verbatim}
@@ -38,7 +40,7 @@
 
 
 % The figures are in a figures/ subdirectory.
-% \graphicspath{{figures/}}
+\graphicspath{{../figures/}}
 
 
 % \newcommand{\pyitc}{\url{http://www.simtk.org/home/bayesian-itc}} % URL of pyITC project homepage
@@ -142,7 +144,7 @@ The various stages of this pipeline are described in detail below.
 
 \begin{figure*}[tb]
   \centering
-    \includegraphics[width=1.0\textwidth]{pipeline2}
+    \includegraphics[width=1.0\textwidth]{pipeline/pipeline2}
   \caption{{\bf Diagrammatic representation of the various stages of the Ensembler pipeline.}
   The number of viable models surviving each stage of the pipeline for are shown, either for all tyrosine kinases (\emph{All TKs}) or representative individual kinases (\emph{SRC} and \emph{ABL}).
   In addition, the typical timing on a cluster (containing Intel Xeon E5-2665 2.4GHz hyperthreaded processors and NVIDIA GTX-680 or GTX-Titan GPUs) is reported to convey resources required per model and for modeling the entire set of tyrosine kinases.
@@ -239,7 +241,7 @@ Models are resolvated with the target number of waters by first solvating with z
 The explicit solvent MD simulation is also implemented using OpenMM, using the Amber99SB-ILDN force field and TIP3P water {\color{red}[JDC: CITE]} by default.
 Other force fields or water models such as TIP4P-Ew {\color{red}[CITE]}) can be specified via the {\bf Ensembler} API.
 {\color{red}[JDC: We should allow other water models in OpenMM too, such as TIP4P-Ew?]}
-{\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a --water\_model flag to the CLI, for example.]}
+{\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a -{}-water\_model flag to the CLI, for example.]}
 
 {\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g. structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
 
@@ -275,34 +277,65 @@ For larger numbers of models (such as entire protein families), modeling time is
 \section{Results}
 \label{section:results}
 
-% \begin{table}
-% \begin{tabular}{l|c|c|c}
-%
-%     & SRC & ABL & All 90 TKs \\
-%     \hline
-%     Templates & \num{4433} & \num{4433} & \num{398970} \\
-%     Models & \num{4248} & \num{4250} & \num{382568} \\
-%     Unique models & \num{4093} & \num{4247} & \num{378839} \\
-%     Refined models & \num{4023} & \num{4241} & \num{373513} \\
-%
-% \end{tabular}
-% \label{tab:model_counts}
-% \caption{Model counts for the kinase domains of human SRC and ABL, and for all of the 90 human TK targets, at various stages of the Ensembler pipeline.}
-% \end{table}
-%
-% \begin{table}
-% \begin{tabular}{l|c}
-%
-%     & Timing ($h$:$m$:$s$) \\
-%     \hline
-%     Template reconstruction & 03:00:00 \\
-%     Modeling & 00:01:19 \\
-%     Refinement (100 ps implicit solvent MD) & 00:01:58 \\
-%
-% \end{tabular}
-% \label{tab:timings}
-% \caption{Average timings per template/model for the compute-intensive stages of the Ensembler pipeline.}
-% \end{table}
+\begin{figure}[tb]
+  \centering
+    \includegraphics[width=1.0\textwidth]{seqid_dist/seqid_dist}
+    \caption{{\bf Sequence identity distribution for human TK models.}
+    Distribution of sequence identities for all 373,513 models generated for the human tyrosine kinases.
+    {\color{blue}[DLP: should I mention the use of KDE smoothing?]}
+    Sequence identities are calculated from pairwise target-template alignments.
+    The cumulative distribution function is shown by the dashed line.
+    }
+  \label{figseqid_dist}
+\end{figure}
+
+\begin{figure}[tb]
+  \centering
+    \includegraphics[width=1.0\textwidth]{rmsddist/rmsddist2}
+    \caption{{\bf RMSD distribution by sequence identity.}
+    RMSD distributions for all 373,513 human TK models, divided into three sequence identity ranges.
+    % TODO may want to mention KDE smoothing
+    For a given target, model RMSDs are calculated relative to the highest sequence identity model for that target.
+  }
+  \label{figrmsddist}
+\end{figure}
+
+\begin{figure}[tb]
+  \centering
+    \includegraphics[width=1.0\textwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
+    \caption{{\bf Superposition of clustered models of Src and Abl.}
+    Superposed renderings of nine models each for Src and Abl, giving some indication the diversity of conformations generated by Ensembler.
+    The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figrmsddist}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
+    The models shown are the centroids of each cluster.
+    Models are colored and given transparency based on their sequence identity, so that high sequence identity models are blue and opaque, while lower sequence identity models are transparent and red.
+  }
+  \label{figsuperposition}
+\end{figure}
+
+\begin{figure}
+  \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+      \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/distances}
+      \caption{Src}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+      \includegraphics[width=1.0\textwidth]{residue_pair_distances/abl/distances}
+      \caption{Abl}
+    \end{subfigure}
+    \caption{{\bf Residue pair distances for Src and Abl.}
+    % ...
+  }
+  \label{figaa_pair_distances_ref_structures}
+\end{figure}
+
+\begin{figure}[tb]
+  \centering
+    \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/src_ref_structures}
+    \caption{{\bf Reference structures for Src.}
+    % ...
+  }
+  \label{figsrc_ref_structures}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DISCUSSION
