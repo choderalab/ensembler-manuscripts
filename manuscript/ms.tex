@@ -121,13 +121,13 @@ For this reason, simulation studies typically consider only one or a few protein
 
 The ability to fully exploit the large base of available protein sequence and structural data in biomolecular simulation studies could open up many interesting avenues for research, enabling the study of entire protein families or superfamilies across multiple organisms.
 The similarity between members of a given protein family could be exploited to generate arrays of conformational models, which could be used as starting configurations to aid sampling in MD simulations.
-This approach would be highly beneficial for many MD methods, such as Markov state modeling, which require global coverage of the conformational landscape to realize their full potential, and would also be particularly useful in cases where structural data is present for only a subset of the members of a protein family.
-It would also aid in studying protein families known to have multiple metastable conformations---such as kinases---, for which the combined body of structural data for the family may cover a large range of these conformations, while the available structures for any individual member might encompass only one or two distinct conformations.
+This approach would be highly beneficial for many MD methods, such as MSM construction, which require global coverage of the conformational landscape to realize their full potential, and would also be particularly useful in cases where structural data is present for only a subset of the members of a protein family.
+It would also aid in studying protein families known to have multiple metastable conformations---such as kinases---for which the combined body of structural data for the family may cover a large range of these conformations, while the available structures for any individual member might encompass only one or two distinct conformations.
 
-Here, we present the first steps toward bridging the gap between biomolecular simulation software and \emph{omics}-scale sequence and structural data: a fully automated open source framework for building simulation-ready protein models scalable from single sequences to entire superfamilies.
+Here, we present the first steps toward bridging the gap between biomolecular simulation software and \emph{omics}-scale sequence and structural data: a fully automated open source framework for building simulation-ready protein models in multiple conformational substates scalable from single sequences to entire superfamilies.
 {\bf Ensembler} provides functions for selecting target sequences and homologous template structures, and (by interfacing with a number of external packages) performs pairwise alignments, comparative modeling of target-template pairs, and several stages of model refinement.
 As an example application, we have constructed models for the entire set of human tyrosine kinase catalytic domains, using all available structures of protein kinase domains (from any species) as templates.
-This results in a total of almost 400,000 models, and we demonstrate that these provide wide-ranging coverage of known functionally relevant regions of structure.
+This results in a total of almost 400,000 models, and we demonstrate that these provide wide-ranging coverage of known functionally relevant conformations.
 By using these models as starting configurations for highly parallel MD simulations, we expect their structural diversity to greatly aid in sampling of conformational space.
 We anticipate that the tool will prove to be useful in a number of other ways.
 For example, the generated models could represent valuable data sets even without subsequent production simulation, allowing exploration of the conformational diversity present within the available structural data for a given protein family.
@@ -146,6 +146,7 @@ The various stages of this pipeline are described in detail below.
 
 {\color{red}[JDC: We could really help the reader if we preface each section here with a bit of an introduction of what we're trying to accomplish in each stage.  Otherwise, I worry that each section is a long list of things we do without reference to an overall concept of what the stage is trying to accomplish or why certain decisions were made.]}
 {\color{blue}[DLP: Good point. I've added in brief introductions for each section.]}
+{\color{red}[JDC: Can you do a bit more here? I feel that the reader may need more orientation.  You've essentially just added a sentence or two at the beginning of each stage that doesn't really enlighten the user as to your terminology (\emph{tempalte} and \emph{target}), your motivation for \emph{why} things are done each stage, or \emph{how} the user is to select among the various options available.]}
 
 \begin{figure*}[tb]
     \includegraphics[width=1.0\textwidth]{pipeline/pipeline2}
@@ -161,9 +162,10 @@ The various stages of this pipeline are described in detail below.
 \subsubsection{Target selection}
 
 The first stage entails the selection of a set of target protein sequences.
+{\color{red}[JDC: Maybe explain what is meant by ``target protein sequences''?  These are the sequences the user is interested in modeling.]}
 
 These targets can be defined manually, simply by providing a FASTA-formatted text file containing the desired target sequences with arbitrary identifiers.
-The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}), using the subcommand {\tt gather\_targets}.
+The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Isn't there a real citation for UniProt?]}, using the subcommand {\tt gather\_targets}.
 % {\color{red}[JDC: Does it make sense to omit discussion of TargetExplorer since it's not clear how useful this will be to users?]}
 % {\color{blue}[DLP: Yes, I think TargetExplorer is primarily an internal tool for the moment, so let's omit discussion of that.]}
 The user specifies a query string with the {\tt -{}-query} flag, which conforms to the same syntax as the search function available on the UniProt website.
@@ -181,10 +183,12 @@ For example, the above {\tt -{}-query} flag for selecting all human protein kina
 To select only domains of the first three types, the following regular expression could be used: {\tt`\^{}Protein kinase(?!; truncated)(?!; inactive)'}.
 In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest.
 Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
+{\color{red}[JDC: Does it make sense to set some of these coded examples off on their own lines?]}
 
 \subsubsection{Template selection}
 
 The second stage entails the selection of templates and storage of associated structures, sequences and identifiers.
+{\color{red}[JDC: Again, can you provide more information about \emph{why} this is being done? What the motivation is, and how the user might expect to select these?]}
 
 This data can be provided manually, by storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
 The structure residues must also match those in the sequence file.
@@ -288,26 +292,32 @@ For larger numbers of models (such as entire protein families), modeling time is
 \section{Results}
 \label{section:results}
 
-As a first application of {\bf Ensembler}, we have built models for all 90 human tyrosine kinase (TKs) domains listed in UniProt.
+{\color{red}[JDC: It would be useful to have some subheadings in this section to give it some internal organization.]}
+
+As a first application of {\bf Ensembler}, we have built models for all 90 human tyrosine kinase (TK) domains listed in UniProt.
+{\color{red}[JDC: Is there a complete list of these somewhere?  Maybe reference supplementary data?]}
 TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer.
+{\color{red}[JDC: CITE]}
 For example, mutations of Src are associated with colon, breast and prostate cancer {\color{red}[CITE: Src cancer involvement]}, while a translocation between the TK Abl and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia {\color{red}[CITE: Abl cancer involvement]}.
 Protein kinase domains are thought to have multiple accessible metastable conformation states, with a single active conformation, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations [CITE: Lee and Craik Science 2009].
-Kinases are thus a particularly interesting subject for study with MSM methods [CITE: recent kinase MSM papers], and this approach could benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g. by generating large numbers of starting configurations to be used in highly parallel MD simulation.
+{\color{red}[JDC: Lee and Craik do not discuss kinases, I don't believe; you'll have to find an accurate reference on kinase conformations.]}
+Kinases are thus a particularly interesting subject for study with MSM methods [CITE: recent kinase MSM papers], and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
 
 We selected all available structures of protein kinase domains (of any species) as templates, for a total of 4433 (\num{398970} target-template pairs).
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
 
 The templates were first subjected to loop remodeling, using the {\tt loopmodel} subcommand.
 Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled.
+{\color{red}[JDC: Can you give some statistics on the distribution of loop lengths modeled?  Why did loop modeling fail in the cases it did?  Anything else you can say here beyond this one sentence?]}
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} surviving models.
 In addition, the solvation stage was performed for two representative individual kinases (\emph{Src} and \emph{Abl}).
-The number of models which survived each stage are shown in Fig. \ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
-Fig. \ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage.
+The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
+Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage.
 
-The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig. \ref{figure:rmsd-distribution-by-sequence-identity}.
+The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
 The distributions are stratified based on the sequence identity between target and template, indicating that higher sequence identity templates result in lower RMSD models.
-The sequence identity stratifications were selected based on the sequence identity distribution (Fig. \ref{figure:sequence-identity-distribution}), which suggests an intuitive division into three categories, with \num{307753} models in the 0-35\% sequence identity range, \num{69922} models in the 35-55\% range, and \num{4893} models in the 55-100\% range. 
+The sequence identity stratifications were selected based on the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), which suggests an intuitive division into three categories, with \num{307753} models in the 0-35\% sequence identity range, \num{69922} models in the 35-55\% range, and \num{4893} models in the 55-100\% range. 
 
 % superpositions etc.
 
@@ -321,8 +331,10 @@ The sequence identity stratifications were selected based on the sequence identi
     \caption{{\bf Sequence identity distribution for human TK models.}
     Distribution of sequence identities for all 373,513 models generated for the human tyrosine kinases.
     {\color{blue}[DLP: should I mention the use of KDE smoothing?]}
+    {\color{red}[JDC: Yes.]}
     Sequence identities are calculated from pairwise target-template alignments.
     The cumulative distribution function is shown by the dashed line.    
+    {\color{red}[JDC: Font size too small.]}
     }
   \label{figure:sequence-identity-distribution}
 \end{figure}
@@ -338,6 +350,7 @@ The sequence identity stratifications were selected based on the sequence identi
     RMSD distributions for all 373,513 human TK models, divided into three sequence identity ranges.
     % TODO may want to mention KDE smoothing
     For a given target, model RMSDs are calculated relative to the highest sequence identity model for that target.
+    {\color{red}[JDC: Font size too small.]}
   }
   \label{figure:rmsd-distribution-by-sequence-identity}
 \end{figure}
@@ -350,10 +363,13 @@ The sequence identity stratifications were selected based on the sequence identi
     \includegraphics[width=1.0\columnwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
     
     \caption{{\bf Superposition of clustered models of Src and Abl.}
-    Superposed renderings of nine models each for Src and Abl, giving some indication the diversity of conformations generated by Ensembler.
+    Superposed renderings of nine models each for Src and Abl, 
+    {\color{red}[JDC: Src and Abl, or Src and Abl1? The description should match the captions above.]}
+    giving some indication the diversity of conformations generated by Ensembler.
     The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figure:rmsd-distribution-by-sequence-identity}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
     The models shown are the centroids of each cluster.
     Models are colored and given transparency based on their sequence identity, so that high sequence identity models are blue and opaque, while lower sequence identity models are transparent and red.
+    {\color{red}[JDC: Font size too small.]}
   }
   \label{figure:superposition}
 \end{figure}
@@ -372,6 +388,8 @@ The sequence identity stratifications were selected based on the sequence identi
 }
 
     \caption{{\bf E310-R409 and K295-E310 distances for models of Src and Abl, colored by sequence identity.}
+  {\color{red}[JDC: Font size too small if single-column, so I made this double-column. Not sure if that's what you want.]}
+  {\color{red}[JDC: Fill in rest of caption.]}
   }
   \label{figure:pair-distances-ref-structures}
 \end{figure*}
