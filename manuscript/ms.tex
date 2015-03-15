@@ -38,6 +38,8 @@
 \usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
 \usepackage[group-separator={,}]{siunitx}
 
+% Pretty-printing of shell commands
+\newcommand{\shellcmd}[1]{\\\ \texttt{\scriptsize\# #1}\\}
 
 % The figures are in a figures/ subdirectory.
 \graphicspath{{../figures/}}
@@ -70,13 +72,13 @@
 \begin{abstract}
 
 The rapidly expanding body of available genomic and protein structural data provides a rich resource for understanding protein dynamics with biomolecular simulation. 
-While computational infrastructure has grown rapidly, simulations on an \emph{omics} scale are not yet widespread, primarily because software infrastructure to enable this has not kept pace. 
-It should now be possible to study protein dynamics across entire (super)families, exploiting the variety of available structural biology data and conformational similarities across homologous proteins.
+While computational infrastructure has grown rapidly, simulations on an \emph{omics} scale are not yet widespread, primarily because software infrastructure to enable simulations at this scale have not kept pace. 
+It should now be possible to study protein dynamics across entire (super)families, exploiting both available structural biology data and conformational similarities across homologous proteins.
 Here, we present a new tool for enabling high-throughput simulation in the genomics era.
 {\bf Ensembler} takes any set of sequences---from a single sequence to an entire superfamily---and shepherds them through various stages of modeling and refinement to produce simulation-ready structures.
-This includes comparative modeling to all relevant PDB structures (which may span multiple conformational states of interest), reconstruction of missing loops, addition of missing atoms, culling of nearly identical structures, assignment of appropriate protonation states, solvation in explicit solvent, and refinement with molecular simulation to ensure stable simulation. 
+This includes comparative modeling to all relevant PDB structures (which may span multiple conformational states of interest), reconstruction of missing loops, addition of missing atoms, culling of nearly identical structures, assignment of appropriate protonation states, solvation in explicit solvent, and refinement and filtering with molecular simulation to ensure stable simulation. 
 The output of this pipeline is an ensemble of structures ready for subsequent molecular simulations using computer clusters, supercomputers, or distributed computing projects like Folding@home.
-{\bf Ensembler} automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.  
+{\bf Ensembler} automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.  {\color{red}[JDC: Prior sentence is redundant?]}
 A particular advantage of this approach can be found in the construction of kinetic models of conformational dynamics---such as Markov state models---which benefit from a diverse array of initial configurations that span the accessible conformational states to aid sampling.
 We demonstrate the power of this approach by constructing models for all catalytic domains in the human tyrosine kinase family, using all available kinase catalytic domain structures from any organism as structural templates.
 
@@ -84,7 +86,7 @@ We demonstrate the power of this approach by constructing models for all catalyt
 It should run on all major operating systems, and has been tested on Linux and OS X.
 The latest release can be installed via the {\tt conda} package manager, and the latest source can be downloaded from \url{https://github.com/choderalab/ensembler}.
 
-\emph{Keywords: molecular dynamics simulation; comparative modeling}
+\emph{Keywords: molecular dynamics simulation; comparative modeling; distributed simulation}
 
 % TODO expand to all human protein kinases?
 
@@ -381,8 +383,9 @@ The sequence identity stratifications were selected based on the sequence identi
 \section{Availability and Future Directions}
 \label{section:availability}
 
-The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python.
-Instructions can be found at \url{https://github.com/choderalab/ensembler}.
+The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python~\cite{conda}.
+\shellcmd{conda install -c https://conda.binstar.org/omnia ensembler}
+Up to date instructions can be found at \url{https://github.com/choderalab/ensembler}.
 This will install all dependencies except for Modeller and (optionally) Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
 The latest source can be downloaded from the above GitHub repository, which also contains instructions for building and installing the code.
 
