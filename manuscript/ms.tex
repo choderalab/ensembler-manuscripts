@@ -31,12 +31,15 @@
 \usepackage{amssymb}
 %\usepackage[mathbf,mathcal]{euler}
 %\usepackage{citesort}
-\usepackage{subcaption}
+\usepackage[caption=false]{subfig}
 \usepackage{dcolumn}
 \usepackage{boxedminipage}
 \usepackage{verbatim}
 \usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
 \usepackage[group-separator={,}]{siunitx}
+
+% Justification
+\captionsetup{singlelinecheck=off}
 
 % Pretty-printing of shell commands
 \newcommand{\shellcmd}[1]{\\\ \texttt{\scriptsize\# #1}\\}
@@ -103,7 +106,7 @@ The latest release can be installed via the {\tt conda} package manager, and the
 Recent advances in genomics and structural biology have helped generate an enormous wealth of protein data at the level of amino-acid sequence and three-dimensional structure.
 However, proteins typically exist as an ensemble of thermally accessible conformational states, and static structures provide only a snapshot of their rich dynamical behavior.
 Many functional properties---such as the ability to bind small molecules or interact with signaling partners---require transitions between states, encompassing anything from reorganization of sidechains at binding interfaces to domain motions to large scale folding-unfolding events.
-Drug discovery could also benefit from a more extensive consideration of protein dynamics, whereby small molecules might be selected based on their predicted ability to bind and trap a protein target in an inactive state [CITE Lee Craik Science 2009].
+Drug discovery could also benefit from a more extensive consideration of protein dynamics, whereby small molecules might be selected based on their predicted ability to bind and trap a protein target in an inactive state~\cite{craik:2009:science:trapping-moving-targets}.
 
 Molecular dynamics (MD) simulations have the capability, in principle, to describe the time evolution of a protein in atomistic detail, and have proven themselves to be a useful tool in the study of protein dynamics.
 A number of mature software packages and forcefields are available, and much recent progress has been driven by advances in computing architecture.
@@ -145,8 +148,8 @@ The various stages of this pipeline are described in detail below.
 {\color{blue}[DLP: Good point. I've added in brief introductions for each section.]}
 
 \begin{figure*}[tb]
-  \centering
     \includegraphics[width=1.0\textwidth]{pipeline/pipeline2}
+
   \caption{{\bf Diagrammatic representation of the various stages of the Ensembler pipeline.}
   The number of viable models surviving each stage of the pipeline are shown, either for all tyrosine kinases (\emph{All TKs}) or representative individual kinases (\emph{SRC} and \emph{ABL}).
   In addition, the typical timing on a cluster (containing Intel Xeon E5-2665 2.4GHz hyperthreaded processors and NVIDIA GTX-680 or GTX-Titan GPUs) is reported to exemplify the resources required per model and for modeling the entire set of tyrosine kinases.
@@ -302,79 +305,90 @@ In addition, the solvation stage was performed for two representative individual
 The number of models which survived each stage are shown in Fig. \ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
 Fig. \ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage.
 
-The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig. \ref{figrmsddist}.
+The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig. \ref{figure:rmsd-distribution-by-sequence-identity}.
 The distributions are stratified based on the sequence identity between target and template, indicating that higher sequence identity templates result in lower RMSD models.
-The sequence identity stratifications were selected based on the sequence identity distribution (Fig. \ref{figseqiddist}), which suggests an intuitive division into three categories, with \num{307753} models in the 0-35\% sequence identity range, \num{69922} models in the 35-55\% range, and \num{4893} models in the 55-100\% range. 
+The sequence identity stratifications were selected based on the sequence identity distribution (Fig. \ref{figure:sequence-identity-distribution}), which suggests an intuitive division into three categories, with \num{307753} models in the 0-35\% sequence identity range, \num{69922} models in the 35-55\% range, and \num{4893} models in the 55-100\% range. 
 
 % superpositions etc.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Sequence identity distribution
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{figure}[tb]
-  \centering
-    \includegraphics[width=1.0\textwidth]{seqid_dist/seqid_dist}
+    \includegraphics[width=1.0\columnwidth]{seqid_dist/seqid_dist}
+
     \caption{{\bf Sequence identity distribution for human TK models.}
     Distribution of sequence identities for all 373,513 models generated for the human tyrosine kinases.
     {\color{blue}[DLP: should I mention the use of KDE smoothing?]}
     Sequence identities are calculated from pairwise target-template alignments.
-    The cumulative distribution function is shown by the dashed line.
+    The cumulative distribution function is shown by the dashed line.    
     }
-  \label{figseqiddist}
+  \label{figure:sequence-identity-distribution}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: RMSD distribution by sequence identity
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{figure}[tb]
-  \centering
-    \includegraphics[width=1.0\textwidth]{rmsddist/rmsddist2}
+    \includegraphics[width=1.0\columnwidth]{rmsddist/rmsddist2}
+
     \caption{{\bf RMSD distribution by sequence identity.}
     RMSD distributions for all 373,513 human TK models, divided into three sequence identity ranges.
     % TODO may want to mention KDE smoothing
     For a given target, model RMSDs are calculated relative to the highest sequence identity model for that target.
   }
-  \label{figrmsddist}
+  \label{figure:rmsd-distribution-by-sequence-identity}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Superposition of Src and Abl sequence identity classes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{figure}[tb]
-  \centering
-    \includegraphics[width=1.0\textwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
+    \includegraphics[width=1.0\columnwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
+    
     \caption{{\bf Superposition of clustered models of Src and Abl.}
     Superposed renderings of nine models each for Src and Abl, giving some indication the diversity of conformations generated by Ensembler.
-    The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figrmsddist}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
+    The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figure:rmsd-distribution-by-sequence-identity}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
     The models shown are the centroids of each cluster.
     Models are colored and given transparency based on their sequence identity, so that high sequence identity models are blue and opaque, while lower sequence identity models are transparent and red.
   }
-  \label{figsuperposition}
+  \label{figure:superposition}
 \end{figure}
 
-\begin{figure}
-  \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-      \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/distances}
-      \caption{Src}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-      \includegraphics[width=1.0\textwidth]{residue_pair_distances/abl/distances}
-      \caption{Abl}
-    \end{subfigure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Residue pair distance plots
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+
+\subfloat[Src]{\label{figure:src-distances}%
+   \includegraphics[width=0.45\textwidth]{residue_pair_distances/src/distances}
+}
+\subfloat[Abl]{\label{figure:abl-distances}%
+   \includegraphics[width=0.45\textwidth]{residue_pair_distances/abl/distances}
+}
+
     \caption{{\bf E310-R409 and K295-E310 distances for models of Src and Abl, colored by sequence identity.}
   }
-  \label{figaa_pair_distances_ref_structures}
-\end{figure}
+  \label{figure:pair-distances-ref-structures}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Pairwise distances with reference structures for Src
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[tb]
-  \centering
     \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/src_ref_structures}
-    % \begin{subfigure}[b]{0.45\textwidth}
-    %   \includegraphics[width=1.0\textwidth, clip=true, trim=30em 0em 40em 0em]{residue_pair_distances/src/inactive}
-    %   \caption{Inactive}
-    % \end{subfigure}
-    % \begin{subfigure}[b]{0.45\textwidth}
-    %   \includegraphics[width=1.0\textwidth, clip=true, trim=30em 0em 27em 10em]{residue_pair_distances/src/active}
-    %   \caption{Active}
-    % \end{subfigure}
+    
     \caption{{\bf Two structures of Src, indicating certain residues involved in activation.}
     In the inactive state, E310 forms a salt bridge with R409.
     During activation, the C-helix (green) moves and rotates, orienting E310 towards the ATP-binding site and allowing it to instead form a salt bridge with K295.
     This positions K295 in the appropriate position for catalysis.
   }
-  \label{figsrc_ref_structures}
+  \label{figure:src-ref-structrues}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
