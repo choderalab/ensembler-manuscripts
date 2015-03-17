@@ -81,7 +81,7 @@ Here, we present a new tool for enabling high-throughput simulation in the genom
 {\bf Ensembler} takes any set of sequences---from a single sequence to an entire superfamily---and shepherds them through various stages of modeling and refinement to produce simulation-ready structures.
 This includes comparative modeling to all relevant PDB structures (which may span multiple conformational states of interest), reconstruction of missing loops, addition of missing atoms, culling of nearly identical structures, assignment of appropriate protonation states, solvation in explicit solvent, and refinement and filtering with molecular simulation to ensure stable simulation. 
 The output of this pipeline is an ensemble of structures ready for subsequent molecular simulations using computer clusters, supercomputers, or distributed computing projects like Folding@home.
-{\bf Ensembler} automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.  {\color{red}[JDC: Prior sentence is redundant?]}
+{\bf Ensembler} thus automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.  {\color{red}[JDC: Prior sentence is redundant?]}
 A particular advantage of this approach can be found in the construction of kinetic models of conformational dynamics---such as Markov state models---which benefit from a diverse array of initial configurations that span the accessible conformational states to aid sampling.
 We demonstrate the power of this approach by constructing models for all catalytic domains in the human tyrosine kinase family, using all available kinase catalytic domain structures from any organism as structural templates.
 
@@ -223,6 +223,8 @@ This stage entails the generation of models via comparative modeling of each tar
 
 Modeling is performed with the Modeller automodel function {\color{red}[CITE: Modeller]}, which implements comparative structure modeling by satisfaction of spatial restraints {\color{red}[CITE: Sali Blundell J Mol Biol 1993; Fiser Sali Prot Sci 9 2000]}.
 While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module (CITE: BioPython)---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~{\color{red}[CITE: Gaston Gonnet Science 1992]}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
+Models are output as PDB-format coordinate files.
+To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip} library to apply compression to all sizeable text files.
 
 All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
 Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
@@ -306,20 +308,54 @@ Kinases are thus a particularly interesting subject for study with MSM methods [
 We selected all available structures of protein kinase domains (of any species) as templates, for a total of 4433 (\num{398970} target-template pairs).
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
 
-The templates were first subjected to loop remodeling, using the {\tt loopmodel} subcommand.
-Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled.
+Unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
+The number of missing residues in each template ranged from 0 to 102, with a median of 11 and a standard deviation of 13.
+Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled, with most remodeling failures attributable to spatial constraints imposed by the original template structure.
+There was some correlation between remodeling failures and the number of missing residues; templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
+The distributions are plotted in Fig. S1.
+% TODO Work out if there is an easy way to reference SI figures
 {\color{red}[JDC: Can you give some statistics on the distribution of loop lengths modeled?  Why did loop modeling fail in the cases it did?  Anything else you can say here beyond this one sentence?]}
+{\color{blue}[DLP: Addressed in the text, and a SI figure.]}
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} surviving models.
-In addition, the solvation stage was performed for two representative individual kinases (\emph{Src} and \emph{Abl}).
+To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for just two representative individual kinases (\emph{Src} and \emph{Abl}).
 The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
-Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage.
+The number of refined models for each target ranged from 4005 to 4248, with a median of 4160 and standard deviation of 60.
+Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
+
+Each model generated about 513 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 1.7 GB per TK target or 149 GB for all 90 TKs.
+The data generated per model breaks down as 436 kB for the output from the modeling stage---with the largest contribution arising from the Modeller restraint files---and 77 kB for the implicit solvent MD refinement stage.
 
 The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
-The distributions are stratified based on the sequence identity between target and template, indicating that higher sequence identity templates result in lower RMSD models.
-The sequence identity stratifications were selected based on the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), which suggests an intuitive division into three categories, with \num{307753} models in the 0-35\% sequence identity range, \num{69922} models in the 35-55\% range, and \num{4893} models in the 55-100\% range. 
+The distributions are stratified based on the sequence identity between target and template, indicating that higher sequence identity templates result in models with lower RMSDs.
+The sequence identity stratifications were selected based on the sequence identity distribution plotted in Fig.~\ref{figure:sequence-identity-distribution}, which suggests an intuitive division into three categories, with \num{307753} models in the 0-35\% sequence identity range, \num{69922} models in the 35-55\% range, and \num{4893} models in the 55-100\% range. 
 
-% superpositions etc.
+To provide a more complete evaluation of the models generated, we have analyzed two example TKs (\emph{Src} and \emph{Abl}) in detail.
+Due to their importance in cancer, as outlined above, these kinases have been the subject of numerous studies, encompassing many different methodologies.
+In terms of structural data, a large number of crystal structures have been solved (with or without ligands such as nucleotide substrate or inhibitor drugs), showing the kinases in a number of different conformations.
+These two kinases are thus also interesting targets for MSM studies, with one recent study focusing on modeling the states which constitute the activation pathway of Src {\color{blue}[CITE:Shukla Pande Nat Commun 2014]}.
+
+Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl}.
+Models were first stratified into three ranges, based on the structure of the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), then subjected to $k$-medoids clustering to pick three representative models from each sequence identity range.
+Each model is colored and given a transparency based on the sequence identity between the target and template sequence.
+The figure gives an idea of the variance present in the generated models.
+High sequence identity models (in opaque blue) tend to be quite structurally similar, with some variation in loops or changes in domain orientation.
+The Abl1 renderings indicate one high sequence identity model with a long unstructured region at one of the termini, which was unresolved in the original template structure.
+While such models are not necessarily incorrect or undersirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
+Lower sequence identity models (in transparent white or red) indicate much greater variation in all parts of the structure.
+We believe the mix of high and low sequence identity models to be particularly useful for methods such as MSM building, which require thorough sampling of the conformational landscape.
+The high sequence identity models could be considered to be the most likely to accurately represent true metastable states.
+Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
+
+To evaluate the models of \emph{Src} and \emph{Abl} in the context of the published literature, we have focused on two residue pair distances thought to be important for the activation process in protein kinase domains.
+Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
+A number of articles and review articles suggest that the activation process entails (amongst other processes) the transfer of a salt-bridge from E310 and R409 to a salt-bridge between E310 and K295, thus positioning K295 in the required position for catalysis. % TODO CITE
+These residues are also known to be conserved in protein kinase domains, % TODO CITE
+and thus likely also play a role in the activation process of Abl1. % TODO CITE
+% TODO NOTE: distances for Abl1 structures all look like ?inactive or ?active
+As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
+The models appear to have strong coverage of regions in which either of the salt-bridges is formed, as well as a wide range of regions inbetween.
+We thus expect that such a set of models, if used as starting configurations for a parallel MD simulation, could greastly aid in sampling of the activation process.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Sequence identity distribution
@@ -330,10 +366,9 @@ The sequence identity stratifications were selected based on the sequence identi
 
     \caption{{\bf Sequence identity distribution for human TK models.}
     Distribution of sequence identities for all 373,513 models generated for the human tyrosine kinases.
-    {\color{blue}[DLP: should I mention the use of KDE smoothing?]}
-    {\color{red}[JDC: Yes.]}
     Sequence identities are calculated from pairwise target-template alignments.
-    The cumulative distribution function is shown by the dashed line.    
+    The cumulative distribution function is shown by the dashed line.
+    The plotted distributions have been smoothed using kernel density estimation.
     {\color{red}[JDC: Font size too small.]}
     }
   \label{figure:sequence-identity-distribution}
@@ -348,8 +383,8 @@ The sequence identity stratifications were selected based on the sequence identi
 
     \caption{{\bf RMSD distribution by sequence identity.}
     RMSD distributions for all 373,513 human TK models, divided into three sequence identity ranges.
-    % TODO may want to mention KDE smoothing
     For a given target, model RMSDs are calculated relative to the highest sequence identity model for that target.
+    The plotted distributions have been smoothed using kernel density estimation.
     {\color{red}[JDC: Font size too small.]}
   }
   \label{figure:rmsd-distribution-by-sequence-identity}
@@ -375,6 +410,21 @@ The sequence identity stratifications were selected based on the sequence identi
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Reference structures for Src
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[tb]
+    \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/src_ref_structures}
+    
+    \caption{{\bf Two structures of Src, indicating certain residues involved in activation.}
+    In the inactive state, E310 forms a salt bridge with R409.
+    During activation, the C-helix (green) moves and rotates, orienting E310 towards the ATP-binding site and allowing it to instead form a salt bridge with K295.
+    This positions K295 in the appropriate position for catalysis.
+  }
+  \label{figure:src-ref-structures}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Residue pair distance plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -387,27 +437,16 @@ The sequence identity stratifications were selected based on the sequence identi
    \includegraphics[width=0.45\textwidth]{residue_pair_distances/abl/distances}
 }
 
-    \caption{{\bf E310-R409 and K295-E310 distances for models of Src and Abl, colored by sequence identity.}
-  {\color{red}[JDC: Font size too small if single-column, so I made this double-column. Not sure if that's what you want.]}
-  {\color{red}[JDC: Fill in rest of caption.]}
-  }
-  \label{figure:pair-distances-ref-structures}
+    \caption{{\bf Src and Abl1 models projected onto the distances between two conserved residue pairs, colored by sequence identity.}
+    Two Src structures (PDB entries 1Y57 [CITE] and 2SRC [CITE]) are projected onto the plots for reference, representing active and inactive states respectively.
+    These structures and the residue pairs analyzed here are depicted in Fig.~\ref{figure:src-ref-structures}.
+    Distances are measured between the center of masses of the three terminal sidechain heavy atoms of each residue.
+    The atom names for these atoms, according to the PDB coordinate files for both reference structures, are---Lys: NZ, CD, CE (ethylamine); Glu: OE1, CD, OE2 (carboxylate); Arg: NH1, CZ, NH2 (part of guanidine).
+    {\color{red}[JDC: Font size too small if single-column, so I made this double-column. Not sure if that's what you want.]}
+    {\color{red}[JDC: Fill in rest of caption.]}
+    }
+  \label{figure:pair-distances}
 \end{figure*}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Pairwise distances with reference structures for Src
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tb]
-    \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/src_ref_structures}
-    
-    \caption{{\bf Two structures of Src, indicating certain residues involved in activation.}
-    In the inactive state, E310 forms a salt bridge with R409.
-    During activation, the C-helix (green) moves and rotates, orienting E310 towards the ATP-binding site and allowing it to instead form a salt bridge with K295.
-    This positions K295 in the appropriate position for catalysis.
-  }
-  \label{figure:src-ref-structrues}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DISCUSSION

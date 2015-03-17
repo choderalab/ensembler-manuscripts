@@ -3,8 +3,11 @@ import ensembler
 import pandas as pd
 import numpy as np
 import seaborn as sns
-import matplotlib.pyplot as plt
 from matplotlib import lines
+
+# ====================
+# Data
+# ====================
 
 data_dir = os.path.join('..', '..', 'data')
 targets = open(os.path.join(data_dir, 'TKs.txt')).read().splitlines()
@@ -20,10 +23,16 @@ for target in targets[1:]:
 
 df_has_model = combined_dfs[combined_dfs.has_model]
 
-# Plot sequence identity distribution
+# ====================
+# Plotting
+# ====================
+
+# sns.set_context('paper', font_scale=1.7)
 
 sns.set(style="white")
-fig, ax1 = plt.subplots()
+fig = sns.plt.figure()
+ax1 = sns.plt.axes()
+# fig, ax1 = sns.plt.subplots()
 
 palette = sns.color_palette('deep', 2)
 
@@ -32,7 +41,7 @@ sns.kdeplot(df_has_model.seqid, bw=1., ax=ax1, color='black', shade=True)
 ax1.legend_.remove()
 ax1.set_xlabel('sequence identity (%)')
 ax1.set_xlim(100,0)
-plt.setp(ax1, yticks=[])
+sns.plt.setp(ax1, yticks=[])
 
 ax2 = ax1.twinx().twiny()
 sns.kdeplot(100.-df_has_model.seqid[::100], bw=1., cumulative=True, ax=ax2, color='black', linestyle='--')
@@ -40,7 +49,7 @@ ax2.set_ylabel('CDF')
 ax2.legend_.remove()
 
 ax2.set_xlim(0,100)
-plt.setp(ax2, xticks=[])
+sns.plt.setp(ax2, xticks=[])
 
 x1  = [-3.0, -3.0]
 y1  = [0.68, 0.78]
@@ -55,5 +64,5 @@ ax2.add_line(line2)
 ax2.text(-3., 0.5, 'probability density', rotation='vertical', ha='center', va='center')
 ax2.text(107.5, 0.5, 'CDF', rotation='vertical', ha='center', va='center')
 
-# plt.tight_layout()
-plt.savefig('seqid_dist.png')
+# sns.plt.tight_layout()
+sns.plt.savefig('seqid_dist.png')
