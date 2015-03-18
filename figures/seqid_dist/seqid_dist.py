@@ -64,4 +64,5 @@ ax2.add_line(line1)
 ax2.add_line(line2)
 
 sns.plt.tight_layout()
-sns.plt.savefig('seqid_dist.png', dpi=300)
+sns.plt.savefig('seqid_dist.pdf')
+# sns.plt.savefig('seqid_dist.png', dpi=300)

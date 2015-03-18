@@ -72,7 +72,8 @@ sns.despine(left=True)
 
 plt.tight_layout()
 
-plt.savefig('rmsddist2.png', dpi=300)
+plt.savefig('rmsddist2.pdf')
+# plt.savefig('rmsddist2.png', dpi=300)
 
 plt.close()
 

@@ -96,5 +96,6 @@ cbar.set_alpha=1
 fig.subplots_adjust(hspace=0)
 # sns.plt.tight_layout()
 
-sns.plt.savefig('distances.png', bbox_inches='tight', dpi=300)
+sns.plt.savefig('distances.pdf', bbox_inches='tight')
+# sns.plt.savefig('distances.png', bbox_inches='tight', dpi=300)
 # sns.plt.savefig('distances.png', dpi=300)

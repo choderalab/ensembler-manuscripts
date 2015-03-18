@@ -11,6 +11,7 @@ unsuccessful = df[df.no_missing_residues == False][df.successful == False]
 # ====
 
 sns.set_context('paper', font_scale=1)
+sns.set_style('whitegrid')
 sns.plt.figure(figsize=(3.5, 2.625))
 
 sns.distplot(successful.nmissing_resis, hist=False, kde=True, rug=True, label='successful',
@@ -37,4 +38,5 @@ sns.plt.xlabel('Number of missing residues')
 
 sns.plt.tight_layout()
 
-sns.plt.savefig('nmissing_resis_distributions.png', dpi=300)
+sns.plt.savefig('nmissing_resis_distributions.pdf')
+# sns.plt.savefig('nmissing_resis_distributions.png', dpi=300)
