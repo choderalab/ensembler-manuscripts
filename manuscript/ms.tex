@@ -159,23 +159,18 @@ The various stages of this pipeline are described in detail below.
   \label{figpipeline}
 \end{figure*}
 
-\subsubsection{Target selection}
+\subsubsection*{Target selection}
 
-The first stage entails the selection of a set of target protein sequences.
+The first stage entails the selection of a set of target protein sequences, i.e. the sequences the user is interested in modeling.
 {\color{red}[JDC: Maybe explain what is meant by ``target protein sequences''?  These are the sequences the user is interested in modeling.]}
+{\color{blue}[DLP: Addressed.]}
 
 These targets can be defined manually, simply by providing a FASTA-formatted text file containing the desired target sequences with arbitrary identifiers.
 The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Isn't there a real citation for UniProt?]}, using the subcommand {\tt gather\_targets}.
-% {\color{red}[JDC: Does it make sense to omit discussion of TargetExplorer since it's not clear how useful this will be to users?]}
-% {\color{blue}[DLP: Yes, I think TargetExplorer is primarily an internal tool for the moment, so let's omit discussion of that.]}
 The user specifies a query string with the {\tt -{}-query} flag, which conforms to the same syntax as the search function available on the UniProt website.
-% {\color{red}[JDC: What command-line flag or API call is used to select targets from UniProt?]}
-% {\color{red}[DLP: the command-line flag is now described]}
 For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
 In this way, the user may select a single protein, many proteins, or an entire superfamily.
 The program outputs a FASTA file, setting the UniProt mnemonic (e.g. {\tt SRC\_HUMAN}) as the identifier for each target protein.
-% {\color{red}[JDC: Can you give a clearer picture of how this is done?  Does the user just specify different flags for these categories, or would they have to construct different Uniprot searches?]}
-% {\color{blue}[DLP: This is explained more clearly now.]}
 
 In many cases, it will be desirable to build models of an isolated protein domain, rather than the full-length protein.
 The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-domains} flag. 
@@ -185,22 +180,22 @@ In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_
 Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
 {\color{red}[JDC: Does it make sense to set some of these coded examples off on their own lines?]}
 
-\subsubsection{Template selection}
+\subsubsection*{Template selection}
 
-The second stage entails the selection of templates and storage of associated structures, sequences and identifiers.
+{\bf Ensembler} uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
+The second stage thus entails the selection of templates and storage of associated sequences, structures and identifiers.
+These templates can be specified manually, or using the {\tt ensembler gather\_templates} subcommand to automatically select templates from the Protein Data Bank (PDB) or from UniProt.
+A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, guaranteeing some degree of homology between targets and templates.
 {\color{red}[JDC: Again, can you provide more information about \emph{why} this is being done? What the motivation is, and how the user might expect to select these?]}
+{\color{blue}[DLP: Addressed]}
 
-This data can be provided manually, by storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
+Manual selection of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
 The structure residues must also match those in the sequence file.
 
-The {\tt ensembler gather\_templates} subcommand also provides methods for selecting template structures from either UniProt or the Protein Data Bank (PDB; \href{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
+The {\tt ensembler gather\_templates} subcommand provides methods for selecting template structures from either UniProt or the PDB (\href{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
 Both methods select templates at the level of PDB chains---a PDB structure containing multiple chains with identical sequence spans (e.g. for crystal unit cells with multiple asymmetric units) would thus give rise to multiple template structures.
 
-% {\color{red}[JDC: Do you use the RCSB or some other PDB site?]} - DLP: I use the RCSB, but all PDB sites are updated simultaneously so I think it shouldn't matter. However, I've updated the link so that it points to the RCSB PDB.
-% {\color{red}[JDC: Again, not sure if it is helpful to leave this in unless it will be immediately useful to the reader]} - DLP: references to TargetExplorer removed
-
 Selection of templates from the PDB simply requires passing a list of PDB IDs as a comma-separated string, e.g. {\tt -{}-query 2H8H,1Y57}.
-% {\color{red}[JDC: Who specifies the list of PDB IDs?  How are they specified?  Can this be built automatically, or does the user need to specify these?]} DLP: these are specified by the user as a comma-separated list, as is now described above.
 Specific PDB chain IDs can optionally also be selected via the {\tt -{}-chainids} flag.
 The program retrieves structures from the PDB server, as well as associated data from the SIFTS service (\href{http://www.ebi.ac.uk/pdbe/docs/sifts/}{www.ebi.ac.uk/pdbe/docs/sifts}) (CITE: Velankar Nucleic Acids Res 2013), which provides residue-level mappings between PDB and UniProt entries.
 The SIFTS data is used to extract template sequences, retaining only residues which are resolved and match the equivalent residue in the UniProt sequence---non-wildtype residues are thus removed from the template structures.
@@ -217,22 +212,22 @@ Because fewer loops need to be built during the subsequent model-building stage,
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
 
-\subsubsection{Modeling}
+\subsubsection*{Modeling}
 
-This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are filtered out using a RMSD-based clustering scheme.
+This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are subsequently filtered out using a RMSD-based clustering scheme.
 
 Modeling is performed with the Modeller automodel function {\color{red}[CITE: Modeller]}, which implements comparative structure modeling by satisfaction of spatial restraints {\color{red}[CITE: Sali Blundell J Mol Biol 1993; Fiser Sali Prot Sci 9 2000]}.
-While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module (CITE: BioPython)---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~{\color{red}[CITE: Gaston Gonnet Science 1992]}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
+While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module [CITE: BioPython]---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~{\color{red}[CITE: Gaston Gonnet Science 1992]}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
 Models are output as PDB-format coordinate files.
-To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip} library to apply compression to all sizeable text files.
+A list of all model identifiers sorted by sequence identity is also written to a text file.
+To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip} library to apply compression to all sizeable text files from the modeling stage onwards.
 
 All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
 Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
 The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
-% {\color{red}[JDC: Which atoms are used in the RMSD comparison?  All atoms, heavy atoms, or CA only?]} - DLP: CA only. This is now specified in the text.
 
-\subsubsection{Refinement}
+\subsubsection*{Refinement}
 
 This stage entails the use of molecular dynamics simulations to refine the models built in the previous step.
 This helps to improve model quality and also prepares models for subsequent production simulation, including solvation with explicit water molecules, if desired.
@@ -257,19 +252,16 @@ Other force fields or water models such as TIP4P-Ew {\color{red}[CITE]}) can be 
 {\color{red}[JDC: We should allow other water models in OpenMM too, such as TIP4P-Ew?]}
 {\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a -{}-water\_model flag to the CLI, for example.]}
 
-{\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g. structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
-
-\subsubsection{Packaging}
+\subsubsection*{Packaging}
 
 {\bf Ensembler} provides a packaging module which can be used to compress models in preparation for data transfer, or to prepare models with the appropriate directory and file structure for subsequent production simulations on the distributed computing platform Folding@home (CITE: F@H).
 
-\subsubsection{Provenance}
+\subsubsection*{Provenance}
 
 To aid the user in tracking the provenance of each model, each pipeline function also outputs a metadata file, which helps to link data to the software version used to generate it (both {\bf Ensembler} and its dependencies), and also provides timing and performance information, and other data such as hostname.
 
-\subsubsection{Rapidly modeling a single template}
+\subsubsection*{Rapidly modeling a single template}
 
-% quickmodel function performs the entire pipeline in one go, for a single target and a small number of templates.
 For users interested in simply using {\bf Ensembler} to rapidly generate a set of models for a single template sequence, {\bf Ensembler} provides a command-line tool {\tt quickmodel}, which performs the entire pipeline for a single target with a small number of templates.
 For larger numbers of models (such as entire protein families), modeling time is greatly reduced by using the main modeling pipeline, which is parallelized via MPI, distributing computation across each model (or across each template, in the case of the loop reconstruction code), and scaling (in a ``pleasantly parallel'' manner) up to the number of models generated.
 
@@ -296,17 +288,21 @@ For larger numbers of models (such as entire protein families), modeling time is
 
 {\color{red}[JDC: It would be useful to have some subheadings in this section to give it some internal organization.]}
 
+\subsubsection*{Modeling of all human tyrosine kinase catalytic domains}
+
 As a first application of {\bf Ensembler}, we have built models for all 90 human tyrosine kinase (TK) domains listed in UniProt.
 {\color{red}[JDC: Is there a complete list of these somewhere?  Maybe reference supplementary data?]}
 TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer.
 {\color{red}[JDC: CITE]}
-For example, mutations of Src are associated with colon, breast and prostate cancer {\color{red}[CITE: Src cancer involvement]}, while a translocation between the TK Abl and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia {\color{red}[CITE: Abl cancer involvement]}.
+For example, mutations of Src are associated with colon, breast and prostate cancer {\color{red}[CITE: Src cancer involvement]}, while a translocation between the TK Abl1 and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia {\color{red}[CITE: Abl1 cancer involvement]}.
 Protein kinase domains are thought to have multiple accessible metastable conformation states, with a single active conformation, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations [CITE: Lee and Craik Science 2009].
 {\color{red}[JDC: Lee and Craik do not discuss kinases, I don't believe; you'll have to find an accurate reference on kinase conformations.]}
 Kinases are thus a particularly interesting subject for study with MSM methods [CITE: recent kinase MSM papers], and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
 
 We selected all available structures of protein kinase domains (of any species) as templates, for a total of 4433 (\num{398970} target-template pairs).
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
+
+\subsubsection*{Ensembler modeling statistics}
 
 Unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
 The number of missing residues in each template ranged from 0 to 102, with a median of 11 and a standard deviation of 13.
@@ -318,7 +314,7 @@ The distributions are plotted in Fig. S1.
 {\color{blue}[DLP: Addressed in the text, and a SI figure.]}
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} surviving models.
-To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for just two representative individual kinases (\emph{Src} and \emph{Abl}).
+To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
 The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
 The number of refined models for each target ranged from 4005 to 4248, with a median of 4160 and standard deviation of 60.
 Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
@@ -326,16 +322,18 @@ Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster f
 Each model generated about 513 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 1.7 GB per TK target or 149 GB for all 90 TKs.
 The data generated per model breaks down as 436 kB for the output from the modeling stage---with the largest contribution arising from the Modeller restraint files---and 77 kB for the implicit solvent MD refinement stage.
 
+\subsubsection*{Evaluation of model quality}
+
 The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
 The distributions are stratified based on the sequence identity between target and template, indicating that higher sequence identity templates result in models with lower RMSDs.
 The sequence identity stratifications were selected based on the sequence identity distribution plotted in Fig.~\ref{figure:sequence-identity-distribution}, which suggests an intuitive division into three categories, with \num{307753} models in the 0-35\% sequence identity range, \num{69922} models in the 35-55\% range, and \num{4893} models in the 55-100\% range. 
 
-To provide a more complete evaluation of the models generated, we have analyzed two example TKs (\emph{Src} and \emph{Abl}) in detail.
+To provide a more complete evaluation of the models generated, we have analyzed two example TKs (\emph{Src} and \emph{Abl1}) in detail.
 Due to their importance in cancer, as outlined above, these kinases have been the subject of numerous studies, encompassing many different methodologies.
 In terms of structural data, a large number of crystal structures have been solved (with or without ligands such as nucleotide substrate or inhibitor drugs), showing the kinases in a number of different conformations.
 These two kinases are thus also interesting targets for MSM studies, with one recent study focusing on modeling the states which constitute the activation pathway of Src {\color{blue}[CITE:Shukla Pande Nat Commun 2014]}.
 
-Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl}.
+Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl1}.
 Models were first stratified into three ranges, based on the structure of the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), then subjected to $k$-medoids clustering to pick three representative models from each sequence identity range.
 Each model is colored and given a transparency based on the sequence identity between the target and template sequence.
 The figure gives an idea of the variance present in the generated models.
@@ -347,15 +345,14 @@ We believe the mix of high and low sequence identity models to be particularly u
 The high sequence identity models could be considered to be the most likely to accurately represent true metastable states.
 Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
 
-To evaluate the models of \emph{Src} and \emph{Abl} in the context of the published literature, we have focused on two residue pair distances thought to be important for the activation process in protein kinase domains.
+To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published literature, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domains.
+We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S1.
 Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
-A number of articles and review articles suggest that the activation process entails (amongst other processes) the transfer of a salt-bridge from E310 and R409 to a salt-bridge between E310 and K295, thus positioning K295 in the required position for catalysis. % TODO CITE
-These residues are also known to be conserved in protein kinase domains, % TODO CITE
-and thus likely also play a role in the activation process of Abl1. % TODO CITE
-% TODO NOTE: distances for Abl1 structures all look like ?inactive or ?active
-As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
-The models appear to have strong coverage of regions in which either of the salt-bridges is formed, as well as a wide range of regions inbetween.
-We thus expect that such a set of models, if used as starting configurations for a parallel MD simulation, could greastly aid in sampling of the activation process.
+One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
+These three residues are also well conserved [CITE Kannan Neuwald JMB 2005] and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family [CITE Foda Shan Seeliger Src Nat Commun 2015; Shukla Pande Nat Commun 2014; Ozkirimli Post Prot Sci 2008].
+As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl1} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
+The models show strong coverage of regions in which either of the electrostatic interactions is formed, as well as a wide range of regions inbetween.
+We thus expect that such a set of models, if used as starting configurations for highly parallel MD simulation, could greatly aid in sampling of the activation process.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Sequence identity distribution
@@ -365,7 +362,7 @@ We thus expect that such a set of models, if used as starting configurations for
     \includegraphics[width=1.0\columnwidth]{seqid_dist/seqid_dist}
 
     \caption{{\bf Sequence identity distribution for human TK models.}
-    Distribution of sequence identities for all 373,513 models generated for the human tyrosine kinases.
+    Distribution of sequence identities for all \num{373513} models generated for the human tyrosine kinases.
     Sequence identities are calculated from pairwise target-template alignments.
     The cumulative distribution function is shown by the dashed line.
     The plotted distributions have been smoothed using kernel density estimation.
@@ -382,7 +379,7 @@ We thus expect that such a set of models, if used as starting configurations for
     \includegraphics[width=1.0\columnwidth]{rmsddist/rmsddist2}
 
     \caption{{\bf RMSD distribution by sequence identity.}
-    RMSD distributions for all 373,513 human TK models, divided into three sequence identity ranges.
+    RMSD distributions for all \num{373513} human TK models, divided into three sequence identity ranges.
     For a given target, model RMSDs are calculated relative to the highest sequence identity model for that target.
     The plotted distributions have been smoothed using kernel density estimation.
     {\color{red}[JDC: Font size too small.]}
@@ -391,15 +388,16 @@ We thus expect that such a set of models, if used as starting configurations for
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Superposition of Src and Abl sequence identity classes
+% FIGURE: Superposition of Src and Abl1 sequence identity classes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[tb]
     \includegraphics[width=1.0\columnwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
     
-    \caption{{\bf Superposition of clustered models of Src and Abl.}
-    Superposed renderings of nine models each for Src and Abl, 
+    \caption{{\bf Superposition of clustered models of Src and Abl1.}
+    Superposed renderings of nine models each for Src and Abl1, 
     {\color{red}[JDC: Src and Abl, or Src and Abl1? The description should match the captions above.]}
+    {\color{blue}[DLP: Addressed. Using Abl1, as this is the HGNC recommended symbol.]}
     giving some indication the diversity of conformations generated by Ensembler.
     The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figure:rmsd-distribution-by-sequence-identity}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
     The models shown are the centroids of each cluster.
@@ -418,7 +416,7 @@ We thus expect that such a set of models, if used as starting configurations for
     
     \caption{{\bf Two structures of Src, indicating certain residues involved in activation.}
     In the inactive state, E310 forms a salt bridge with R409.
-    During activation, the C-helix (green) moves and rotates, orienting E310 towards the ATP-binding site and allowing it to instead form a salt bridge with K295.
+    During activation, the $\alpha$C-helix (green) moves and rotates, orienting E310 towards the ATP-binding site and allowing it to instead form a salt bridge with K295.
     This positions K295 in the appropriate position for catalysis.
   }
   \label{figure:src-ref-structures}
@@ -433,7 +431,7 @@ We thus expect that such a set of models, if used as starting configurations for
 \subfloat[Src]{\label{figure:src-distances}%
    \includegraphics[width=0.45\textwidth]{residue_pair_distances/src/distances}
 }
-\subfloat[Abl]{\label{figure:abl-distances}%
+\subfloat[Abl1]{\label{figure:abl-distances}%
    \includegraphics[width=0.45\textwidth]{residue_pair_distances/abl/distances}
 }
 
@@ -457,12 +455,21 @@ We thus expect that such a set of models, if used as starting configurations for
 The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python~\cite{conda}.
 \shellcmd{conda install -c https://conda.binstar.org/omnia ensembler}
 Up to date instructions can be found at \url{https://github.com/choderalab/ensembler}.
-This will install all dependencies except for Modeller and (optionally) Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
+This will install all dependencies except for Modeller and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
 The latest source can be downloaded from the above GitHub repository, which also contains instructions for building and installing the code.
+
+% Limitations:
+% counterions
+% PTMs
+% long loops
+
+{\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g. structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
 
 % TODO future directions
 % TODO what's on the Ensembler 2 roadmap?
 % TODO MCCE?
+
+% TODO CITE: Shan Shaw Proton-dependent switch Abl1 PNAS 2009
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ACKNOWLEDGMENTS
