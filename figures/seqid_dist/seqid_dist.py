@@ -27,12 +27,11 @@ df_has_model = combined_dfs[combined_dfs.has_model]
 # Plotting
 # ====================
 
-# sns.set_context('paper', font_scale=1.7)
+sns.set_context('paper', font_scale=1.)
+sns.set_style('white')
+fig = sns.plt.figure(figsize=(3.5,2.625))
 
-sns.set(style="white")
-fig = sns.plt.figure()
 ax1 = sns.plt.axes()
-# fig, ax1 = sns.plt.subplots()
 
 palette = sns.color_palette('deep', 2)
 
@@ -51,18 +50,18 @@ ax2.legend_.remove()
 ax2.set_xlim(0,100)
 sns.plt.setp(ax2, xticks=[])
 
-x1  = [-3.0, -3.0]
-y1  = [0.68, 0.78]
+ax2.text(-3.5, 0.45, 'probability density', rotation='vertical', ha='center', va='center', fontsize='x-small')
+ax2.text(112.0, 0.45, 'CDF', rotation='vertical', ha='center', va='center', fontsize='x-small')
+x1  = [-3.5, -3.5]
+y1  = [0.78, 0.88]
 line1 = lines.Line2D(x1, y1, color='k')
 line1.set_clip_on(False)
-x2  = [107.0, 107.0]
-y2  = [0.57, 0.67]
+x2  = [111.2, 111.2]
+y2  = [0.54, 0.69]
 line2 = lines.Line2D(x2, y2, color='k', linestyle='--')
 line2.set_clip_on(False)
 ax2.add_line(line1)
 ax2.add_line(line2)
-ax2.text(-3., 0.5, 'probability density', rotation='vertical', ha='center', va='center')
-ax2.text(107.5, 0.5, 'CDF', rotation='vertical', ha='center', va='center')
 
-# sns.plt.tight_layout()
-sns.plt.savefig('seqid_dist.png')
+sns.plt.tight_layout()
+sns.plt.savefig('seqid_dist.png', dpi=300)

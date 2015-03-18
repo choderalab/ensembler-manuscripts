@@ -310,7 +310,7 @@ Unresolved template residues were first remodeled using the {\tt loopmodel} subc
 The number of missing residues in each template ranged from 0 to 102, with a median of 11 and a standard deviation of 13.
 Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled, with most remodeling failures attributable to spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues; templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
-The distributions are plotted in Fig. S1.
+The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
 % TODO Work out if there is an easy way to reference SI figures
 {\color{red}[JDC: Can you give some statistics on the distribution of loop lengths modeled?  Why did loop modeling fail in the cases it did?  Anything else you can say here beyond this one sentence?]}
 {\color{blue}[DLP: Addressed in the text, and a SI figure.]}
@@ -368,7 +368,7 @@ We thus expect that such a set of models, if used as starting configurations for
     Sequence identities are calculated from pairwise target-template alignments.
     The cumulative distribution function is shown by the dashed line.
     The plotted distributions have been smoothed using kernel density estimation.
-    {\color{red}[JDC: Font size too small.]}
+    % {\color{red}[JDC: Font size too small.]}
     }
   \label{figure:sequence-identity-distribution}
 \end{figure}
@@ -384,7 +384,7 @@ We thus expect that such a set of models, if used as starting configurations for
     RMSD distributions for all \num{373513} human TK models, divided into three sequence identity ranges.
     For a given target, model RMSDs are calculated relative to the highest sequence identity model for that target.
     The plotted distributions have been smoothed using kernel density estimation.
-    {\color{red}[JDC: Font size too small.]}
+    % {\color{red}[JDC: Font size too small.]}
   }
   \label{figure:rmsd-distribution-by-sequence-identity}
 \end{figure}
@@ -404,7 +404,7 @@ We thus expect that such a set of models, if used as starting configurations for
     The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figure:rmsd-distribution-by-sequence-identity}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
     The models shown are the centroids of each cluster.
     Models are colored and given transparency based on their sequence identity, so that high sequence identity models are blue and opaque, while lower sequence identity models are transparent and red.
-    {\color{red}[JDC: Font size too small.]}
+    % {\color{red}[JDC: Font size too small.]}
   }
   \label{figure:superposition}
 \end{figure}
@@ -430,20 +430,22 @@ We thus expect that such a set of models, if used as starting configurations for
 
 \begin{figure*}
 
-\subfloat[Src]{\label{figure:src-distances}%
-   \includegraphics[width=0.45\textwidth]{residue_pair_distances/src/distances}
-}
-\subfloat[Abl1]{\label{figure:abl-distances}%
-   \includegraphics[width=0.45\textwidth]{residue_pair_distances/abl/distances}
-}
+% \subfloat[Src]{\label{figure:src-distances}%
+%    \includegraphics[width=0.45\textwidth]{residue_pair_distances/src/distances}
+% }
+% \subfloat[Abl1]{\label{figure:abl-distances}%
+%    \includegraphics[width=0.45\textwidth]{residue_pair_distances/abl/distances}
+% }
+
+    \includegraphics[width=1.0\columnwidth]{residue_pair_distances/src_abl_combined/distances}
 
     \caption{{\bf Src and Abl1 models projected onto the distances between two conserved residue pairs, colored by sequence identity.}
     Two Src structures (PDB entries 1Y57 [CITE] and 2SRC [CITE]) are projected onto the plots for reference, representing active and inactive states respectively.
     These structures and the residue pairs analyzed here are depicted in Fig.~\ref{figure:src-ref-structures}.
     Distances are measured between the center of masses of the three terminal sidechain heavy atoms of each residue.
     The atom names for these atoms, according to the PDB coordinate files for both reference structures, are---Lys: NZ, CD, CE (ethylamine); Glu: OE1, CD, OE2 (carboxylate); Arg: NH1, CZ, NH2 (part of guanidine).
-    {\color{red}[JDC: Font size too small if single-column, so I made this double-column. Not sure if that's what you want.]}
-    {\color{red}[JDC: Fill in rest of caption.]}
+    % {\color{red}[JDC: Font size too small if single-column, so I made this double-column. Not sure if that's what you want.]}
+    % {\color{red}[JDC: Fill in rest of caption.]}
     }
   \label{figure:pair-distances}
 \end{figure*}
@@ -498,6 +500,7 @@ DLP and this work was supported in part by the generous support of a Louis V.~Ge
 \onecolumngrid
 \newpage
 \appendix
+\setcounter{figure}{0}
 
 \renewcommand{\thesection}{\arabic{section}}
 \section{Sequences and residue numbering schemes for Src and Abl1}
@@ -560,5 +563,15 @@ SRC_HUMAN   481   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKEPEERP TFEYLQAFLE DYF}TS
 SRC_CHICK   478   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKDPEERP TFEYLQAFLE DYF}TSTEPQY QPGENL       533
                   ********** ********** ****:***** ********** ********** ******
 \end{alltt}
+
+\section{Figures}
+
+\begin{figure*}[h]
+    \includegraphics[width=0.5\textwidth]{loopmodel_analysis/nmissing_resis_distributions}
+    \caption{{\bf Distributions for the number of missing residues for templates for which remodeling (with the {\tt loopmodel} command) was either successful or unsuccessful.}
+    The plotted distributions are smoothed using kernel density estimation, and the raw data points are shown as a rug plot.
+    }
+    \label{si:loopmodel-nmissing-residues}
+\end{figure*}
 
 \end{document}

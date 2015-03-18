@@ -9,21 +9,9 @@ import numpy as np
 import pandas as pd
 import mdtraj as md
 import msmbuilder.cluster
-import seaborn as sns
 import matplotlib as mpl
 
 srcdir = '../../../data/models/SRC_HUMAN_D0'
-
-# draw colorbar
-cmap = sns.plt.cm.coolwarm_r
-norm = sns.mpl.colors.Normalize(vmin=0, vmax=100)
-fig = sns.plt.figure(figsize=(2,8))
-ax1 = fig.add_axes([0.05, 0.05, 0.3, 0.9])
-cb = sns.mpl.colorbar.ColorbarBase(ax1, cmap=cmap, norm=norm)
-cb.ax.tick_params(labelsize=25.)
-cb.set_label('sequence identity (%)', fontsize=35.)
-sns.plt.savefig('colorbar.png')
-
 
 nmodels_per_class = 3
 

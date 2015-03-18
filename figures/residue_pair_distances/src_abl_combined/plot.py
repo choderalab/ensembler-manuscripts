@@ -12,8 +12,8 @@ df = pd.read_csv(os.path.join(srcdir, 'traj-refine_implicit_md-data.csv'))
 
 traj = mdtraj.load(os.path.join(srcdir, 'traj-refine_implicit_md.xtc'), top=os.path.join(srcdir, 'traj-refine_implicit_md-topol.pdb'))
 
-inactive_structure = mdtraj.load('2SRC.pdb')
-active_structure = mdtraj.load('1Y57.pdb')
+inactive_structure = mdtraj.load('../src/2SRC.pdb')
+active_structure = mdtraj.load('../src/1Y57.pdb')
 
 # K295 = 29
 # E310 = 44
@@ -54,28 +54,47 @@ active_structure_contacts = mdtraj.compute_contacts(active_structure, contacts=a
 # plot
 # ====
 
-sns.set_context('paper', font_scale=1.)
+sns.set_context('paper', font_scale=0.8)
 sns.set_style('whitegrid')
-fig = sns.plt.figure(figsize=(3.5,2.625))
+fig = sns.plt.figure(figsize=(7.25,2.625))
+ax1 = sns.plt.subplot(1,2,1)
 
 seqids = df.seqid
 
 # ax_models = sns.plt.scatter(pairs_dict[pairs[0]]['distances'][::-1], pairs_dict[pairs[1]]['distances'][::-1], c=seqids[::-1], cmap=sns.plt.cm.coolwarm_r, marker='o', alpha=0.7, vmin=0, vmax=100)
 ax_models = sns.plt.scatter(contacts[0][::-1], contacts[1][::-1], c=seqids[::-1], cmap=sns.plt.cm.coolwarm_r, marker='o', alpha=0.7, vmin=0, vmax=100, s=15.)
-cb = sns.plt.colorbar(ax_models, label='sequence identity (%)')
-# cb.solids.set_edgecolor("face")   # makes sure colorbar is smooth
 
 sns.plt.scatter(active_structure_contacts[0], active_structure_contacts[1], facecolor='g', marker='*', s=80., linewidth=0.5, label='1Y57 (SRC, active)')
 sns.plt.scatter(inactive_structure_contacts[0], inactive_structure_contacts[1], facecolor='r', marker='*', s=80., linewidth=0.5, label='2SRC (SRC, inactive)')
 
 sns.plt.xlabel('-'.join(pairs[0]) + ' (nm)')
 sns.plt.ylabel('-'.join(pairs[1]) + ' (nm)')
-sns.plt.legend(fontsize=7.)
+sns.plt.legend(fontsize=6.)
 sns.plt.xlim(0,5)
 sns.plt.ylim(0,5)
-sns.plt.axes().set_aspect('equal')
+ax1.set_aspect('equal')
 
-sns.plt.tight_layout()
+ax2 = sns.plt.subplot(1,2,2)
+ax_models = sns.plt.scatter(contacts[0][::-1], contacts[1][::-1], c=seqids[::-1], cmap=sns.plt.cm.coolwarm_r, marker='o', alpha=0.7, vmin=0, vmax=100, s=15.)
+ax2.set_aspect('equal')
+
+sns.plt.scatter(active_structure_contacts[0], active_structure_contacts[1], facecolor='g', marker='*', s=80., linewidth=0.5, label='1Y57 (SRC, active)')
+sns.plt.scatter(inactive_structure_contacts[0], inactive_structure_contacts[1], facecolor='r', marker='*', s=80., linewidth=0.5, label='2SRC (SRC, inactive)')
+sns.plt.xlabel('-'.join(pairs[0]) + ' (nm)')
+sns.plt.ylabel('-'.join(pairs[1]) + ' (nm)')
+sns.plt.legend(fontsize=6.)
+sns.plt.xlim(0,5)
+sns.plt.ylim(0,5)
+ax1.set_aspect('equal')
+
+cbar = sns.plt.colorbar(ax_models, label='sequence identity (%)')
+# Various failed attempts to get a smooth colorbar:
+cbar.set_alpha=1
+# cbar.solids.set_rasterized(True) 
+# cbar.solids.set_edgecolor("face")
+
+fig.subplots_adjust(hspace=0)
+# sns.plt.tight_layout()
 
 sns.plt.savefig('distances.png', bbox_inches='tight', dpi=300)
 # sns.plt.savefig('distances.png', dpi=300)

@@ -33,7 +33,13 @@ seqid_ranges_labels = deepcopy(seqid_ranges)
 
 seqid_ranges[-1][-1] = 101.
 
-sns.set(style="white")
+# ========
+# Plotting
+# ========
+
+sns.set_context('paper', font_scale=1.)
+sns.set_style('white')
+fig = sns.plt.figure(figsize=(3.5,2.625))
 
 # palette = sns.blend_palette([sns.desaturate('royalblue', 0), 'royalblue'], 5)
 palette = sns.color_palette('GnBu_d', n_colors=3)[::-1]
@@ -58,11 +64,15 @@ for i, seqid_range in enumerate(seqid_ranges):
 ax = plt.gca()
 plt.setp(ax, yticks=[])
 
-plt.legend(title='Sequence identity (%)')
+legend = plt.legend(title='Sequence identity (%)', fontsize='xx-small')
+plt.setp(legend.get_title(),fontsize='x-small')
 plt.xlim(0,40)
 plt.xlabel('RMSD ($\AA$)')
 sns.despine(left=True)
-plt.savefig('rmsddist2.png')
+
+plt.tight_layout()
+
+plt.savefig('rmsddist2.png', dpi=300)
 
 plt.close()
 
