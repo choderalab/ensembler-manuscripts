@@ -186,7 +186,7 @@ Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
 
 {\bf Ensembler} uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
 The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
-These templates can be specified manually, or using the {\tt ensembler gather\_templates} subcommand to automatically select templates from the Protein Data Bank (PDB) or from UniProt.
+These templates can be specified manually, or using the {\tt ensembler gather\_templates} subcommand to automatically select templates based on a search of the Protein Data Bank (PDB) or UniProt.
 A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, guaranteeing some degree of homology between targets and templates.
 {\color{red}[JDC: Again, can you provide more information about \emph{why} this is being done? What the motivation is, and how the user might expect to select these?]}
 {\color{blue}[DLP: Addressed]}
@@ -207,6 +207,7 @@ Matching residues then extracted from the original coordinate files and stored a
 
 Selection of templates from UniProt proceeds in a similar fashion as for target selection; the {\tt -{}-query} flag is used to select full-length proteins from UniProt, while the optional {\tt -{}-domains} flag allows selection of individual domains with a regular expression string.
 The returned UniProt data for each protein includes a list of associated PDB chains and their residue spans, and this information is used to select template structures, using the same method as for template selection from the PDB.
+Only structures solved by X-ray crystallography or NMR are selected, thus excluding computer-generated models available from the PDB.
 If the {\tt -{}-domains} flag is used, then templates are truncated at the start and end of the domain sequence.
 
 Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm {\color{red}[CITE]} provided via the {\tt loopmodel} tool of the Rosetta software suite (CITE: Rosetta and/or loopmodel).
@@ -311,7 +312,6 @@ The number of missing residues in each template ranged from 0 to 102, with a med
 Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled, with most remodeling failures attributable to spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues; templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
 The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
-% TODO Work out if there is an easy way to reference SI figures
 {\color{red}[JDC: Can you give some statistics on the distribution of loop lengths modeled?  Why did loop modeling fail in the cases it did?  Anything else you can say here beyond this one sentence?]}
 {\color{blue}[DLP: Addressed in the text, and a SI figure.]}
 
@@ -449,18 +449,54 @@ We thus expect that such a set of models, if used as starting configurations for
 \section{Availability and Future Directions}
 \label{section:availability}
 
+\subsubsection*{Availability}
+
 The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python~\cite{conda}.
 \shellcmd{conda install -c https://conda.binstar.org/omnia ensembler}
 Up to date instructions can be found at \url{https://github.com/choderalab/ensembler}.
 This will install all dependencies except for Modeller and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
 The latest source can be downloaded from the above GitHub repository, which also contains instructions for building and installing the code.
 
-% Limitations:
-% counterions
-% PTMs
-% long loops
+\subsubsection*{Future Directions}
 
 {\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g. structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
+
+Comparative protein modeling and MD simulation set-up can be approached in a number of different ways, with varying degrees of complexity, and there are a number of obvious additions and improvements which we plan to implement in future versions of {\bf Ensembler}.
+
+Some amino acids can exist in different protonation states, depending on pH and on their local environment.
+These protonation states can have important effects on biological processes.
+For example, long timescale MD simulations have suggested that the conformation of the DFG motif of the TK Abl1---believed to be an important regulatory mechanism[CITE: Abl1 DFG flip evidence]---is controlled by protonation of the aspartate [CITE: Shan Shaw Proton-dependent switch Abl1 PNAS 2009].
+Currently, protonation states are assigned simply based on pH (a user-controllable parameter).
+At neutral pH, histidines have two protonation states which are approximately equally likely, and in this situation the selection is therefore made based on which state results in a better hydrogen bond.
+It would be highly desirable to instead use a method which assigns amino acid protonation states based on a rigorous assessment of the local environment.
+We thus plan to implement an interface and command-line function for assigning protonation states with MCCE2~\cite{mcce2}, which uses electrostatics calculations combined with Monte Carlo sampling of side chain conformers to calculate pKa values.
+
+Many proteins require the presence of various types of non-protein atoms and molecules for proper function, such as metal ions (e.g.~Mg$^{+2}$), cofactors (e.g.~ATP) or post-translational modifications (e.g.~phosphorylation, methylation, glycosylation, etc.), and we thus plan for {\bf Ensembler} to eventually have the capability to include such entities in the generated models.
+Binding sites for metal ions are frequently found in proteins, often playing a role in catalysis.
+For example, protein kinase domains contain two binding sites for divalent metal cations, and display significantly increased activity in the presence of Mg$^{2+}$~[CITE: Adams Taylor Protein Sci 1993], the divalent cation with highest concentration in mammalian cells.
+Metal ions are often not resolved in experimental structures of proteins, but by taking into account the full range of available structural data, it should be possible in many cases to include metal ions based on the structures of homologous proteins.
+We are careful to point out, however, that metal ion parameters in classical MD force fields have significant limitations, particularly in their interactions with proteins~[CITE: Sousa Ramos chapter 11 of Kinetics and Dynamics: From Nano- to Bio-Scale, Springer, 2010].
+Cofactors and post-translational modifications are also often not fully resolved in experimental structures, and endogenous cofactors are frequently substituted with other molecules to facilitate experimental structural analysis.
+Again, {\bf Ensembler} could exploit structural data from a set of homologous proteins to model in these molecules, although there will be likely be a number of challenges to overcome in the design and implementation of such functionality.
+
+Another limitation with the present version of {\bf Ensembler} involves the treatment of members of a protein family with especially long residue insertions or deletions.
+For example, the set of all human protein kinase domains listed in UniProt have a median length of 265 residues and a standard deviation of 45, yet the minimum and maximum lengths are 102 and 801 respectively.
+The latter value corresponds to the protein kinase domain of serine/threonine-kinase \emph{greatwall}, which includes a long insertion between the two main lobes of the catalytic domain.
+In principle, such insertions could be excluded from the generated models, though a number of questions would arise as to how best to approach this.
+
+\subsubsection*{Conclusion}
+
+We believe {\bf Ensembler} to be an important first step toward enabling computational modeling and simulation of proteins on the scale of entire protein families, and suggest that it could likely prove useful for tasks beyond its original aim of providing diverse starting configurations for MD simulations.
+The code is open source and has been developed with extensibility in mind, in order to facilitate its customization for a wide range of potential uses by the wider scientific community.
+
+
+% Limitations:
+% protonation states
+% structural ions, e.g. Mg2+
+% prosthetic groups, e.g. heme
+% cofactors, e.g. ATP
+% PTMs - phosphorylation, methylation, glycosylation
+% long loops
 
 % TODO future directions
 % TODO what's on the Ensembler 2 roadmap?
