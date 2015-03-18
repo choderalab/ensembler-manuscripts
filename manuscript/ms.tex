@@ -6,6 +6,8 @@
 \pdfoutput=1
 \usepackage[pdftex]{graphicx}
 
+\usepackage{alltt}
+
 %\usepackage{palatino}
 
 %\usepackage{palatino}
@@ -346,7 +348,7 @@ The high sequence identity models could be considered to be the most likely to a
 Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
 
 To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published literature, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domains.
-We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S1.
+We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S\ref{si:residue-numbering-schemes}.
 Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
 One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
 These three residues are also well conserved [CITE Kannan Neuwald JMB 2005] and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family [CITE Foda Shan Seeliger Src Nat Commun 2015; Shukla Pande Nat Commun 2014; Ozkirimli Post Prot Sci 2008].
@@ -488,5 +490,75 @@ DLP and this work was supported in part by the generous support of a Louis V.~Ge
 
 %\bibliographystyle{prsty} 
 \bibliography{ms.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDICES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\onecolumngrid
+\newpage
+\appendix
+
+\renewcommand{\thesection}{\arabic{section}}
+\section{Sequences and residue numbering schemes for Src and Abl1}
+\label{si:residue-numbering-schemes}
+
+Kinase catalytic domains are highlighted in red, and the conserved residues analyzed in the main text (Figs.~\ref{figure:src-ref-structures} and~\ref{figure:pair-distances}) are highlighted with yellow background.
+
+\subsubsection*{Human Abl1 sequence}
+
+\begin{alltt}
+1     MLEICLKLVG CKSKKGLSSS SSCYLEEALQ RPVASDFEPQ GLSEAARWNS KENLLAGPSE    60
+61    NDPNLFVALY DFVASGDNTL SITKGEKLRV LGYNHNGEWC EAQTKNGQGW VPSNYITPVN   120
+121   SLEKHSWYHG PVSRNAAEYL LSSGINGSFL VRESESSPGQ RSISLRYEGR VYHYRINTAS   180
+181   DGKLYVSSES RFNTLAELVH HHSTVADGLI TTLHYPAPKR NKPTVYGVSP NYDKWEMERT   240
+241   D{\color{red}ITMKHKLGG GQYGEVYEGV WKKYSLTVAV {\setlength{\fboxsep}{0pt}\colorbox{yellow}{K}}TLKEDTMEV EEFLK{\setlength{\fboxsep}{0pt}\colorbox{yellow}{E}}AAVM KEIKHPNLVQ}   300
+301   {\color{red}LLGVCTREPP FYIITEFMTY GNLLDYLREC NRQEVNAVVL LYMATQISSA MEYLEKKNFI}   360
+361   {\color{red}HRDLAARNCL VGENHLVKVA DFGLS{\setlength{\fboxsep}{0pt}\colorbox{yellow}{R}}LMTG DTYTAHAGAK FPIKWTAPES LAYNKFSIKS}   420
+421   {\color{red}DVWAFGVLLW EIATYGMSPY PGIDLSQVYE LLEKDYRMER PEGCPEKVYE LMRACWQWNP}   480
+481   {\color{red}SDRPSFAEIH QAF}ETMFQES SISDEVEKEL GKQGVRGAVS TLLQAPELPT KTRTSRRAAE   540
+541   HRDTTDVPEM PHSKGQGESD PLDHEPAVSP LLPRKERGPP EGGLNEDERL LPKDKKTNLF   600
+601   SALIKKKKKT APTPPKRSSS FREMDGQPER RGAGEEEGRD ISNGALAFTP LDTADPAKSP   660
+661   KPSNGAGVPN GALRESGGSG FRSPHLWKKS STLTSSRLAT GEEEGGGSSS KRFLRSCSAS   720
+721   CVPHGAKDTE WRSVTLPRDL QSTGRQFDSS TFGGHKSEKP ALPRKRAGEN RSDQVTRGTV   780
+781   TPPPRLVKKN EEAADEVFKD IMESSPGSSP PNLTPKPLRR QVTVAPASGL PHKEEAGKGS   840
+841   ALGTPAAAEP VTPTSKAGSG APGGTSKGPA EESRVRRHKH SSESPGRDKG KLSRLKPAPP   900
+901   PPPAASAGKA GGKPSQSPSQ EAAGEAVLGA KTKATSLVDA VNSDAAKPSQ PGEGLKKPVL   960
+961   PATPKPQSAK PSGTPISPAP VPSTLPSASS ALAGDQPSST AFIPLISTRV SLRKTRQPPE  1020
+1021  RIASGAITKG VVLDSTEALC LAISRNSEQM ASHSAVLEAG KNLYTFCVSY VDSIQQMRNK  1080
+1081  FAFREAINKL ENNLRELQIC PATAGSGPAA TQDFSKLLSS VKEISDIVQR             1130
+\end{alltt}
+
+\subsubsection*{Sequences for human and chicken Src, aligned using Clustal Omega}
+
+\begin{alltt}
+SRC_HUMAN   1     MGSNKSKPKD ASQRRRSLEP AENVHGAGGG AFPASQTPSK PASADGHRGP SAAFAPAAAE    60
+SRC_CHICK   1     MGSSKSKPKD PSQRRRSLEP PDSTH---HG GFPASQTPNK TAAPDTHRTP SRSFGTVATE    57
+                  ***.******  *********  :..*    * .*******.*  *: * ** * * :*. .*:*  
+SRC_HUMAN   61    PKLFGGFNSS DTVTSPQRAG PLAGGVTTFV ALYDYESRTE TDLSFKKGER LQIVNNTEGD   120
+SRC_CHICK   58    PKLFGGFNTS DTVTSPQRAG ALAGGVTTFV ALYDYESRTE TDLSFKKGER LQIVNNTEGD   117
+                  ********:* **********  ********* ********** ********** **********  
+SRC_HUMAN   121   WWLAHSLSTG QTGYIPSNYV APSDSIQAEE WYFGKITRRE SERLLLNAEN PRGTFLVRES   180
+SRC_CHICK   118   WWLAHSLTTG QTGYIPSNYV APSDSIQAEE WYFGKITRRE SERLLLNPEN PRGTFLVRES   177
+                  *******:** ********** ********** ********** ******* ** **********  
+SRC_HUMAN   181   ETTKGAYCLS VSDFDNAKGL NVKHYKIRKL DSGGFYITSR TQFNSLQQLV AYYSKHADGL   240
+SRC_CHICK   178   ETTKGAYCLS VSDFDNAKGL NVKHYKIRKL DSGGFYITSR TQFSSLQQLV AYYSKHADGL   237
+                  ********** ********** ********** ********** ***.****** **********  
+SRC_HUMAN   241   CHRLTTVCPT SKPQTQGLAK DAWEIPRES{\color{red}L RLEVKLGQGC FGEVWMGTWN GTTRVAI{\setlength{\fboxsep}{0pt}\colorbox{yellow}{K}}TL}   300
+SRC_CHICK   238   CHRLTNVCPT SKPQTQGLAK DAWEIPRES{\color{red}L RLEVKLGQGC FGEVWMGTWN GTTRVAI{\setlength{\fboxsep}{0pt}\colorbox{yellow}{K}}TL}   297
+                  *****.**** ********** ********** ********** ********** **********  
+SRC_HUMAN   301   {\color{red}KPGTMSPEAF LQ{\setlength{\fboxsep}{0pt}\colorbox{yellow}{E}}AQVMKKL RHEKLVQLYA VVSEEPIYIV TEYMSKGSLL DFLKGETGKY}   360
+SRC_CHICK   298   {\color{red}KPGTMSPEAF LQ{\setlength{\fboxsep}{0pt}\colorbox{yellow}{E}}AQVMKKL RHEKLVQLYA VVSEEPIYIV TEYMSKGSLL DFLKGEMGKY}   357
+                  ********** ********** ********** ********** ********** ****** ***  
+SRC_HUMAN   361   {\color{red}LRLPQLVDMA AQIASGMAYV ERMNYVHRDL RAANILVGEN LVCKVADFGL A{\setlength{\fboxsep}{0pt}\colorbox{yellow}{R}}LIEDNEYT}   420
+SRC_CHICK   358   {\color{red}LRLPQLVDMA AQIASGMAYV ERMNYVHRDL RAANILVGEN LVCKVADFGL A{\setlength{\fboxsep}{0pt}\colorbox{yellow}{R}}LIEDNEYT}   417
+                  ********** ********** ********** ********** ********** **********  
+SRC_HUMAN   421   {\color{red}ARQGAKFPIK WTAPEAALYG RFTIKSDVWS FGILLTELTT KGRVPYPGMV NREVLDQVER}   480
+SRC_CHICK   418   {\color{red}ARQGAKFPIK WTAPEAALYG RFTIKSDVWS FGILLTELTT KGRVPYPGMV NREVLDQVER}   477
+                  ********** ********** ********** ********** ********** **********  
+SRC_HUMAN   481   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKEPEERP TFEYLQAFLE DYF}TSTEPQY QPGENL       536
+SRC_CHICK   478   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKDPEERP TFEYLQAFLE DYF}TSTEPQY QPGENL       533
+                  ********** ********** ****:***** ********** ********** ******
+\end{alltt}
 
 \end{document}
