@@ -185,7 +185,7 @@ Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
 \subsubsection*{Template selection}
 
 {\bf Ensembler} uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
-The second stage thus entails the selection of templates and storage of associated sequences, structures and identifiers.
+The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
 These templates can be specified manually, or using the {\tt ensembler gather\_templates} subcommand to automatically select templates from the Protein Data Bank (PDB) or from UniProt.
 A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, guaranteeing some degree of homology between targets and templates.
 {\color{red}[JDC: Again, can you provide more information about \emph{why} this is being done? What the motivation is, and how the user might expect to select these?]}
@@ -296,7 +296,7 @@ As a first application of {\bf Ensembler}, we have built models for all 90 human
 {\color{red}[JDC: Is there a complete list of these somewhere?  Maybe reference supplementary data?]}
 TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer.
 {\color{red}[JDC: CITE]}
-For example, mutations of Src are associated with colon, breast and prostate cancer {\color{red}[CITE: Src cancer involvement]}, while a translocation between the TK Abl1 and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia {\color{red}[CITE: Abl1 cancer involvement]}.
+For example, mutations of Src are associated with colon, breast, and prostate cancer {\color{red}[CITE: Src cancer involvement]}, while a translocation between the TK Abl1 and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia {\color{red}[CITE: Abl1 cancer involvement]}.
 Protein kinase domains are thought to have multiple accessible metastable conformation states, with a single active conformation, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations [CITE: Lee and Craik Science 2009].
 {\color{red}[JDC: Lee and Craik do not discuss kinases, I don't believe; you'll have to find an accurate reference on kinase conformations.]}
 Kinases are thus a particularly interesting subject for study with MSM methods [CITE: recent kinase MSM papers], and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
@@ -351,7 +351,7 @@ To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the publi
 We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S\ref{si:residue-numbering-schemes}.
 Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
 One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
-These three residues are also well conserved [CITE Kannan Neuwald JMB 2005] and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family [CITE Foda Shan Seeliger Src Nat Commun 2015; Shukla Pande Nat Commun 2014; Ozkirimli Post Prot Sci 2008].
+These three residues are also well conserved [CITE Kannan Neuwald JMB 2005], and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family [CITE Foda Shan Seeliger Src Nat Commun 2015; Shukla Pande Nat Commun 2014; Ozkirimli Post Prot Sci 2008].
 As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl1} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
 The models show strong coverage of regions in which either of the electrostatic interactions is formed, as well as a wide range of regions inbetween.
 We thus expect that such a set of models, if used as starting configurations for highly parallel MD simulation, could greatly aid in sampling of the activation process.
