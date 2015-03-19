@@ -49,9 +49,6 @@
 % The figures are in a figures/ subdirectory.
 \graphicspath{{../figures/}}
 
-
-% \newcommand{\pyitc}{\url{http://www.simtk.org/home/bayesian-itc}} % URL of pyITC project homepage
-
 %% DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
@@ -77,14 +74,14 @@
 \begin{abstract}
 
 The rapidly expanding body of available genomic and protein structural data provides a rich resource for understanding protein dynamics with biomolecular simulation. 
-While computational infrastructure has grown rapidly, simulations on an \emph{omics} scale are not yet widespread, primarily because software infrastructure to enable simulations at this scale have not kept pace. 
+While computational infrastructure has grown rapidly, simulations on an \emph{omics} scale are not yet widespread, primarily because software infrastructure to enable simulations at this scale has not kept pace. 
 It should now be possible to study protein dynamics across entire (super)families, exploiting both available structural biology data and conformational similarities across homologous proteins.
 Here, we present a new tool for enabling high-throughput simulation in the genomics era.
 {\bf Ensembler} takes any set of sequences---from a single sequence to an entire superfamily---and shepherds them through various stages of modeling and refinement to produce simulation-ready structures.
 This includes comparative modeling to all relevant PDB structures (which may span multiple conformational states of interest), reconstruction of missing loops, addition of missing atoms, culling of nearly identical structures, assignment of appropriate protonation states, solvation in explicit solvent, and refinement and filtering with molecular simulation to ensure stable simulation. 
 The output of this pipeline is an ensemble of structures ready for subsequent molecular simulations using computer clusters, supercomputers, or distributed computing projects like Folding@home.
-{\bf Ensembler} thus automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.  {\color{red}[JDC: Prior sentence is redundant?]}
-A particular advantage of this approach can be found in the construction of kinetic models of conformational dynamics---such as Markov state models---which benefit from a diverse array of initial configurations that span the accessible conformational states to aid sampling.
+{\bf Ensembler} thus automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.
+A particular advantage of this approach can be found in the construction of kinetic models of conformational dynamics---such as Markov state models (MSMs)---which benefit from a diverse array of initial configurations that span the accessible conformational states to aid sampling.
 We demonstrate the power of this approach by constructing models for all catalytic domains in the human tyrosine kinase family, using all available kinase catalytic domain structures from any organism as structural templates.
 
 {\bf Ensembler} is free and open source software licensed under the GNU General Public License (GPL) v2. 
@@ -108,12 +105,12 @@ The latest release can be installed via the {\tt conda} package manager, and the
 Recent advances in genomics and structural biology have helped generate an enormous wealth of protein data at the level of amino-acid sequence and three-dimensional structure.
 However, proteins typically exist as an ensemble of thermally accessible conformational states, and static structures provide only a snapshot of their rich dynamical behavior.
 Many functional properties---such as the ability to bind small molecules or interact with signaling partners---require transitions between states, encompassing anything from reorganization of sidechains at binding interfaces to domain motions to large scale folding-unfolding events.
-Drug discovery could also benefit from a more extensive consideration of protein dynamics, whereby small molecules might be selected based on their predicted ability to bind and trap a protein target in an inactive state~\cite{craik:2009:science:trapping-moving-targets}.
+Drug discovery could also benefit from a more extensive consideration of protein dynamics, whereby small molecules might be selected based on their predicted ability to bind and trap a protein target in an inactive state~\cite{craik:science:2009:trapping-moving-targets}.
 
 Molecular dynamics (MD) simulations have the capability, in principle, to describe the time evolution of a protein in atomistic detail, and have proven themselves to be a useful tool in the study of protein dynamics.
-A number of mature software packages and forcefields are available, and much recent progress has been driven by advances in computing architecture.
-For example, many MD packages are now able to exploit GPUs, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE] allow scalability on an unprecedented level.
-In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity [CITE MSM reviews].
+A number of mature software packages and forcefields are now available, and much recent progress has been driven by advances in computing architecture.
+For example, many MD packages are now able to exploit GPUs~\cite{eastman:jctc:2012:openmm,walker:jctc:2013:amber-gpu}, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE] allow scalability on an unprecedented level.
+In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2010:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 MSM methods in particular have the advantage of being able to aggregate data from multiple independent MD trajectories, facilitating parallelization of production simulations and thus greatly alleviating overall computational cost.
 There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates [CITE Modeller and Rosetta and a recent homology modeling review].
 
@@ -511,8 +508,8 @@ The code is open source and has been developed with extensibility in mind, in or
 \label{section:acknowledgments}
 
 The authors are grateful to Kyle A.~Beauchamp (MSKCC), Robert McGibbon (Stanford), Arien S. Rustenburg (MSKCC) for many excellent software engineering suggestions.
-The authors thank Sonya M.~Hanson (MSKCC), Nicholas M.~Levinson (?), Markus A.~Seeliger (Stony Brook), Diwakar Shukla (Stanford), and Avner Schlessinger (Mount Sinai) for helpful scientific feedback on modeling kinases.
-The authors are grateful to Benjamin Webb and Andrej Sali (UCSF) for help with the MODELLER package, Peter Eastman and Vijay Pande (Stanford) for assistance with OpenMM, and Marilyn Gunner (CCNY) for assistance with MCCE2.
+The authors thank Sonya M.~Hanson (MSKCC), Nicholas M.~Levinson (University of Minnesota), Markus A.~Seeliger (Stony Brook), Diwakar Shukla (Stanford), and Avner Schlessinger (Mount Sinai) for helpful scientific feedback on modeling kinases.
+The authors are grateful to Benjamin Webb and Andrej \v{S}ali (UCSF) for help with the MODELLER package, Peter Eastman and Vijay Pande (Stanford) for assistance with OpenMM, and Marilyn Gunner (CCNY) for assistance with MCCE2.
 DLP and this work was supported in part by the generous support of a Louis V.~Gerstner Young Investigator Award.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
