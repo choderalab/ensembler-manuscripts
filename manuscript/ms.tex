@@ -206,8 +206,10 @@ The structure residues must also match those in the sequence file.
 
 \subsubsection*{Template refinement}
 
-Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm {\color{red}[CITE]} provided via the {\tt loopmodel} tool of the Rosetta software suite (CITE: Rosetta and/or loopmodel).
-Because fewer loops need to be built during the subsequent model-building stage, prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
+Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm {\color{red}[CITE]} provided via the {\tt loopmodel} tool of the Rosetta software suite {\color{red}[CITE: Rosetta and/or loopmodel]}.
+Because fewer loops need to be built during the subsequent model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
+{\color{red}[JDC: Can you show the distribution of missing loop lengths for the TKs?]}
+
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
 
@@ -256,6 +258,7 @@ Other force fields or water models such as TIP4P-Ew {\color{red}[CITE]}) can be 
 \subsubsection*{Packaging}
 
 {\bf Ensembler} provides a packaging module which can be used to compress models in preparation for data transfer, or to prepare models with the appropriate directory and file structure for subsequent production simulations on the distributed computing platform Folding@home (CITE: F@H).
+{\color{red}[JDC: Is there a way we can make this more generally useful to others?  For example, is there a different system they might want to use, such as \href{http://copernicus.readthedocs.org/en/latest/tutorials/md-tutorial.html#creating-a-workflow-for-molecular-simulations}{Copernicus}?]}
 
 \subsubsection*{Provenance}
 
@@ -287,8 +290,6 @@ For larger numbers of models (such as entire protein families), modeling time is
 \section{Results}
 \label{section:results}
 
-{\color{red}[JDC: It would be useful to have some subheadings in this section to give it some internal organization.]}
-
 \subsubsection*{Modeling of all human tyrosine kinase catalytic domains}
 
 As a first application of {\bf Ensembler}, we have built models for all 90 human tyrosine kinase (TK) domains listed in UniProt.
@@ -307,6 +308,7 @@ The templates were derived from 3028 individual PDB entries and encompassed 23 d
 
 Unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
 The number of missing residues in each template ranged from 0 to 102, with a median of 11 and a standard deviation of 13.
+{\color{red}[JDC: Any chance you can generate a plot of the distribution of loop lengths?  I'm guessing this is pretty non-normal since the standard deviation is larger than the median!]}
 Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled, with most remodeling failures attributable to spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues; templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
 The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
@@ -314,15 +316,17 @@ The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
 {\color{blue}[DLP: Addressed in the text, and a SI figure.]}
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} surviving models.
+{\color{red}[JDC: What percentage is this?]}
 To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
 The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
 The number of refined models for each target ranged from 4005 to 4248, with a median of 4160 and standard deviation of 60.
 Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
 
 Each model generated about 513 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 1.7 GB per TK target or 149 GB for all 90 TKs.
-The data generated per model breaks down as 436 kB for the output from the modeling stage---with the largest contribution arising from the Modeller restraint files---and 77 kB for the implicit solvent MD refinement stage.
+The data generated per model breaks down as 436 kB for the output from the modeling stage---with the largest contribution arising from the stored Modeller restraint files---and 77 kB for the implicit solvent MD refinement stage.
+{\color{red}[JDC: Maybe we want to add a flag to make retaining the Modeller restraint files optional?  I had originally just saved these so we could do subsequent OpenMM-based model refinement if desired, but we don't actually do that yet.]}
 
-\subsubsection*{Evaluation of model quality}
+\subsubsection*{Evaluation of model quality and utility}
 
 The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
 The distributions are stratified based on the sequence identity between target and template, indicating that higher sequence identity templates result in models with lower RMSDs.
@@ -335,17 +339,18 @@ These two kinases are thus also interesting targets for MSM studies, with one re
 
 Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl1}.
 Models were first stratified into three ranges, based on the structure of the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), then subjected to $k$-medoids clustering to pick three representative models from each sequence identity range.
+{\color{red}[JDC: Explain how $k$-medoids clustering was done either here or in figure caption.]}
 Each model is colored and given a transparency based on the sequence identity between the target and template sequence.
 The figure gives an idea of the variance present in the generated models.
 High sequence identity models (in opaque blue) tend to be quite structurally similar, with some variation in loops or changes in domain orientation.
 The Abl1 renderings indicate one high sequence identity model with a long unstructured region at one of the termini, which was unresolved in the original template structure.
-While such models are not necessarily incorrect or undersirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
+While such models are not necessarily incorrect or undesirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
 Lower sequence identity models (in transparent white or red) indicate much greater variation in all parts of the structure.
 We believe the mix of high and low sequence identity models to be particularly useful for methods such as MSM building, which require thorough sampling of the conformational landscape.
 The high sequence identity models could be considered to be the most likely to accurately represent true metastable states.
 Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
 
-To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published literature, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domains.
+To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published structural biology literature, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domains.
 We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S\ref{si:residue-numbering-schemes}.
 Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
 One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
@@ -449,11 +454,13 @@ We thus expect that such a set of models, if used as starting configurations for
 
 \subsubsection*{Availability}
 
-The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python~\cite{conda}.
+The code for {\bf Ensembler} is hosted on the collaborative open source software development platform GitHub,\\
+\url{http://github.com/choderalab/ensembler} \\
+The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python~\cite{conda}:
 \shellcmd{conda install -c https://conda.binstar.org/omnia ensembler}
-Up to date instructions can be found at \url{https://github.com/choderalab/ensembler}.
 This will install all dependencies except for Modeller and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
-The latest source can be downloaded from the above GitHub repository, which also contains instructions for building and installing the code.
+The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
+{\color{red}[JDC: Where does documentation reside?  And example inputs for generating the results in this paper?]}
 
 \subsubsection*{Future Directions}
 
@@ -512,6 +519,7 @@ The authors are grateful to Kyle A.~Beauchamp (MSKCC), Robert McGibbon (Stanford
 The authors thank Sonya M.~Hanson (MSKCC), Nicholas M.~Levinson (University of Minnesota), Markus A.~Seeliger (Stony Brook), Diwakar Shukla (Stanford), and Avner Schlessinger (Mount Sinai) for helpful scientific feedback on modeling kinases.
 The authors are grateful to Benjamin Webb and Andrej \v{S}ali (UCSF) for help with the MODELLER package, Peter Eastman and Vijay Pande (Stanford) for assistance with OpenMM, and Marilyn Gunner (CCNY) for assistance with MCCE2.
 DLP and this work was supported in part by the generous support of a Louis V.~Gerstner Young Investigator Award.
+{\color{red}[Add PBG support statement.]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY
