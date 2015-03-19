@@ -115,10 +115,11 @@ MSM methods in particular have the advantage of being able to aggregate data fro
 There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates [CITE Modeller and Rosetta and a recent homology modeling review].
 
 However, it remains difficult for researchers to exploit the full variety of available protein sequence and structural data in simulation studies, largely due to limitations in software architecture.
-For example, the set up of a biomolecular simulation is typically performed manually, encompassing a series of fairly standard (yet time-consuming) steps such as the choice of protein sequence construct and starting structure, addition of missing residues and atoms, solvation with explicit water and salt buffer, choice of simulation parameters, and system relaxation with energy minimization and one or more short MD simulations.
-For this reason, simulation studies typically consider only one or a few proteins and starting configurations.
+For example, the set up of a biomolecular simulation is typically performed manually, encompassing a series of fairly standard (yet time-consuming) steps such as the choice of protein sequence construct and starting structure(s), addition of missing residues and atoms, solvation with explicit water and counterions (and potentially buffer components and cosolvents), choice of simulation parameters (or parameterization schemes for components where parameters do not yet exist),  system relaxation with energy minimization, and one or more short preparatory MD simulations to equilibrate the system and relax the simulation cell.
+Due to the laborious and manual nature of this process, simulation studies typically consider only one or a few proteins and starting configurations.
+Worse still, studies (or collections of studies) that \emph{do} consider multiple proteins often suffer from the lack of consistent best practices in this preparation process, making comparisons between related proteins unnecessarily difficult.
 
-The ability to fully exploit the large base of available protein sequence and structural data in biomolecular simulation studies could open up many interesting avenues for research, enabling the study of entire protein families or superfamilies across multiple organisms.
+The ability to fully exploit the large quantity of available protein sequence and structural data in biomolecular simulation studies could open up many interesting avenues for research, enabling the study of entire protein families or superfamilies within a single organism or across multiple organisms.
 The similarity between members of a given protein family could be exploited to generate arrays of conformational models, which could be used as starting configurations to aid sampling in MD simulations.
 This approach would be highly beneficial for many MD methods, such as MSM construction, which require global coverage of the conformational landscape to realize their full potential, and would also be particularly useful in cases where structural data is present for only a subset of the members of a protein family.
 It would also aid in studying protein families known to have multiple metastable conformations---such as kinases---for which the combined body of structural data for the family may cover a large range of these conformations, while the available structures for any individual member might encompass only one or two distinct conformations.
@@ -128,24 +129,22 @@ Here, we present the first steps toward bridging the gap between biomolecular si
 As an example application, we have constructed models for the entire set of human tyrosine kinase catalytic domains, using all available structures of protein kinase domains (from any species) as templates.
 This results in a total of almost 400,000 models, and we demonstrate that these provide wide-ranging coverage of known functionally relevant conformations.
 By using these models as starting configurations for highly parallel MD simulations, we expect their structural diversity to greatly aid in sampling of conformational space.
+
 We anticipate that the tool will prove to be useful in a number of other ways.
 For example, the generated models could represent valuable data sets even without subsequent production simulation, allowing exploration of the conformational diversity present within the available structural data for a given protein family.
 Furthermore, the automation of simulation set up provides an excellent opportunity to make concrete certain "best practices", such as the choice of simulation parameters.
+{\color{red}[JDC: Can we also add the URL of where to get the code and TK models here?]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DESIGN AND IMPLEMENTATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Design and Implementation}
 
-{\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API.
+{\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API to allow integration of its components into other applications.
 
 The {\bf Ensembler} modeling pipeline comprises a series of stages which are performed in a defined order. 
 A visual overview of the pipeline is shown in Fig.~\ref{figpipeline}.
 The various stages of this pipeline are described in detail below.
-
-{\color{red}[JDC: We could really help the reader if we preface each section here with a bit of an introduction of what we're trying to accomplish in each stage.  Otherwise, I worry that each section is a long list of things we do without reference to an overall concept of what the stage is trying to accomplish or why certain decisions were made.]}
-{\color{blue}[DLP: Good point. I've added in brief introductions for each section.]}
-{\color{red}[JDC: Can you do a bit more here? I feel that the reader may need more orientation.  You've essentially just added a sentence or two at the beginning of each stage that doesn't really enlighten the user as to your terminology (\emph{tempalte} and \emph{target}), your motivation for \emph{why} things are done each stage, or \emph{how} the user is to select among the various options available.]}
 
 \begin{figure*}[tb]
     \includegraphics[width=1.0\textwidth]{pipeline/pipeline2}
@@ -158,15 +157,14 @@ The various stages of this pipeline are described in detail below.
   \label{figpipeline}
 \end{figure*}
 
-\subsubsection*{Target selection}
+\subsubsection*{Target selection and retrieval}
 
-The first stage entails the selection of a set of target protein sequences, i.e. the sequences the user is interested in modeling.
-{\color{red}[JDC: Maybe explain what is meant by ``target protein sequences''?  These are the sequences the user is interested in modeling.]}
-{\color{blue}[DLP: Addressed.]}
+The first stage entails the selection of a set of \emph{target} protein sequences---the sequences the user is interested in generating simulation-ready structural models for.
+This may be a single sequence---such as a full-length protein or a construct representing a single domain---or a collection of sequences, such as a particular domain from an entire family of proteins.
 
-These targets can be defined manually, simply by providing a FASTA-formatted text file containing the desired target sequences with arbitrary identifiers.
-The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Isn't there a real citation for UniProt?]}, using the subcommand {\tt gather\_targets}.
-The user specifies a query string with the {\tt -{}-query} flag, which conforms to the same syntax as the search function available on the UniProt website.
+Target sequences can be defined manually, simply by providing a FASTA-formatted text file containing the desired target sequences with arbitrary identifiers.
+The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Isn't there a real citation for UniProt?]}---via a UniProt search query.
+To retrieve target sequences from UniProt, the subcommand {\tt gather\_targets} us used with the {\tt -{}-query} flag followed by a UniProt query string conforming to the same syntax as the search function available on the UniProt website.
 For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
 In this way, the user may select a single protein, many proteins, or an entire superfamily.
 The program outputs a FASTA file, setting the UniProt mnemonic (e.g. {\tt SRC\_HUMAN}) as the identifier for each target protein.
@@ -179,7 +177,7 @@ In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_
 Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
 {\color{red}[JDC: Does it make sense to set some of these coded examples off on their own lines?]}
 
-\subsubsection*{Template selection}
+\subsubsection*{Template selection and retrieval}
 
 {\bf Ensembler} uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
 The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
@@ -212,7 +210,7 @@ Because fewer loops need to be built during the subsequent model-building stage,
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
 
-\subsubsection*{Modeling}
+\subsubsection*{Modeling of targets}
 
 This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are subsequently filtered out using a RMSD-based clustering scheme.
 
@@ -227,7 +225,7 @@ Since the goal is to provide good coverage of conformation space, {\bf Ensembler
 The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
 
-\subsubsection*{Refinement}
+\subsubsection*{Refinement of models}
 
 This stage entails the use of molecular dynamics simulations to refine the models built in the previous step.
 This helps to improve model quality and also prepares models for subsequent production simulation, including solvation with explicit water molecules, if desired.
@@ -239,6 +237,8 @@ The {\bf Ensembler} API allows the use of any of the other force fields implemen
 The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
 {\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
 {\color{blue}[DLP: We currently just filter out models which throw exceptions or NaNs.]}
+
+\subsubsection*{Solvation and NPT equilibration}
 
 While protein-only models may be sufficient for structural analysis or implicit solvent simulations, {\bf Ensembler} also provides a stage for solvating models with explicit water and performing a round of explicit-solvent MD refinement/equilibration under isothermal-isobaric (NPT) conditions.
 The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, such as the construction of MSMs.
