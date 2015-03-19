@@ -152,7 +152,7 @@ The various stages of this pipeline are described in detail below.
   \caption{{\bf Diagrammatic representation of the various stages of the Ensembler pipeline.}
   The number of viable models surviving each stage of the pipeline are shown, either for all tyrosine kinases (\emph{All TKs}) or representative individual kinases (\emph{SRC} and \emph{ABL}).
   In addition, the typical timing on a cluster (containing Intel Xeon E5-2665 2.4GHz hyperthreaded processors and NVIDIA GTX-680 or GTX-Titan GPUs) is reported to exemplify the resources required per model and for modeling the entire set of tyrosine kinases.
-  Note that \emph{CPU-h} denotes the number of hours consumed by the equivalent of a single hyperthread---parallel execution can reduce wall clock time nearly linearly.
+  Note that \emph{CPU-h} denotes the number of hours consumed by the equivalent of a single hyperthread and \emph{GPU-h} on a single GPU---parallel execution can reduce wall clock time nearly linearly.
   }
   \label{figpipeline}
 \end{figure*}
@@ -161,21 +161,21 @@ The various stages of this pipeline are described in detail below.
 
 The first stage entails the selection of a set of \emph{target} protein sequences---the sequences the user is interested in generating simulation-ready structural models for.
 This may be a single sequence---such as a full-length protein or a construct representing a single domain---or a collection of sequences, such as a particular domain from an entire family of proteins.
+The output of this stage is a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
-Target sequences can be defined manually, simply by providing a FASTA-formatted text file containing the desired target sequences with arbitrary identifiers.
-The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Isn't there a real citation for UniProt?]}---via a UniProt search query.
+The {\tt ensembler} command-line tool allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Cite \href{http://www.uniprot.org/help/publications}{one of these UniProt citations?}]}---via a UniProt search query.
 To retrieve target sequences from UniProt, the subcommand {\tt gather\_targets} us used with the {\tt -{}-query} flag followed by a UniProt query string conforming to the same syntax as the search function available on the UniProt website.
 For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
-In this way, the user may select a single protein, many proteins, or an entire superfamily.
+In this way, the user may select a single protein, many proteins, or an entire superfamily from UniProt.
 The program outputs a FASTA file, setting the UniProt mnemonic (e.g. {\tt SRC\_HUMAN}) as the identifier for each target protein.
 
 In many cases, it will be desirable to build models of an isolated protein domain, rather than the full-length protein.
 The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-domains} flag. 
 For example, the above {\tt -{}-query} flag for selecting all human protein kinases returns UniProt entries with domain annotations including "Protein kinase", "Protein kinase 1", "Protein kinase 2", "Protein kinase; truncated", "Protein kinase; inactive", "SH2", "SH3", etc.
 To select only domains of the first three types, the following regular expression could be used: {\tt`\^{}Protein kinase(?!; truncated)(?!; inactive)'}.
-In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest.
-Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
-{\color{red}[JDC: Does it make sense to set some of these coded examples off on their own lines?]}
+In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest (e.g.~{\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}).
+
+Target sequences can also be defined manually (or from another program) by providing a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
 \subsubsection*{Template selection and retrieval}
 
@@ -183,13 +183,8 @@ Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
 The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
 These templates can be specified manually, or using the {\tt ensembler gather\_templates} subcommand to automatically select templates based on a search of the Protein Data Bank (PDB) or UniProt.
 A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, guaranteeing some degree of homology between targets and templates.
-{\color{red}[JDC: Again, can you provide more information about \emph{why} this is being done? What the motivation is, and how the user might expect to select these?]}
-{\color{blue}[DLP: Addressed]}
 
-Manual selection of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
-The structure residues must also match those in the sequence file.
-
-The {\tt ensembler gather\_templates} subcommand provides methods for selecting template structures from either UniProt or the PDB (\href{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
+The {\tt ensembler gather\_templates} subcommand provides methods for selecting template structures from either UniProt or the PDB (\url{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
 Both methods select templates at the level of PDB chains---a PDB structure containing multiple chains with identical sequence spans (e.g. for crystal unit cells with multiple asymmetric units) would thus give rise to multiple template structures.
 
 Selection of templates from the PDB simply requires passing a list of PDB IDs as a comma-separated string, e.g. {\tt -{}-query 2H8H,1Y57}.
@@ -204,6 +199,12 @@ Selection of templates from UniProt proceeds in a similar fashion as for target 
 The returned UniProt data for each protein includes a list of associated PDB chains and their residue spans, and this information is used to select template structures, using the same method as for template selection from the PDB.
 Only structures solved by X-ray crystallography or NMR are selected, thus excluding computer-generated models available from the PDB.
 If the {\tt -{}-domains} flag is used, then templates are truncated at the start and end of the domain sequence.
+
+Templates can also be defined manually.
+Manual selection of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
+The structure residues must also match those in the sequence file.
+
+\subsubsection*{Template refinement}
 
 Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm {\color{red}[CITE]} provided via the {\tt loopmodel} tool of the Rosetta software suite (CITE: Rosetta and/or loopmodel).
 Because fewer loops need to be built during the subsequent model-building stage, prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
@@ -222,7 +223,7 @@ To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip
 
 All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
 Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
-The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
+The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
 
 \subsubsection*{Refinement of models}
