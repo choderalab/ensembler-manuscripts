@@ -49,9 +49,6 @@
 % The figures are in a figures/ subdirectory.
 \graphicspath{{../figures/}}
 
-
-% \newcommand{\pyitc}{\url{http://www.simtk.org/home/bayesian-itc}} % URL of pyITC project homepage
-
 %% DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
@@ -77,14 +74,14 @@
 \begin{abstract}
 
 The rapidly expanding body of available genomic and protein structural data provides a rich resource for understanding protein dynamics with biomolecular simulation. 
-While computational infrastructure has grown rapidly, simulations on an \emph{omics} scale are not yet widespread, primarily because software infrastructure to enable simulations at this scale have not kept pace. 
+While computational infrastructure has grown rapidly, simulations on an \emph{omics} scale are not yet widespread, primarily because software infrastructure to enable simulations at this scale has not kept pace. 
 It should now be possible to study protein dynamics across entire (super)families, exploiting both available structural biology data and conformational similarities across homologous proteins.
 Here, we present a new tool for enabling high-throughput simulation in the genomics era.
 {\bf Ensembler} takes any set of sequences---from a single sequence to an entire superfamily---and shepherds them through various stages of modeling and refinement to produce simulation-ready structures.
 This includes comparative modeling to all relevant PDB structures (which may span multiple conformational states of interest), reconstruction of missing loops, addition of missing atoms, culling of nearly identical structures, assignment of appropriate protonation states, solvation in explicit solvent, and refinement and filtering with molecular simulation to ensure stable simulation. 
 The output of this pipeline is an ensemble of structures ready for subsequent molecular simulations using computer clusters, supercomputers, or distributed computing projects like Folding@home.
-{\bf Ensembler} thus automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.  {\color{red}[JDC: Prior sentence is redundant?]}
-A particular advantage of this approach can be found in the construction of kinetic models of conformational dynamics---such as Markov state models---which benefit from a diverse array of initial configurations that span the accessible conformational states to aid sampling.
+{\bf Ensembler} thus automates much of the time-consuming process of preparing protein models suitable for simulation, while allowing scalability up to entire superfamilies.
+A particular advantage of this approach can be found in the construction of kinetic models of conformational dynamics---such as Markov state models (MSMs)---which benefit from a diverse array of initial configurations that span the accessible conformational states to aid sampling.
 We demonstrate the power of this approach by constructing models for all catalytic domains in the human tyrosine kinase family, using all available kinase catalytic domain structures from any organism as structural templates.
 
 {\bf Ensembler} is free and open source software licensed under the GNU General Public License (GPL) v2. 
@@ -108,20 +105,21 @@ The latest release can be installed via the {\tt conda} package manager, and the
 Recent advances in genomics and structural biology have helped generate an enormous wealth of protein data at the level of amino-acid sequence and three-dimensional structure.
 However, proteins typically exist as an ensemble of thermally accessible conformational states, and static structures provide only a snapshot of their rich dynamical behavior.
 Many functional properties---such as the ability to bind small molecules or interact with signaling partners---require transitions between states, encompassing anything from reorganization of sidechains at binding interfaces to domain motions to large scale folding-unfolding events.
-Drug discovery could also benefit from a more extensive consideration of protein dynamics, whereby small molecules might be selected based on their predicted ability to bind and trap a protein target in an inactive state~\cite{craik:2009:science:trapping-moving-targets}.
+Drug discovery could also benefit from a more extensive consideration of protein dynamics, whereby small molecules might be selected based on their predicted ability to bind and trap a protein target in an inactive state~\cite{craik:science:2009:trapping-moving-targets}.
 
 Molecular dynamics (MD) simulations have the capability, in principle, to describe the time evolution of a protein in atomistic detail, and have proven themselves to be a useful tool in the study of protein dynamics.
-A number of mature software packages and forcefields are available, and much recent progress has been driven by advances in computing architecture.
-For example, many MD packages are now able to exploit GPUs, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE] allow scalability on an unprecedented level.
-In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity [CITE MSM reviews].
+A number of mature software packages and forcefields are now available, and much recent progress has been driven by advances in computing architecture.
+For example, many MD packages are now able to exploit GPUs~\cite{eastman:jctc:2012:openmm,walker:jctc:2013:amber-gpu}, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE] allow scalability on an unprecedented level.
+In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2010:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 MSM methods in particular have the advantage of being able to aggregate data from multiple independent MD trajectories, facilitating parallelization of production simulations and thus greatly alleviating overall computational cost.
 There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates [CITE Modeller and Rosetta and a recent homology modeling review].
 
 However, it remains difficult for researchers to exploit the full variety of available protein sequence and structural data in simulation studies, largely due to limitations in software architecture.
-For example, the set up of a biomolecular simulation is typically performed manually, encompassing a series of fairly standard (yet time-consuming) steps such as the choice of protein sequence construct and starting structure, addition of missing residues and atoms, solvation with explicit water and salt buffer, choice of simulation parameters, and system relaxation with energy minimization and one or more short MD simulations.
-For this reason, simulation studies typically consider only one or a few proteins and starting configurations.
+For example, the set up of a biomolecular simulation is typically performed manually, encompassing a series of fairly standard (yet time-consuming) steps such as the choice of protein sequence construct and starting structure(s), addition of missing residues and atoms, solvation with explicit water and counterions (and potentially buffer components and cosolvents), choice of simulation parameters (or parameterization schemes for components where parameters do not yet exist),  system relaxation with energy minimization, and one or more short preparatory MD simulations to equilibrate the system and relax the simulation cell.
+Due to the laborious and manual nature of this process, simulation studies typically consider only one or a few proteins and starting configurations.
+Worse still, studies (or collections of studies) that \emph{do} consider multiple proteins often suffer from the lack of consistent best practices in this preparation process, making comparisons between related proteins unnecessarily difficult.
 
-The ability to fully exploit the large base of available protein sequence and structural data in biomolecular simulation studies could open up many interesting avenues for research, enabling the study of entire protein families or superfamilies across multiple organisms.
+The ability to fully exploit the large quantity of available protein sequence and structural data in biomolecular simulation studies could open up many interesting avenues for research, enabling the study of entire protein families or superfamilies within a single organism or across multiple organisms.
 The similarity between members of a given protein family could be exploited to generate arrays of conformational models, which could be used as starting configurations to aid sampling in MD simulations.
 This approach would be highly beneficial for many MD methods, such as MSM construction, which require global coverage of the conformational landscape to realize their full potential, and would also be particularly useful in cases where structural data is present for only a subset of the members of a protein family.
 It would also aid in studying protein families known to have multiple metastable conformations---such as kinases---for which the combined body of structural data for the family may cover a large range of these conformations, while the available structures for any individual member might encompass only one or two distinct conformations.
@@ -131,24 +129,22 @@ Here, we present the first steps toward bridging the gap between biomolecular si
 As an example application, we have constructed models for the entire set of human tyrosine kinase catalytic domains, using all available structures of protein kinase domains (from any species) as templates.
 This results in a total of almost 400,000 models, and we demonstrate that these provide wide-ranging coverage of known functionally relevant conformations.
 By using these models as starting configurations for highly parallel MD simulations, we expect their structural diversity to greatly aid in sampling of conformational space.
+
 We anticipate that the tool will prove to be useful in a number of other ways.
 For example, the generated models could represent valuable data sets even without subsequent production simulation, allowing exploration of the conformational diversity present within the available structural data for a given protein family.
 Furthermore, the automation of simulation set up provides an excellent opportunity to make concrete certain "best practices", such as the choice of simulation parameters.
+{\color{red}[JDC: Can we also add the URL of where to get the code and TK models here?]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DESIGN AND IMPLEMENTATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Design and Implementation}
 
-{\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API.
+{\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API to allow integration of its components into other applications.
 
 The {\bf Ensembler} modeling pipeline comprises a series of stages which are performed in a defined order. 
 A visual overview of the pipeline is shown in Fig.~\ref{figpipeline}.
 The various stages of this pipeline are described in detail below.
-
-{\color{red}[JDC: We could really help the reader if we preface each section here with a bit of an introduction of what we're trying to accomplish in each stage.  Otherwise, I worry that each section is a long list of things we do without reference to an overall concept of what the stage is trying to accomplish or why certain decisions were made.]}
-{\color{blue}[DLP: Good point. I've added in brief introductions for each section.]}
-{\color{red}[JDC: Can you do a bit more here? I feel that the reader may need more orientation.  You've essentially just added a sentence or two at the beginning of each stage that doesn't really enlighten the user as to your terminology (\emph{tempalte} and \emph{target}), your motivation for \emph{why} things are done each stage, or \emph{how} the user is to select among the various options available.]}
 
 \begin{figure*}[tb]
     \includegraphics[width=1.0\textwidth]{pipeline/pipeline2}
@@ -156,45 +152,39 @@ The various stages of this pipeline are described in detail below.
   \caption{{\bf Diagrammatic representation of the various stages of the Ensembler pipeline.}
   The number of viable models surviving each stage of the pipeline are shown, either for all tyrosine kinases (\emph{All TKs}) or representative individual kinases (\emph{SRC} and \emph{ABL}).
   In addition, the typical timing on a cluster (containing Intel Xeon E5-2665 2.4GHz hyperthreaded processors and NVIDIA GTX-680 or GTX-Titan GPUs) is reported to exemplify the resources required per model and for modeling the entire set of tyrosine kinases.
-  Note that \emph{CPU-h} denotes the number of hours consumed by the equivalent of a single hyperthread---parallel execution can reduce wall clock time nearly linearly.
+  Note that \emph{CPU-h} denotes the number of hours consumed by the equivalent of a single hyperthread and \emph{GPU-h} on a single GPU---parallel execution can reduce wall clock time nearly linearly.
   }
   \label{figpipeline}
 \end{figure*}
 
-\subsubsection*{Target selection}
+\subsubsection*{Target selection and retrieval}
 
-The first stage entails the selection of a set of target protein sequences, i.e. the sequences the user is interested in modeling.
-{\color{red}[JDC: Maybe explain what is meant by ``target protein sequences''?  These are the sequences the user is interested in modeling.]}
-{\color{blue}[DLP: Addressed.]}
+The first stage entails the selection of a set of \emph{target} protein sequences---the sequences the user is interested in generating simulation-ready structural models for.
+This may be a single sequence---such as a full-length protein or a construct representing a single domain---or a collection of sequences, such as a particular domain from an entire family of proteins.
+The output of this stage is a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
-These targets can be defined manually, simply by providing a FASTA-formatted text file containing the desired target sequences with arbitrary identifiers.
-The {\tt ensembler} command-line tool also allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Isn't there a real citation for UniProt?]}, using the subcommand {\tt gather\_targets}.
-The user specifies a query string with the {\tt -{}-query} flag, which conforms to the same syntax as the search function available on the UniProt website.
+The {\tt ensembler} command-line tool allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Cite \href{http://www.uniprot.org/help/publications}{one of these UniProt citations?}]}---via a UniProt search query.
+To retrieve target sequences from UniProt, the subcommand {\tt gather\_targets} us used with the {\tt -{}-query} flag followed by a UniProt query string conforming to the same syntax as the search function available on the UniProt website.
 For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
-In this way, the user may select a single protein, many proteins, or an entire superfamily.
+In this way, the user may select a single protein, many proteins, or an entire superfamily from UniProt.
 The program outputs a FASTA file, setting the UniProt mnemonic (e.g. {\tt SRC\_HUMAN}) as the identifier for each target protein.
 
 In many cases, it will be desirable to build models of an isolated protein domain, rather than the full-length protein.
 The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-domains} flag. 
 For example, the above {\tt -{}-query} flag for selecting all human protein kinases returns UniProt entries with domain annotations including "Protein kinase", "Protein kinase 1", "Protein kinase 2", "Protein kinase; truncated", "Protein kinase; inactive", "SH2", "SH3", etc.
 To select only domains of the first three types, the following regular expression could be used: {\tt`\^{}Protein kinase(?!; truncated)(?!; inactive)'}.
-In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest.
-Example identifiers: {\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}.
-{\color{red}[JDC: Does it make sense to set some of these coded examples off on their own lines?]}
+In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest (e.g.~{\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}).
 
-\subsubsection*{Template selection}
+Target sequences can also be defined manually (or from another program) by providing a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
+
+\subsubsection*{Template selection and retrieval}
 
 {\bf Ensembler} uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
 The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
 These templates can be specified manually, or using the {\tt ensembler gather\_templates} subcommand to automatically select templates based on a search of the Protein Data Bank (PDB) or UniProt.
 A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, guaranteeing some degree of homology between targets and templates.
-{\color{red}[JDC: Again, can you provide more information about \emph{why} this is being done? What the motivation is, and how the user might expect to select these?]}
-{\color{blue}[DLP: Addressed]}
 
-Manual selection of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
-The structure residues must also match those in the sequence file.
-
-The {\tt ensembler gather\_templates} subcommand provides methods for selecting template structures from either UniProt or the PDB (\href{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
+The {\tt ensembler gather\_templates} subcommand provides methods for selecting template structures from either UniProt or the PDB (\url{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
 Both methods select templates at the level of PDB chains---a PDB structure containing multiple chains with identical sequence spans (e.g. for crystal unit cells with multiple asymmetric units) would thus give rise to multiple template structures.
 
 Selection of templates from the PDB simply requires passing a list of PDB IDs as a comma-separated string, e.g. {\tt -{}-query 2H8H,1Y57}.
@@ -210,12 +200,20 @@ The returned UniProt data for each protein includes a list of associated PDB cha
 Only structures solved by X-ray crystallography or NMR are selected, thus excluding computer-generated models available from the PDB.
 If the {\tt -{}-domains} flag is used, then templates are truncated at the start and end of the domain sequence.
 
-Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm {\color{red}[CITE]} provided via the {\tt loopmodel} tool of the Rosetta software suite (CITE: Rosetta and/or loopmodel).
-Because fewer loops need to be built during the subsequent model-building stage, prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
+Templates can also be defined manually.
+Manual selection of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
+The structure residues must also match those in the sequence file.
+
+\subsubsection*{Template refinement}
+
+Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm {\color{red}[CITE]} provided via the {\tt loopmodel} tool of the Rosetta software suite {\color{red}[CITE: Rosetta and/or loopmodel]}.
+Because fewer loops need to be built during the subsequent model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
+{\color{red}[JDC: Can you show the distribution of missing loop lengths for the TKs?]}
+
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
 
-\subsubsection*{Modeling}
+\subsubsection*{Modeling of targets}
 
 This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are subsequently filtered out using a RMSD-based clustering scheme.
 
@@ -227,10 +225,10 @@ To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip
 
 All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
 Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
-The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
+The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
 
-\subsubsection*{Refinement}
+\subsubsection*{Refinement of models}
 
 This stage entails the use of molecular dynamics simulations to refine the models built in the previous step.
 This helps to improve model quality and also prepares models for subsequent production simulation, including solvation with explicit water molecules, if desired.
@@ -242,6 +240,8 @@ The {\bf Ensembler} API allows the use of any of the other force fields implemen
 The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
 {\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
 {\color{blue}[DLP: We currently just filter out models which throw exceptions or NaNs.]}
+
+\subsubsection*{Solvation and NPT equilibration}
 
 While protein-only models may be sufficient for structural analysis or implicit solvent simulations, {\bf Ensembler} also provides a stage for solvating models with explicit water and performing a round of explicit-solvent MD refinement/equilibration under isothermal-isobaric (NPT) conditions.
 The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, such as the construction of MSMs.
@@ -258,6 +258,7 @@ Other force fields or water models such as TIP4P-Ew {\color{red}[CITE]}) can be 
 \subsubsection*{Packaging}
 
 {\bf Ensembler} provides a packaging module which can be used to compress models in preparation for data transfer, or to prepare models with the appropriate directory and file structure for subsequent production simulations on the distributed computing platform Folding@home (CITE: F@H).
+{\color{red}[JDC: Is there a way we can make this more generally useful to others?  For example, is there a different system they might want to use, such as \href{http://copernicus.readthedocs.org/en/latest/tutorials/md-tutorial.html#creating-a-workflow-for-molecular-simulations}{Copernicus}?]}
 
 \subsubsection*{Provenance}
 
@@ -289,8 +290,6 @@ For larger numbers of models (such as entire protein families), modeling time is
 \section{Results}
 \label{section:results}
 
-{\color{red}[JDC: It would be useful to have some subheadings in this section to give it some internal organization.]}
-
 \subsubsection*{Modeling of all human tyrosine kinase catalytic domains}
 
 As a first application of {\bf Ensembler}, we have built models for all 90 human tyrosine kinase (TK) domains listed in UniProt.
@@ -309,6 +308,7 @@ The templates were derived from 3028 individual PDB entries and encompassed 23 d
 
 Unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
 The number of missing residues in each template ranged from 0 to 102, with a median of 11 and a standard deviation of 13.
+{\color{red}[JDC: Any chance you can generate a plot of the distribution of loop lengths?  I'm guessing this is pretty non-normal since the standard deviation is larger than the median!]}
 Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled, with most remodeling failures attributable to spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues; templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
 The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
@@ -316,15 +316,17 @@ The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
 {\color{blue}[DLP: Addressed in the text, and a SI figure.]}
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} surviving models.
+{\color{red}[JDC: What percentage is this?]}
 To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
 The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
 The number of refined models for each target ranged from 4005 to 4248, with a median of 4160 and standard deviation of 60.
 Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
 
 Each model generated about 513 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 1.7 GB per TK target or 149 GB for all 90 TKs.
-The data generated per model breaks down as 436 kB for the output from the modeling stage---with the largest contribution arising from the Modeller restraint files---and 77 kB for the implicit solvent MD refinement stage.
+The data generated per model breaks down as 436 kB for the output from the modeling stage---with the largest contribution arising from the stored Modeller restraint files---and 77 kB for the implicit solvent MD refinement stage.
+{\color{red}[JDC: Maybe we want to add a flag to make retaining the Modeller restraint files optional?  I had originally just saved these so we could do subsequent OpenMM-based model refinement if desired, but we don't actually do that yet.]}
 
-\subsubsection*{Evaluation of model quality}
+\subsubsection*{Evaluation of model quality and utility}
 
 The distribution of RMSDs of the final models (relative to the highest sequence identity model for a given target) is shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
 The distributions are stratified based on the sequence identity between target and template, indicating that higher sequence identity templates result in models with lower RMSDs.
@@ -337,17 +339,18 @@ These two kinases are thus also interesting targets for MSM studies, with one re
 
 Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl1}.
 Models were first stratified into three ranges, based on the structure of the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), then subjected to $k$-medoids clustering to pick three representative models from each sequence identity range.
+{\color{red}[JDC: Explain how $k$-medoids clustering was done either here or in figure caption.]}
 Each model is colored and given a transparency based on the sequence identity between the target and template sequence.
 The figure gives an idea of the variance present in the generated models.
 High sequence identity models (in opaque blue) tend to be quite structurally similar, with some variation in loops or changes in domain orientation.
 The Abl1 renderings indicate one high sequence identity model with a long unstructured region at one of the termini, which was unresolved in the original template structure.
-While such models are not necessarily incorrect or undersirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
+While such models are not necessarily incorrect or undesirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
 Lower sequence identity models (in transparent white or red) indicate much greater variation in all parts of the structure.
 We believe the mix of high and low sequence identity models to be particularly useful for methods such as MSM building, which require thorough sampling of the conformational landscape.
 The high sequence identity models could be considered to be the most likely to accurately represent true metastable states.
 Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
 
-To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published literature, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domains.
+To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published structural biology literature, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domains.
 We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S\ref{si:residue-numbering-schemes}.
 Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
 One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
@@ -451,11 +454,13 @@ We thus expect that such a set of models, if used as starting configurations for
 
 \subsubsection*{Availability}
 
-The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python~\cite{conda}.
+The code for {\bf Ensembler} is hosted on the collaborative open source software development platform GitHub,\\
+\url{http://github.com/choderalab/ensembler} \\
+The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python~\cite{conda}:
 \shellcmd{conda install -c https://conda.binstar.org/omnia ensembler}
-Up to date instructions can be found at \url{https://github.com/choderalab/ensembler}.
 This will install all dependencies except for Modeller and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
-The latest source can be downloaded from the above GitHub repository, which also contains instructions for building and installing the code.
+The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
+{\color{red}[JDC: Where does documentation reside?  And example inputs for generating the results in this paper?]}
 
 \subsubsection*{Future Directions}
 
@@ -511,9 +516,10 @@ The code is open source and has been developed with extensibility in mind, in or
 \label{section:acknowledgments}
 
 The authors are grateful to Kyle A.~Beauchamp (MSKCC), Robert McGibbon (Stanford), Arien S. Rustenburg (MSKCC) for many excellent software engineering suggestions.
-The authors thank Sonya M.~Hanson (MSKCC), Nicholas M.~Levinson (?), Markus A.~Seeliger (Stony Brook), Diwakar Shukla (Stanford), and Avner Schlessinger (Mount Sinai) for helpful scientific feedback on modeling kinases.
-The authors are grateful to Benjamin Webb and Andrej Sali (UCSF) for help with the MODELLER package, Peter Eastman and Vijay Pande (Stanford) for assistance with OpenMM, and Marilyn Gunner (CCNY) for assistance with MCCE2.
+The authors thank Sonya M.~Hanson (MSKCC), Nicholas M.~Levinson (University of Minnesota), Markus A.~Seeliger (Stony Brook), Diwakar Shukla (Stanford), and Avner Schlessinger (Mount Sinai) for helpful scientific feedback on modeling kinases.
+The authors are grateful to Benjamin Webb and Andrej \v{S}ali (UCSF) for help with the MODELLER package, Peter Eastman and Vijay Pande (Stanford) for assistance with OpenMM, and Marilyn Gunner (CCNY) for assistance with MCCE2.
 DLP and this work was supported in part by the generous support of a Louis V.~Gerstner Young Investigator Award.
+{\color{red}[Add PBG support statement.]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY
