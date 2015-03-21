@@ -237,7 +237,7 @@ This helps to improve model quality and also prepares models for subsequent prod
 
 Models are first subjected to energy minimization (using the L-BFGS algorithm {\color{red}[CITE]}), followed by a short molecular dynamics (MD) simulation with an implicit solvent representation.
 This is implemented using the OpenMM molecular simulation toolkit (link and CITE: OpenMM), chosen for its flexible Python API, and high performance GPU-acclerated simulation code.
-By default, the Amber99SB-ILDN force field is used {\color{red}[CITE: amber99sbildn refs]} with a modified generalized Born solvent model (GBSA-OBC) (CITE: GBSA-OBC).
+By default, the Amber99SB-ILDN force field~\cite{amber99sb-ildn} is used with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
 The {\bf Ensembler} API allows the use of any of the other force fields implemented in OpenMM.
 The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
 {\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
@@ -478,7 +478,8 @@ For example, long timescale MD simulations have suggested that the conformation 
 Currently, protonation states are assigned simply based on pH (a user-controllable parameter).
 At neutral pH, histidines have two protonation states which are approximately equally likely, and in this situation the selection is therefore made based on which state results in a better hydrogen bond.
 It would be highly desirable to instead use a method which assigns amino acid protonation states based on a rigorous assessment of the local environment.
-We thus plan to implement an interface and command-line function for assigning protonation states with MCCE2~\cite{mcce2}, which uses electrostatics calculations combined with Monte Carlo sampling of side chain conformers to calculate pKa values.
+We thus plan to implement an interface and command-line function for assigning protonation states with MCCE2~\cite{alexov-gunner:biophys-j:1997:mcce2,georgescu-alexov-gunner:biophys-j:2002:mcce2,song-mao-gunner:j-comput-chem:2009:mcce2}, which uses electrostatics calculations combined with Monte Carlo sampling of side chain conformers to calculate pKa values.
+{\color{red}[JDC: I think we may want to consider doing that at this stage.  Let's discuss.]}
 
 Many proteins require the presence of various types of non-protein atoms and molecules for proper function, such as metal ions (e.g.~Mg$^{+2}$), cofactors (e.g.~ATP) or post-translational modifications (e.g.~phosphorylation, methylation, glycosylation, etc.), and we thus plan for {\bf Ensembler} to eventually have the capability to include such entities in the generated models.
 Binding sites for metal ions are frequently found in proteins, often playing a role in catalysis.
@@ -529,7 +530,7 @@ DLP and this work was supported in part by the generous support of a Louis V.~Ge
 % BIBLIOGRAPHY
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\bibliographystyle{prsty} 
+\bibliographystyle{prsty} 
 \bibliography{ms.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -546,6 +547,7 @@ DLP and this work was supported in part by the generous support of a Louis V.~Ge
 \label{si:residue-numbering-schemes}
 
 Kinase catalytic domains are highlighted in red, and the conserved residues analyzed in the main text (Figs.~\ref{figure:src-ref-structures} and~\ref{figure:pair-distances}) are highlighted with yellow background.
+{\color{red}[JDC: Very cool!  Did you write a script to generate this, or did you have to do this by hand?]}
 
 \subsubsection*{Human Abl1 sequence}
 
@@ -610,7 +612,8 @@ SRC_CHICK   478   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKDPEERP TFEYLQAFLE DYF}TS
     \caption{{\bf Distributions for the number of missing residues in the TK templates.}
     The upper plot shows the distribution of the total number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling (with the {\tt loopmodel} subcommand) failed (red). The raw data points for all templates are shown as a rug plot.
     The lower plot shows the distribution of the number of residues per template gap, normalized and smoothed using kernel density estimation. The raw data points are shown as a rug plot.
-    }
+    {\color{red}[JDC: Some ideas for cleaning this up: Either the tick marks are being misrendered in that they are not taller if there are multiple data points with the same number or the data is really funky, since I would expect there to be a few examples in some bins.  Also, is there a big drawback to making the top histogram bin size unity, since the values are integral?  I don't think transparency is needed for the histogram bars either.  I would also make the x-axes for the top and bottom plots different, since the data ranges are different.  Finally, I'd see if a histogram with unit bin size might be more appropriate for the bottom plot as well---the KDE just doesn't feel right for this kind of data, since we are trying to report exact statistics from a specific example rather than estimate a general density for problems of this sort.  Finally, I like ``remodeled loop length'' or ``missing loop length'' much better than ``Number of missing residues per template gap'', which seems unnecessarily verbose.]}
+}
     \label{si:loopmodel-nmissing-residues}
 \end{figure*}
 
