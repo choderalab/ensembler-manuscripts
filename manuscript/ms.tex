@@ -109,10 +109,10 @@ Drug discovery could also benefit from a more extensive consideration of protein
 
 Molecular dynamics (MD) simulations have the capability, in principle, to describe the time evolution of a protein in atomistic detail, and have proven themselves to be a useful tool in the study of protein dynamics.
 A number of mature software packages and forcefields are now available, and much recent progress has been driven by advances in computing architecture.
-For example, many MD packages are now able to exploit GPUs~\cite{eastman:jctc:2012:openmm,walker:jctc:2013:amber-gpu}, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home [CITE], GPUGrid [CITE], and Copernicus [CITE] allow scalability on an unprecedented level.
+For example, many MD packages are now able to exploit GPUs~\cite{eastman:jctc:2012:openmm,walker:jctc:2013:amber-gpu}, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home~\cite{shirts-pande:science:2000:fah}, GPUGrid~\cite{buch:2010:gpugrid}, and Copernicus~\cite{pronk:2011:copernicus} allow scalability on an unprecedented level.
 In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2010:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 MSM methods in particular have the advantage of being able to aggregate data from multiple independent MD trajectories, facilitating parallelization of production simulations and thus greatly alleviating overall computational cost.
-There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates [CITE Modeller and Rosetta and a recent homology modeling review].
+There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates~\cite{moult:proteins:2014:casp10,baker:science:2001:structure-prediction-review}.
 
 However, it remains difficult for researchers to exploit the full variety of available protein sequence and structural data in simulation studies, largely due to limitations in software architecture.
 For example, the set up of a biomolecular simulation is typically performed manually, encompassing a series of fairly standard (yet time-consuming) steps such as the choice of protein sequence construct and starting structure(s), addition of missing residues and atoms, solvation with explicit water and counterions (and potentially buffer components and cosolvents), choice of simulation parameters (or parameterization schemes for components where parameters do not yet exist),  system relaxation with energy minimization, and one or more short preparatory MD simulations to equilibrate the system and relax the simulation cell.
@@ -167,7 +167,7 @@ The {\tt ensembler} command-line tool allows targets to be selected from UniProt
 To retrieve target sequences from UniProt, the subcommand {\tt gather\_targets} us used with the {\tt -{}-query} flag followed by a UniProt query string conforming to the same syntax as the search function available on the UniProt website.
 For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
 In this way, the user may select a single protein, many proteins, or an entire superfamily from UniProt.
-The program outputs a FASTA file, setting the UniProt mnemonic (e.g. {\tt SRC\_HUMAN}) as the identifier for each target protein.
+The program outputs a FASTA file, setting the UniProt mnemonic (e.g.~{\tt SRC\_HUMAN}) as the identifier for each target protein.
 
 In many cases, it will be desirable to build models of an isolated protein domain, rather than the full-length protein.
 The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-domains} flag. 
@@ -185,9 +185,9 @@ These templates can be specified manually, or using the {\tt ensembler gather\_t
 A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, guaranteeing some degree of homology between targets and templates.
 
 The {\tt ensembler gather\_templates} subcommand provides methods for selecting template structures from either UniProt or the PDB (\url{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
-Both methods select templates at the level of PDB chains---a PDB structure containing multiple chains with identical sequence spans (e.g. for crystal unit cells with multiple asymmetric units) would thus give rise to multiple template structures.
+Both methods select templates at the level of PDB chains---a PDB structure containing multiple chains with identical sequence spans (e.g.~for crystal unit cells with multiple asymmetric units) would thus give rise to multiple template structures.
 
-Selection of templates from the PDB simply requires passing a list of PDB IDs as a comma-separated string, e.g. {\tt -{}-query 2H8H,1Y57}.
+Selection of templates from the PDB simply requires passing a list of PDB IDs as a comma-separated string, e.g.~{\tt -{}-query 2H8H,1Y57}.
 Specific PDB chain IDs can optionally also be selected via the {\tt -{}-chainids} flag.
 The program retrieves structures from the PDB server, as well as associated data from the SIFTS service (\href{http://www.ebi.ac.uk/pdbe/docs/sifts/}{www.ebi.ac.uk/pdbe/docs/sifts}) (CITE: Velankar Nucleic Acids Res 2013), which provides residue-level mappings between PDB and UniProt entries.
 The SIFTS data is used to extract template sequences, retaining only residues which are resolved and match the equivalent residue in the UniProt sequence---non-wildtype residues are thus removed from the template structures.
@@ -206,22 +206,24 @@ The structure residues must also match those in the sequence file.
 
 \subsubsection*{Template refinement}
 
-Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm {\color{red}[CITE]} provided via the {\tt loopmodel} tool of the Rosetta software suite {\color{red}[CITE: Rosetta and/or loopmodel]}.
+Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
 Because fewer loops need to be built during the subsequent model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
 {\color{red}[JDC: Can you show the distribution of missing loop lengths for the TKs?]}
 
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
 
-\subsubsection*{Modeling of targets}
+\subsubsection*{Modeling}
 
 This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are subsequently filtered out using a RMSD-based clustering scheme.
 
-Modeling is performed with the Modeller automodel function {\color{red}[CITE: Modeller]}, which implements comparative structure modeling by satisfaction of spatial restraints {\color{red}[CITE: Sali Blundell J Mol Biol 1993; Fiser Sali Prot Sci 9 2000]}.
+Modeling is performed with the automodel function of the Modeller software package, which implements comparative structure modeling by satisfaction of spatial restraints~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
 While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module [CITE: BioPython]---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~{\color{red}[CITE: Gaston Gonnet Science 1992]}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
 Models are output as PDB-format coordinate files.
 A list of all model identifiers sorted by sequence identity is also written to a text file.
 To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip} library to apply compression to all sizeable text files from the modeling stage onwards.
+The restraints used by Modeller could potentially be used in alternative refinement schemes, and {\bf Ensembler} thus provides a flag ({\tt -{}-write\_modeller\_restraints\_file}) for optionally saving these restraints to file.
+This option is turned off by default, as the restraint files are relatively large (e.g.~$\sim$400 KB per model for protein kinase domain targets), and are not expected to be used by the majority of users.
 
 All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
 Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
@@ -258,7 +260,9 @@ Other force fields or water models such as TIP4P-Ew {\color{red}[CITE]}) can be 
 \subsubsection*{Packaging}
 
 {\bf Ensembler} provides a packaging module which can be used to compress models in preparation for data transfer, or to prepare models with the appropriate directory and file structure for subsequent production simulations on the distributed computing platform Folding@home (CITE: F@H).
+The module could be easily extended to add methods for preparing models for use with other software, such as the Copernicus platform for running automated, distributed MD simulations.
 {\color{red}[JDC: Is there a way we can make this more generally useful to others?  For example, is there a different system they might want to use, such as \href{http://copernicus.readthedocs.org/en/latest/tutorials/md-tutorial.html#creating-a-workflow-for-molecular-simulations}{Copernicus}?]}
+{\color{blue}[DLP: addressed]}
 
 \subsubsection*{Provenance}
 
@@ -315,16 +319,16 @@ The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
 {\color{red}[JDC: Can you give some statistics on the distribution of loop lengths modeled?  Why did loop modeling fail in the cases it did?  Anything else you can say here beyond this one sentence?]}
 {\color{blue}[DLP: Addressed in the text, and a SI figure.]}
 
-Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} surviving models.
-{\color{red}[JDC: What percentage is this?]}
+Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} (94\%) surviving models.
 To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
 The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
 The number of refined models for each target ranged from 4005 to 4248, with a median of 4160 and standard deviation of 60.
 Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
 
-Each model generated about 513 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 1.7 GB per TK target or 149 GB for all 90 TKs.
-The data generated per model breaks down as 436 kB for the output from the modeling stage---with the largest contribution arising from the stored Modeller restraint files---and 77 kB for the implicit solvent MD refinement stage.
+Each model generated about 116 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 0.5 GB per TK target or 41 GB for all 90 TKs.
+The data generated per model breaks down as 39 kB for the output from the modeling stage (without saving Modeller restraints to file) and 77 kB for the implicit solvent MD refinement stage.
 {\color{red}[JDC: Maybe we want to add a flag to make retaining the Modeller restraint files optional?  I had originally just saved these so we could do subsequent OpenMM-based model refinement if desired, but we don't actually do that yet.]}
+{\color{blue}[DLP: I've added this flag and discussed it in the Design and Implementation section, and also updated the file storage details here.]}
 
 \subsubsection*{Evaluation of model quality and utility}
 
@@ -464,7 +468,7 @@ The latest source can be downloaded from the GitHub repository, which also conta
 
 \subsubsection*{Future Directions}
 
-{\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g. structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
+{\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g.~structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
 
 Comparative protein modeling and MD simulation set-up can be approached in a number of different ways, with varying degrees of complexity, and there are a number of obvious additions and improvements which we plan to implement in future versions of {\bf Ensembler}.
 
@@ -603,8 +607,9 @@ SRC_CHICK   478   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKDPEERP TFEYLQAFLE DYF}TS
 
 \begin{figure*}[h]
     \includegraphics[width=0.5\textwidth]{loopmodel_analysis/nmissing_resis_distributions.pdf}
-    \caption{{\bf Distributions for the number of missing residues for templates for which remodeling (with the {\tt loopmodel} command) was either successful or unsuccessful.}
-    The plotted distributions are smoothed using kernel density estimation, and the raw data points are shown as a rug plot.
+    \caption{{\bf Distributions for the number of missing residues in the TK templates.}
+    The upper plot shows the distribution of the total number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling (with the {\tt loopmodel} subcommand) failed (red). The raw data points for all templates are shown as a rug plot.
+    The lower plot shows the distribution of the number of residues per template gap, normalized and smoothed using kernel density estimation. The raw data points are shown as a rug plot.
     }
     \label{si:loopmodel-nmissing-residues}
 \end{figure*}
