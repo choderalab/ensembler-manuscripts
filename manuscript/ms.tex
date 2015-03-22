@@ -201,34 +201,41 @@ Only structures solved by X-ray crystallography or NMR are selected, thus exclud
 If the {\tt -{}-domains} flag is used, then templates are truncated at the start and end of the domain sequence.
 
 Templates can also be defined manually.
-Manual selection of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
+Manual specification of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
 The structure residues must also match those in the sequence file.
 
 \subsubsection*{Template refinement}
 
-Unresolved template residues can optionally be remodeled with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
-Because fewer loops need to be built during the subsequent model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
-{\color{red}[JDC: Can you show the distribution of missing loop lengths for the TKs?]}
+Unresolved template residues can optionally be modeled into template structures with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
+Because fewer loops need to be built during the subsequent target model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
+{\color{red}[JDC: Should we cite our evidence for this with the TKs, or maybe tone back the claim a bit to say that it is possible this could make things easier?]}
 
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
 
 \subsubsection*{Modeling}
 
-This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are subsequently filtered out using a RMSD-based clustering scheme.
+In the modeling stage, structural models of the target sequence are generated from the template structures, with the goal of modeling the target in a variety of conformations that could be significantly populated under equilibrium conditions.
 
-Modeling is performed with the automodel function of the Modeller software package, which implements comparative structure modeling by satisfaction of spatial restraints~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
-While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module [CITE: BioPython]---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~\cite{gonnet:science:1992:exhaustive-matching}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
-{\color{red}[JDC: What evidence can we present or cite to support this claim?]}
+Modeling is performed using the automodel function of the Modeller software package~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller} to rapidly generate a single model of the target sequence from each template structure.
+Modeller uses simulated annealing cycles along with a minimal forcefield and spatial restraints---generally Gaussian interatomic probability densities extracted from the template structure with database-derived statistics determining the distribution width---to rapidly generate candidate structures of the target sequence from the provided template sequence~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
+
+While Modeller's automodel function can generate its own alignments automatically, we utilize the BioPython {\tt pairwise2} module {\color{red}[CITE: BioPython]}---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~\cite{gonnet:science:1992:exhaustive-matching}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
+{\color{red}[JDC: Can we give some evidence to support this claim, or soften our language on this?]}
+
 Models are output as PDB-format coordinate files.
-A list of all model identifiers sorted by sequence identity is also written to a text file.
+A list of all model identifiers sorted by sequence identity is also written to a text file, so that users may select models from the desired range of sequence identities.
+{\color{red}[JDC: I wonder if we should add an option ``exclude models with sequence identities poorer than X'', since this could be something people might want to do.]}
 To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip} library to apply compression to all sizeable text files from the modeling stage onwards.
-The restraints used by Modeller could potentially be used in alternative refinement schemes, and {\bf Ensembler} thus provides a flag ({\tt -{}-write\_modeller\_restraints\_file}) for optionally saving these restraints to file.
+The restraints used by Modeller could potentially be used in alternative additional refinement schemes, and {\bf Ensembler} thus provides a flag ({\tt -{}-write\_modeller\_restraints\_file}) for optionally saving these restraints to file.
 This option is turned off by default, as the restraint files are relatively large (e.g.~$\sim$400 KB per model for protein kinase domain targets), and are not expected to be used by the majority of users.
 
-All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
-Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
-The mdtraj~\cite{mdtraj} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation, and the leader algorithm is then used to populate clusters.
+\subsubsection*{Filtering of nearly identical models}
+
+Because {\bf Ensembler} treats individual chains from source PDB structures as individual templates, a number of models may be generated with very similar structures if these individual chains are nearly identical in conformation.
+For this reason, and also to allow users to select for high diversity if they so choose, {\bf Ensembler} provides a way to filter out models that are very similar in RMSD.
+A fast clustering scheme is used to identify models differing by a user-specified minimum RMSD.
+The mdtraj~\cite{mdtraj} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation, and the leader algorithm {\color{red}[JDC: Citation for leader algorithm?]} is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
 
 \subsubsection*{Refinement of models}
@@ -257,6 +264,7 @@ The explicit solvent MD simulation is also implemented using OpenMM, using the A
 Other force fields or water models such as TIP4P-Ew~\cite{tip4p-ew} can be specified via the {\bf Ensembler} API.
 {\color{red}[JDC: We should allow other water models in OpenMM too, such as TIP4P-Ew?]}
 {\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a -{}-water\_model flag to the CLI, for example.]}
+{\color{red}[JDC: Would be good to let at least water model and forcefield name be selectable via the CLI!]}
 
 \subsubsection*{Packaging}
 
