@@ -158,7 +158,7 @@ The various stages of this pipeline are described in detail below.
   \label{figpipeline}
 \end{figure*}
 
-\subsubsection*{Target selection and retrieval}
+\subsection*{Target selection and retrieval}
 
 The first stage entails the selection of a set of \emph{target} protein sequences---the sequences the user is interested in generating simulation-ready structural models for.
 This may be a single sequence---such as a full-length protein or a construct representing a single domain---or a collection of sequences, such as a particular domain from an entire family of proteins.
@@ -178,7 +178,7 @@ In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_
 
 Target sequences can also be defined manually (or from another program) by providing a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
-\subsubsection*{Template selection and retrieval}
+\subsection*{Template selection and retrieval}
 
 {\bf Ensembler} uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
 The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
@@ -205,7 +205,7 @@ Templates can also be defined manually.
 Manual specification of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
 The structure residues must also match those in the sequence file.
 
-\subsubsection*{Template refinement}
+\subsection*{Template refinement}
 
 Unresolved template residues can optionally be modeled into template structures with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
 Because fewer loops need to be built during the subsequent target model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
@@ -214,7 +214,7 @@ Because fewer loops need to be built during the subsequent target model-building
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
 
-\subsubsection*{Modeling}
+\subsection*{Modeling}
 
 In the modeling stage, structural models of the target sequence are generated from the template structures, with the goal of modeling the target in a variety of conformations that could be significantly populated under equilibrium conditions.
 
@@ -231,7 +231,7 @@ To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip
 The restraints used by Modeller could potentially be used in alternative additional refinement schemes, and {\bf Ensembler} thus provides a flag ({\tt -{}-write\_modeller\_restraints\_file}) for optionally saving these restraints to file.
 This option is turned off by default, as the restraint files are relatively large (e.g.~$\sim$400 KB per model for protein kinase domain targets), and are not expected to be used by the majority of users.
 
-\subsubsection*{Filtering of nearly identical models}
+\subsection*{Filtering of nearly identical models}
 
 Because {\bf Ensembler} treats individual chains from source PDB structures as individual templates, a number of models may be generated with very similar structures if these individual chains are nearly identical in conformation.
 For this reason, and also to allow users to select for high diversity if they so choose, {\bf Ensembler} provides a way to filter out models that are very similar in RMSD.
@@ -239,7 +239,7 @@ A fast clustering scheme is used to identify models differing by a user-specifie
 The mdtraj~\cite{mdtraj} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation, and the leader algorithm {\color{red}[JDC: Citation for leader algorithm?]} is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
 
-\subsubsection*{Refinement of models}
+\subsection*{Refinement of models}
 
 This stage entails the use of molecular dynamics simulations to refine the models built in the previous step.
 This helps to improve model quality and also prepares models for subsequent production simulation, including solvation with explicit water molecules, if desired.
@@ -252,7 +252,7 @@ The simulation is run for a default of 100 ps to filter out poor quality models 
 {\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
 {\color{blue}[DLP: We currently just filter out models which throw exceptions or NaNs.]}
 
-\subsubsection*{Solvation and NPT equilibration}
+\subsection*{Solvation and NPT equilibration}
 
 While protein-only models may be sufficient for structural analysis or implicit solvent simulations, {\bf Ensembler} also provides a stage for solvating models with explicit water and performing a round of explicit-solvent MD refinement/equilibration under isothermal-isobaric (NPT) conditions.
 The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, such as the construction of MSMs.
@@ -267,14 +267,17 @@ Other force fields or water models such as TIP4P-Ew~\cite{tip4p-ew} can be speci
 {\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a -{}-water\_model flag to the CLI, for example.]}
 {\color{red}[JDC: Would be good to let at least water model and forcefield name be selectable via the CLI!]}
 
-\subsubsection*{Packaging}
+\subsection*{Packaging}
 
-{\bf Ensembler} provides a packaging module which can be used to compress models in preparation for data transfer, or to prepare models with the appropriate directory and file structure for subsequent production simulations on the distributed computing platform Folding@home (CITE: F@H).
+{\bf Ensembler} provides a packaging module which can be used to compress models in preparation for data transfer, or to prepare models with the appropriate directory and file structure for subsequent production simulations on the distributed computing platform Folding@home {\color{red}[CITE: F@H]}.
 The module could be easily extended to add methods for preparing models for use with other software, such as the Copernicus platform for running automated, distributed MD simulations.
 {\color{red}[JDC: Is there a way we can make this more generally useful to others?  For example, is there a different system they might want to use, such as \href{http://copernicus.readthedocs.org/en/latest/tutorials/md-tutorial.html#creating-a-workflow-for-molecular-simulations}{Copernicus}?]}
 {\color{blue}[DLP: addressed]}
+{\color{red}[JDC: How was this addressed?]}
 
-\subsubsection*{Provenance}
+\subsection*{Other features}
+
+\subsubsection*{Tracking provenance information}
 
 To aid the user in tracking the provenance of each model, each pipeline function also outputs a metadata file, which helps to link data to the software version used to generate it (both {\bf Ensembler} and its dependencies), and also provides timing and performance information, and other data such as hostname.
 
@@ -304,7 +307,7 @@ For larger numbers of models (such as entire protein families), modeling time is
 \section{Results}
 \label{section:results}
 
-\subsubsection*{Modeling of all human tyrosine kinase catalytic domains}
+\subsection*{Modeling of all human tyrosine kinase catalytic domains}
 
 As a first application of {\bf Ensembler}, we have built models for all 90 human tyrosine kinase (TK) domains listed in UniProt.
 {\color{red}[JDC: What query was used to yield this set?]}
@@ -319,7 +322,7 @@ Kinases are thus a particularly interesting subject for study with MSM methods [
 We selected all available structures of protein kinase domains (of any species) as templates, for a total of 4433 (\num{398970} target-template pairs).
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
 
-\subsubsection*{Ensembler modeling statistics}
+\subsection*{Ensembler modeling statistics}
 
 \begin{figure}[tbp]
     \includegraphics[width=\textwidth]{loopmodel_analysis/nmissing_resis_distributions.pdf}
@@ -337,17 +340,18 @@ To reduce the reliance on the Modeller rapid model construction stage to reconst
 Out of \num{3666} templates with one or more missing residues, \num{3134} were successfully remodeled by the Rosetta loop modeling stage (with success defined simply as program termination with out error); most remodeling failures were attributable to unsatisfiable spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues (Fig.~\ref{figure:loopmodel-nmissing-residues}, top); templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
 
-Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} (94\%) surviving models.
-To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
+Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} (94\%) surviving models across all TKs.
+To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data {\color{red}[JDC: State how big the solvated model PDBs are?]}, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
+
 The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
-The number of refined models for each target ranged from 4005 to 4248, with a median of 4160 and standard deviation of 60.
+The number of refined models for each target ranged from \num{4005} to \num{4248}, with a median of \num{4160} and standard deviation of \num{60}.
 Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
 
 Each model generated about 116 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 0.5 GB per TK target or 41 GB for all 90 TKs.
 The data generated per model breaks down as 39 kB for the output from the modeling stage (without saving Modeller restraints to file) and 77 kB for the implicit solvent MD refinement stage.
 {\color{red}[JDC: Can you rework this paragraph to specify total space requirements \emph{without} saving MODELLER restraint files (since this is now the default), plus how much each restraint file adds if they are retained as well?  I took a stab at it, but couldn't figure out how the numbers worked out.]}
 
-\subsubsection*{Evaluation of model quality and utility}
+\subsection*{Evaluation of model quality and utility}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: RMSD distribution by sequence identity
@@ -367,9 +371,13 @@ The data generated per model breaks down as 39 kB for the output from the modeli
   \label{figure:rmsd-distribution-by-sequence-identity}
 \end{figure}
 
+\subsubsection*{All tyrosine kinases}
+
 To evaluate the diversity of conformations captured for each target sequence, we first computed the RMSD distributions for all models for each target (relative to the model derived from the highest-identity template) are shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
 To better understand the influence of sequence identity on the conformational similarities of resulting models, the sequence identities were stratified based on the sequence identity distribution plotted in Fig.~\ref{figure:sequence-identity-distribution}, which suggests an intuitive division into three categories, with \num{307753} models in the 0--35\% sequence identity range, \num{69922} models in the 35--55\% range, and \num{4893} models in the 55--100\% range. 
 It is clear that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average.
+
+\subsubsection*{Src and Abl1}
 
 To provide a more complete evaluation of the models generated, we have analyzed two example TKs (\emph{Src} and \emph{Abl1}) in detail.
 Due to their importance in cancer, as outlined above, these kinases have been the subject of numerous studies, encompassing many different methodologies.
@@ -472,7 +480,7 @@ We thus expect that such a set of models, if used as starting configurations for
 \section{Availability and Future Directions}
 \label{section:availability}
 
-\subsubsection*{Availability}
+\subsection*{Availability}
 
 The code for {\bf Ensembler} is hosted on the collaborative open source software development platform GitHub,\\
 \url{http://github.com/choderalab/ensembler} \\
@@ -484,7 +492,7 @@ This will install all dependencies except for Modeller and Rosetta, which are no
 The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
 {\color{red}[JDC: Where does documentation reside?  And example inputs for generating the results in this paper?]}
 
-\subsubsection*{Future Directions}
+\subsection*{Future Directions}
 
 {\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g.~structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
 
@@ -512,7 +520,7 @@ For example, the set of all human protein kinase domains listed in UniProt have 
 The latter value corresponds to the protein kinase domain of serine/threonine-kinase \emph{greatwall}, which includes a long insertion between the two main lobes of the catalytic domain.
 In principle, such insertions could be excluded from the generated models, though a number of questions would arise as to how best to approach this.
 
-\subsubsection*{Conclusion}
+\subsection*{Conclusion}
 
 We believe {\bf Ensembler} to be an important first step toward enabling computational modeling and simulation of proteins on the scale of entire protein families, and suggest that it could likely prove useful for tasks beyond its original aim of providing diverse starting configurations for MD simulations.
 The code is open source and has been developed with extensibility in mind, in order to facilitate its customization for a wide range of potential uses by the wider scientific community.
