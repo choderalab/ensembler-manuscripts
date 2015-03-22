@@ -218,7 +218,8 @@ Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues
 This stage entails the generation of models via comparative modeling of each target sequence onto each template structure. Non-unique models are subsequently filtered out using a RMSD-based clustering scheme.
 
 Modeling is performed with the automodel function of the Modeller software package, which implements comparative structure modeling by satisfaction of spatial restraints~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
-While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module [CITE: BioPython]---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~{\color{red}[CITE: Gaston Gonnet Science 1992]}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
+While Modeller can generate alignments automatically, we utilize the BioPython {\tt pairwise2} module [CITE: BioPython]---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~\cite{gonnet:science:1992:exhaustive-matching}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
+{\color{red}[JDC: What evidence can we present or cite to support this claim?]}
 Models are output as PDB-format coordinate files.
 A list of all model identifiers sorted by sequence identity is also written to a text file.
 To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip} library to apply compression to all sizeable text files from the modeling stage onwards.
@@ -310,14 +311,20 @@ The templates were derived from 3028 individual PDB entries and encompassed 23 d
 
 \subsubsection*{Ensembler modeling statistics}
 
-Unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
-The number of missing residues in each template ranged from 0 to 102, with a median of 11 and a standard deviation of 13.
-{\color{red}[JDC: Any chance you can generate a plot of the distribution of loop lengths?  I'm guessing this is pretty non-normal since the standard deviation is larger than the median!]}
-Out of 3666 templates with one or more missing residues, 3134 were successfully remodeled, with most remodeling failures attributable to spatial constraints imposed by the original template structure.
-There was some correlation between remodeling failures and the number of missing residues; templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
-The distributions are plotted in Fig. S\ref{si:loopmodel-nmissing-residues}.
-{\color{red}[JDC: Can you give some statistics on the distribution of loop lengths modeled?  Why did loop modeling fail in the cases it did?  Anything else you can say here beyond this one sentence?]}
-{\color{blue}[DLP: Addressed in the text, and a SI figure.]}
+\begin{figure}[tbp]
+    \includegraphics[width=\textwidth]{loopmodel_analysis/nmissing_resis_distributions.pdf}
+    \caption{{\bf Distributions for the number of missing residues in the TK templates.}
+    The upper plot shows the distribution of the total number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling (with the {\tt loopmodel} subcommand) failed (red). The raw data points for all templates are shown as a rug plot.
+    The lower plot shows the distribution of the number of residues per template gap, normalized and smoothed using kernel density estimation. The raw data points are shown as a rug plot.
+    {\color{red}[JDC: Some ideas for cleaning this up: Either the tick marks are being misrendered in that they are not taller if there are multiple data points with the same number or the data is really funky, since I would expect there to be a few examples in some bins.  Also, is there a big drawback to making the top histogram bin size unity, since the values are integral?  I don't think transparency is needed for the histogram bars either.  We can also ditch the semilogy axis.  I would also make the x-axes for the top and bottom plots different, since the data ranges are different.  I'd see if a histogram with unit bin size might be more appropriate for the bottom plot as well---the KDE just doesn't feel right for this kind of data, since we are trying to report exact statistics from a specific example rather than estimate a general density for problems of this sort.  Finally, I like ``remodeled loop length'' or ``missing loop length'' much better than ``Number of missing residues per template gap'', which seems unnecessarily verbose.]}
+}
+    \label{figure:loopmodel-nmissing-residues}
+\end{figure}
+
+Crystallographic structures of kinase catalytic domains generally contain a significant number of missing residues (median 11, standard deviation 13, max 102) due to the high mobility of several loops (Fig.~\ref{figure:loopmodel-nmissing-residues}, top), with a number of these missing spans being significant in length (Fig.~\ref{figure:loopmodel-nmissing-residues}, bottom).
+To reduce the reliance on the Modeller rapid model construction stage to reconstruct very long unresolved loops, unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
+Out of \num{3666} templates with one or more missing residues, \num{3134} were successfully remodeled by the Rosetta loop modeling stage (with success defined simply as program termination with out error); most remodeling failures were attributable to unsatisfiable spatial constraints imposed by the original template structure.
+There was some correlation between remodeling failures and the number of missing residues (Fig.~\ref{figure:loopmodel-nmissing-residues}, top); templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} (94\%) surviving models.
 To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
@@ -327,8 +334,7 @@ Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster f
 
 Each model generated about 116 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 0.5 GB per TK target or 41 GB for all 90 TKs.
 The data generated per model breaks down as 39 kB for the output from the modeling stage (without saving Modeller restraints to file) and 77 kB for the implicit solvent MD refinement stage.
-{\color{red}[JDC: Maybe we want to add a flag to make retaining the Modeller restraint files optional?  I had originally just saved these so we could do subsequent OpenMM-based model refinement if desired, but we don't actually do that yet.]}
-{\color{blue}[DLP: I've added this flag and discussed it in the Design and Implementation section, and also updated the file storage details here.]}
+{\color{red}[JDC: Can you rework this paragraph to specify total space requirements \emph{without} saving MODELLER restraint files (since this is now the default), plus how much each restraint file adds if they are retained as well?  I took a stab at it, but couldn't figure out how the numbers worked out.]}
 
 \subsubsection*{Evaluation of model quality and utility}
 
@@ -607,14 +613,5 @@ SRC_CHICK   478   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKDPEERP TFEYLQAFLE DYF}TS
 
 \section{Figures}
 
-\begin{figure*}[h]
-    \includegraphics[width=0.5\textwidth]{loopmodel_analysis/nmissing_resis_distributions.pdf}
-    \caption{{\bf Distributions for the number of missing residues in the TK templates.}
-    The upper plot shows the distribution of the total number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling (with the {\tt loopmodel} subcommand) failed (red). The raw data points for all templates are shown as a rug plot.
-    The lower plot shows the distribution of the number of residues per template gap, normalized and smoothed using kernel density estimation. The raw data points are shown as a rug plot.
-    {\color{red}[JDC: Some ideas for cleaning this up: Either the tick marks are being misrendered in that they are not taller if there are multiple data points with the same number or the data is really funky, since I would expect there to be a few examples in some bins.  Also, is there a big drawback to making the top histogram bin size unity, since the values are integral?  I don't think transparency is needed for the histogram bars either.  I would also make the x-axes for the top and bottom plots different, since the data ranges are different.  Finally, I'd see if a histogram with unit bin size might be more appropriate for the bottom plot as well---the KDE just doesn't feel right for this kind of data, since we are trying to report exact statistics from a specific example rather than estimate a general density for problems of this sort.  Finally, I like ``remodeled loop length'' or ``missing loop length'' much better than ``Number of missing residues per template gap'', which seems unnecessarily verbose.]}
-}
-    \label{si:loopmodel-nmissing-residues}
-\end{figure*}
 
 \end{document}
