@@ -227,7 +227,7 @@ This option is turned off by default, as the restraint files are relatively larg
 
 All chains of template structures that contain the template sequence are utilized in the modeling phase, which can sometimes cause models to be nearly identical.
 Since the goal is to provide good coverage of conformation space, {\bf Ensembler} filters out nearly identical models using structural similarity-based clustering.
-The mdtraj {\color{red}[CITE: mdtraj]} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~{\color{red}[Cite Theobald QCP papers]} implementation, and the leader algorithm is then used to populate clusters.
+The mdtraj~\cite{mdtraj} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation, and the leader algorithm is then used to populate clusters.
 A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
 
 \subsubsection*{Refinement of models}
@@ -235,8 +235,8 @@ A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a s
 This stage entails the use of molecular dynamics simulations to refine the models built in the previous step.
 This helps to improve model quality and also prepares models for subsequent production simulation, including solvation with explicit water molecules, if desired.
 
-Models are first subjected to energy minimization (using the L-BFGS algorithm {\color{red}[CITE]}), followed by a short molecular dynamics (MD) simulation with an implicit solvent representation.
-This is implemented using the OpenMM molecular simulation toolkit (link and CITE: OpenMM), chosen for its flexible Python API, and high performance GPU-acclerated simulation code.
+Models are first subjected to energy minimization (using the L-BFGS algorithm~\cite{lbfgs}, followed by a short molecular dynamics (MD) simulation with an implicit solvent representation.
+This is implemented using the OpenMM molecular simulation toolkit~\cite{eastman:jctc:2012:openmm}, chosen for its flexible Python API, and high performance GPU-acclerated simulation code.
 By default, the Amber99SB-ILDN force field~\cite{amber99sb-ildn} is used with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
 The {\bf Ensembler} API allows the use of any of the other force fields implemented in OpenMM.
 The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
@@ -252,8 +252,8 @@ The target number of waters is selected by first solvating each model with a spe
 {\color{blue}[DLP: Addressed.]}
 This helps to prevent models with particularly long, extended loops---such as those arising from template structures with unresolved termini---from imposing very large box sizes on the entire set of models.
 Models are resolvated with the target number of waters by first solvating with zero padding, then incrementally increasing the box size and resolvating until the target is exceeded, then finally deleting sufficient waters to match the target value.
-The explicit solvent MD simulation is also implemented using OpenMM, using the Amber99SB-ILDN force field and TIP3P water {\color{red}[JDC: CITE]} by default.
-Other force fields or water models such as TIP4P-Ew {\color{red}[CITE]}) can be specified via the {\bf Ensembler} API.
+The explicit solvent MD simulation is also implemented using OpenMM, using the Amber99SB-ILDN force field~\cite{amber99sb-ildn} and TIP3P water~\cite{tip3p} by default.
+Other force fields or water models such as TIP4P-Ew~\cite{tip4p-ew} can be specified via the {\bf Ensembler} API.
 {\color{red}[JDC: We should allow other water models in OpenMM too, such as TIP4P-Ew?]}
 {\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a -{}-water\_model flag to the CLI, for example.]}
 
