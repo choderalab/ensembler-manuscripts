@@ -353,6 +353,26 @@ The data generated per model breaks down as 39 kB for the output from the modeli
 
 \subsection*{Evaluation of model quality and utility}
 
+\subsubsection*{All tyrosine kinases}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Sequence identity distribution
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[tb]
+    \includegraphics[width=1.0\columnwidth]{seqid_dist/seqid_dist.pdf}
+
+    \caption{{\bf Template-target sequence identity distribution for human tyrosine kinase catalytic domains.}
+    Sequence identities are calculated from all pairwise target-template alignments, where targets are human kinase catalytic domain sequences and templates are all kinase catalytic domains from any organism with structures in the PDB, as described in the text.
+    A kernel density estimate of the target-template sequence identity probability density function is shown as a solid line with shaded region, while the corresponding cumulative distribution function is shown as a dashed line.
+    }
+  \label{figure:sequence-identity-distribution}
+\end{figure}
+
+{\color{red}[JDC: DIscuss Fig.~\ref{figure:sequence-identity-distribution} first.]}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: RMSD distribution by sequence identity
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -371,7 +391,6 @@ The data generated per model breaks down as 39 kB for the output from the modeli
   \label{figure:rmsd-distribution-by-sequence-identity}
 \end{figure}
 
-\subsubsection*{All tyrosine kinases}
 
 To evaluate the diversity of conformations captured for each target sequence, we first computed the RMSD distributions for all models for each target (relative to the model derived from the highest-identity template) are shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
 To better understand the influence of sequence identity on the conformational similarities of resulting models, the sequence identities were stratified based on the sequence identity distribution plotted in Fig.~\ref{figure:sequence-identity-distribution}, which suggests an intuitive division into three categories, with \num{307753} models in the 0--35\% sequence identity range, \num{69922} models in the 35--55\% range, and \num{4893} models in the 55--100\% range. 
@@ -385,44 +404,6 @@ To provide a more complete evaluation of the models generated, we have analyzed 
 Due to their importance in cancer, these kinases have been the subject of numerous studies, encompassing many different methodologies.
 In terms of structural data, a large number of crystal structures have been solved (with or without ligands such as nucleotide substrate or inhibitor drugs), showing the kinases in a number of different conformations.
 These two kinases are thus also interesting targets for MSM studies, with one recent study focusing on modeling the states which constitute the activation pathway of Src~\cite{shukla-pande:nature-commun:2014:src-activation-msm}.
-
-Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl1}.
-Models were first stratified into three ranges, based on the structure of the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), then subjected to $k$-medoids clustering to pick three representative models from each sequence identity range.
-{\color{red}[JDC: Explain how $k$-medoids clustering was done either here or in figure caption.]}
-Each model is colored and given a transparency based on the sequence identity between the target and template sequence.
-The figure gives an idea of the variance present in the generated models.
-High sequence identity models (in opaque blue) tend to be quite structurally similar, with some variation in loops or changes in domain orientation.
-
-The Abl1 renderings in Fig.~\ref{figure:superposition} indicate one high sequence identity model with a long unstructured region at one of the termini, which was unresolved in the original template structure.
-While such models are not necessarily incorrect or undesirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
-Lower sequence identity models (in transparent white or red) indicate much greater variation in all parts of the structure.
-We believe the mix of high and low sequence identity models to be particularly useful for methods such as MSM building, which require thorough sampling of the conformational landscape.
-The high sequence identity models could be considered to be the most likely to accurately represent true metastable states.
-Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
-
-To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published structural biology literature on functionally relevant conformations, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domain activity.
-We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S\ref{si:residue-numbering-schemes}.
-
-Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
-One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
-These three residues are also well conserved [CITE Kannan Neuwald JMB 2005], and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family~\cite{shukla-pande:nature-commun:2014:src-activation-msm} [CITE Foda Shan Seeliger Src Nat Commun 2015; Ozkirimli Post Prot Sci 2008].
-As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl1} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
-The models show strong coverage of regions in which either of the electrostatic interactions is formed, as well as a wide range of regions inbetween.
-We thus expect that such a set of models, if used as starting configurations for highly parallel MD simulation, could greatly aid in sampling of functionally relevant conformational states.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Sequence identity distribution
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tb]
-    \includegraphics[width=1.0\columnwidth]{seqid_dist/seqid_dist.pdf}
-
-    \caption{{\bf Template-target sequence identity distribution for human tyrosine kinase catalytic domains.}
-    Sequence identities are calculated from all pairwise target-template alignments, where targets are human kinase catalytic domain sequences and templates are all kinase catalytic domains from any organism with structures in the PDB, as described in the text.
-    A kernel density estimate of the target-template sequence identity probability density function is shown as a solid line with shaded region, while the corresponding cumulative distribution function is shown as a dashed line.
-    }
-  \label{figure:sequence-identity-distribution}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Superposition of Src and Abl1 sequence identity classes
@@ -444,6 +425,23 @@ We thus expect that such a set of models, if used as starting configurations for
   \label{figure:superposition}
 \end{figure}
 
+Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl1}.
+Models were first stratified into three ranges, based on the structure of the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), then subjected to $k$-medoids clustering to pick three representative models from each sequence identity range.
+{\color{red}[JDC: Explain how $k$-medoids clustering was done either here or in figure caption.]}
+Each model is colored and given a transparency based on the sequence identity between the target and template sequence.
+The figure gives an idea of the variance present in the generated models.
+High sequence identity models (in opaque blue) tend to be quite structurally similar, with some variation in loops or changes in domain orientation.
+
+The Abl1 renderings in Fig.~\ref{figure:superposition} indicate one high sequence identity model with a long unstructured region at one of the termini, which was unresolved in the original template structure.
+While such models are not necessarily incorrect or undesirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
+Lower sequence identity models (in transparent white or red) indicate much greater variation in all parts of the structure.
+We believe the mix of high and low sequence identity models to be particularly useful for methods such as MSM building, which require thorough sampling of the conformational landscape.
+The high sequence identity models could be considered to be the most likely to accurately represent true metastable states.
+Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
+
+To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published structural biology literature on functionally relevant conformations, we have focused on two residue pair distances thought to be important for the regulation of protein kinase domain activity.
+We use the residue numbering schemes for chicken Src (which is commonly used in the literature even in reference to human Src)[CITE: 2SRC, 1Y57] and human Abl1 isoform A[CITE: 2F4J, 2HYY, 2G1T] respectively; the exact numbering schemes are provided in Supporting Information S\ref{si:residue-numbering-schemes}.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Reference structures for Src
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -458,6 +456,13 @@ We thus expect that such a set of models, if used as starting configurations for
   }
   \label{figure:src-ref-structures}
 \end{figure}
+
+Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC) {\color{red}[CITE: 2SRC]} and active (PDB code: 1Y57) {\color{red}[CITE: 1Y57]} states.
+One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
+These three residues are also well conserved [CITE Kannan Neuwald JMB 2005], and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family~\cite{shukla-pande:nature-commun:2014:src-activation-msm} [CITE Foda Shan Seeliger Src Nat Commun 2015; Ozkirimli Post Prot Sci 2008].
+As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl1} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
+The models show strong coverage of regions in which either of the electrostatic interactions is formed, as well as a wide range of regions inbetween.
+We thus expect that such a set of models, if used as starting configurations for highly parallel MD simulation, could greatly aid in sampling of functionally relevant conformational states.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Residue pair distance plots
