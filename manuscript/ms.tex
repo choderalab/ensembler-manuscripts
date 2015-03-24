@@ -109,7 +109,7 @@ Drug discovery could also benefit from a more extensive consideration of protein
 
 Molecular dynamics (MD) simulations have the capability, in principle, to describe the time evolution of a protein in atomistic detail, and have proven themselves to be a useful tool in the study of protein dynamics.
 A number of mature software packages and forcefields are now available, and much recent progress has been driven by advances in computing architecture.
-For example, many MD packages are now able to exploit GPUs~\cite{eastman:jctc:2012:openmm,walker:jctc:2013:amber-gpu}, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home~\cite{shirts-pande:science:2000:fah}, GPUGrid~\cite{buch:2010:gpugrid}, and Copernicus~\cite{pronk:2011:copernicus} allow scalability on an unprecedented level.
+For example, many MD packages are now able to exploit GPUs~\cite{eastman:jctc:2012:openmm,walker:jctc:2013:amber-gpu}, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home~\cite{shirts-pande:science:2000:fah}, Copernicus~\cite{pronk:2011:copernicus}, and GPUGrid~\cite{buch:2010:gpugrid}, allow scalability on an unprecedented level.
 In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2010:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 MSM methods in particular have the advantage of being able to aggregate data from multiple independent MD trajectories, facilitating parallelization of production simulations and thus greatly alleviating overall computational cost.
 There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates~\cite{moult:proteins:2014:casp10,baker:science:2001:structure-prediction-review}.
@@ -221,8 +221,8 @@ In the modeling stage, structural models of the target sequence are generated fr
 Modeling is performed using the automodel function of the Modeller software package~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller} to rapidly generate a single model of the target sequence from each template structure.
 Modeller uses simulated annealing cycles along with a minimal forcefield and spatial restraints---generally Gaussian interatomic probability densities extracted from the template structure with database-derived statistics determining the distribution width---to rapidly generate candidate structures of the target sequence from the provided template sequence~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
 
-While Modeller's automodel function can generate its own alignments automatically, we utilize the BioPython {\tt pairwise2} module {\color{red}[CITE: BioPython]}---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~\cite{gonnet:science:1992:exhaustive-matching}, which we have empirically found to produce better quality alignments for purposes of high-throughput model building.
-{\color{red}[JDC: Can we give some evidence to support this claim, or soften our language on this?]}
+While Modeller's automodel function can generate its own alignments automatically, it was more convenient from a software architecture standpoint to use a standalone function.
+As such, we implemented pairwise alignment functionality using the the BioPython {\tt pairwise2} module {\color{red}[CITE: BioPython]}---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~\cite{gonnet:science:1992:exhaustive-matching}.
 
 Models are output as PDB-format coordinate files.
 A list of all model identifiers sorted by sequence identity is also written to a text file, so that users may select models from the desired range of sequence identities.
@@ -247,7 +247,7 @@ This helps to improve model quality and also prepares models for subsequent prod
 Models are first subjected to energy minimization (using the L-BFGS algorithm~\cite{lbfgs}, followed by a short molecular dynamics (MD) simulation with an implicit solvent representation.
 This is implemented using the OpenMM molecular simulation toolkit~\cite{eastman:jctc:2012:openmm}, chosen for its flexible Python API, and high performance GPU-acclerated simulation code.
 By default, the Amber99SB-ILDN force field~\cite{amber99sb-ildn} is used with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
-The {\bf Ensembler} API allows the use of any of the other force fields implemented in OpenMM.
+Any of the other force fields or implicit water models implemented in OpenMM can be specified using the {\tt -{}-ff} and {\tt -{}-water\_model} flags respectively.
 The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
 {\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
 {\color{blue}[DLP: We currently just filter out models which throw exceptions or NaNs.]}
@@ -257,23 +257,18 @@ The simulation is run for a default of 100 ps to filter out poor quality models 
 While protein-only models may be sufficient for structural analysis or implicit solvent simulations, {\bf Ensembler} also provides a stage for solvating models with explicit water and performing a round of explicit-solvent MD refinement/equilibration under isothermal-isobaric (NPT) conditions.
 The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, such as the construction of MSMs.
 The target number of waters is selected by first solvating each model with a specified padding distance (default: 10 \AA), then taking a percentile value from the distribution (default: 68th percentile).
-{\color{red}[JDC: Would be useful to explain why we are doing this.]}
-{\color{blue}[DLP: Addressed.]}
 This helps to prevent models with particularly long, extended loops---such as those arising from template structures with unresolved termini---from imposing very large box sizes on the entire set of models.
+The TIP3P water model~\cite{tip3p} is used by default, but any of the other explicit water models available in OpenMM, such as TIP4P-Ew~\cite{tip4p-ew}, can be specified using the {\tt -{}-water\_model} flag.
 Models are resolvated with the target number of waters by first solvating with zero padding, then incrementally increasing the box size and resolvating until the target is exceeded, then finally deleting sufficient waters to match the target value.
 The explicit solvent MD simulation is also implemented using OpenMM, using the Amber99SB-ILDN force field~\cite{amber99sb-ildn} and TIP3P water~\cite{tip3p} by default.
-Other force fields or water models such as TIP4P-Ew~\cite{tip4p-ew} can be specified via the {\bf Ensembler} API.
-{\color{red}[JDC: We should allow other water models in OpenMM too, such as TIP4P-Ew?]}
-{\color{blue}[DLP: I forgot to mention this in the text previously - any of the OpenMM force fields can be chosen via the API. I've updated the text accordingly. Is this functionality sufficient? I guess it's ok to leave ff choice as an "advanced" feature which requires use of the API? Otherwise I could add a -{}-water\_model flag to the CLI, for example.]}
-{\color{red}[JDC: Would be good to let at least water model and forcefield name be selectable via the CLI!]}
+The force field and water model can again be specified using the {\tt -{}-ff} and {\tt -{}-water\_model} flags respectively.
 
 \subsection*{Packaging}
 
-{\bf Ensembler} provides a packaging module which can be used to compress models in preparation for data transfer, or to prepare models with the appropriate directory and file structure for subsequent production simulations on the distributed computing platform Folding@home {\color{red}[CITE: F@H]}.
-The module could be easily extended to add methods for preparing models for use with other software, such as the Copernicus platform for running automated, distributed MD simulations.
-{\color{red}[JDC: Is there a way we can make this more generally useful to others?  For example, is there a different system they might want to use, such as \href{http://copernicus.readthedocs.org/en/latest/tutorials/md-tutorial.html#creating-a-workflow-for-molecular-simulations}{Copernicus}?]}
-{\color{blue}[DLP: addressed]}
-{\color{red}[JDC: How was this addressed?]}
+{\bf Ensembler} provides a packaging module which can be used to prepare models for other uses.
+The {\tt package\_models} subcommand currently provides functions (specified \emph{via} the {\tt -{}-package\_for} flag) for compressing models in preparation for data transfer, or for organizing them with the appropriate directory and file structure for production simulation on the distributed computing platform Folding@home {\color{red}[CITE: F@H]}.
+The module could easily be extended to add methods for preparing models for other purposes.
+For example, production simulations could alternatively be run using Copernicus~\cite{pronk:2011:copernicus}---a framework for performing parallel adaptive MD simulations--- or GPUGrid~\cite{buch:2010:gpugrid}---a distributing computing platform which relies on computational power voluntarily donated by the owners of nondedicated GPU-equipped computers.
 
 \subsection*{Other features}
 
@@ -314,8 +309,7 @@ As a first application of {\bf Ensembler}, we have built models for all 90 human
 TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer.
 {\color{red}[JDC: CITE]}
 For example, mutations of Src are associated with colon, breast, and prostate cancer {\color{red}[CITE: Src cancer involvement]}, while a translocation between the TK Abl1 and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia {\color{red}[CITE: Abl1 cancer involvement]}.
-Protein kinase domains are thought to have multiple accessible metastable conformation states, with a single active conformation, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations [CITE: Lee and Craik Science 2009].
-{\color{red}[JDC: Lee and Craik do not discuss kinases, I don't believe; you'll have to find an accurate reference on kinase conformations.]}
+Protein kinase domains are thought to have multiple accessible metastable conformation states, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations~\cite{liu:ncb:2006:kinase-inhibitors-inactive-conformations}.
 Kinases are thus a particularly interesting subject for study with MSM methods [CITE: recent kinase MSM papers], and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
 
 We selected all available structures of protein kinase domains (of any species) as templates, for a total of 4433 (\num{398970} target-template pairs).
