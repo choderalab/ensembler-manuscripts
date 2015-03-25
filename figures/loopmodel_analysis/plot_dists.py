@@ -54,13 +54,19 @@ ax1.legend()
 
 # sns.distplot(missing_resis_spans, kde=True, hist=False, rug=True, color='k', kde_kws={'shade': True}, rug_kws={'lw': 0.5}, ax=ax2)
 bins2 = np.arange(0, missing_resis_spans.max()+1, 1)
-sns.distplot(missing_resis_spans, kde=False, hist=True, bins=bins2, color='gray', ax=ax2, hist_kws={'alpha': 1.})
+sns.distplot(missing_resis_spans-2, kde=False, hist=True, bins=bins2, color='gray', ax=ax2, hist_kws={'alpha': 1.})
 # ax2.set_yticks([])
 
 ax1.set_xlabel('Remodeled residues per template')
 ax2.set_xlabel('Remodeled loop length')
 
+ax1.set_xlim(0, 60)
+ax2.set_xlim(0, 30)
+
+ax1.grid()
+ax2.grid()
+
 sns.plt.tight_layout()
 
-# sns.plt.savefig('nmissing_resis_distributions.pdf')
+sns.plt.savefig('nmissing_resis_distributions.pdf')
 sns.plt.savefig('nmissing_resis_distributions.png', dpi=300)
