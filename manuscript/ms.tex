@@ -221,7 +221,7 @@ In the modeling stage, structural models of the target sequence are generated fr
 Modeling is performed using the automodel function of the Modeller software package~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller} to rapidly generate a single model of the target sequence from each template structure.
 Modeller uses simulated annealing cycles along with a minimal forcefield and spatial restraints---generally Gaussian interatomic probability densities extracted from the template structure with database-derived statistics determining the distribution width---to rapidly generate candidate structures of the target sequence from the provided template sequence~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
 
-While Modeller's automodel function can generate its own alignments automatically, it was more convenient from a software architecture standpoint to use a standalone function.
+While Modeller's automodel function can generate its own alignments automatically, a standalone function was preferable for reasons of programming convenience.
 As such, we implemented pairwise alignment functionality using the the BioPython {\tt pairwise2} module {\color{red}[CITE: BioPython]}---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~\cite{gonnet:science:1992:exhaustive-matching}.
 
 Models are output as PDB-format coordinate files.
