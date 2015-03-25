@@ -21,14 +21,16 @@ sns.set_style('whitegrid')
 figsize=(3.5, 4)
 # sns.plt.figure(figsize=figsize)
 
-fig, (ax1, ax2) = sns.plt.subplots(2, 1, sharex=True, figsize=figsize)
+# fig, (ax1, ax2) = sns.plt.subplots(2, 1, sharex=True, figsize=figsize)
+fig, (ax1, ax2) = sns.plt.subplots(2, 1, figsize=figsize)
 
-bins = np.linspace(0, df.nmissing_resis.max(), 10)
-# sns.distplot(df.nmissing_resis, kde=False, bins=bins, label='total')
-# sns.distplot(unsuccessful.nmissing_resis, kde=False, bins=bins, label='successful')
+# bins = np.linspace(0, df.nmissing_resis.max(), 10)
+bins1 = np.arange(0, df.nmissing_resis.max()+1, 1)
+sns.distplot(df.nmissing_resis, kde=False, bins=bins1, label='all templates', ax=ax1, hist_kws={'alpha': 1.})
+sns.distplot(unsuccessful.nmissing_resis, kde=False, bins=bins1, label='failed remodeling', ax=ax1, color=palette[2], hist_kws={'alpha': 1.})
 # same with log y-axis:
-sns.distplot(df.nmissing_resis, kde=False, bins=bins, label='all templates', hist_kws={'log': True}, rug=True, rug_kws={'height': 0.7, 'lw': 0.5}, ax=ax1)
-sns.distplot(unsuccessful.nmissing_resis, kde=False, bins=bins, label='failed remodeling', hist_kws={'log': True}, color=palette[2], ax=ax1)
+# sns.distplot(df.nmissing_resis, kde=False, bins=bins1, label='all templates', hist_kws={'log': True}, rug=True, rug_kws={'height': 0.7, 'lw': 0.5}, ax=ax1)
+# sns.distplot(unsuccessful.nmissing_resis, kde=False, bins=bins1, label='failed remodeling', hist_kws={'log': True}, color=palette[2], ax=ax1)
 # sns.plt.ylim(0.8,10000)
 
 ax1.legend()
@@ -50,12 +52,13 @@ ax1.legend()
 #     alpha=0.5,
 # )
 
-sns.distplot(missing_resis_spans, kde=True, hist=False, rug=True, color='k', kde_kws={'shade': True}, rug_kws={'lw': 0.5}, ax=ax2)
-ax2.set_yticks([])
+# sns.distplot(missing_resis_spans, kde=True, hist=False, rug=True, color='k', kde_kws={'shade': True}, rug_kws={'lw': 0.5}, ax=ax2)
+bins2 = np.arange(0, missing_resis_spans.max()+1, 1)
+sns.distplot(missing_resis_spans, kde=False, hist=True, bins=bins2, color='gray', ax=ax2, hist_kws={'alpha': 1.})
+# ax2.set_yticks([])
 
-sns.plt.xlim(0,120)
-ax1.set_xlabel('Number of missing residues per template')
-ax2.set_xlabel('Number of missing residues per template gap')
+ax1.set_xlabel('Remodeled residues per template')
+ax2.set_xlabel('Remodeled loop length')
 
 sns.plt.tight_layout()
 
