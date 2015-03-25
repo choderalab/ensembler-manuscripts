@@ -58,7 +58,9 @@ sns.distplot(missing_resis_spans-2, kde=False, hist=True, bins=bins2, color='gra
 # ax2.set_yticks([])
 
 ax1.set_xlabel('Remodeled residues per template')
+ax1.set_ylabel('Number of templates')
 ax2.set_xlabel('Remodeled loop length')
+ax2.set_ylabel('Number of loops')
 
 ax1.set_xlim(0, 60)
 ax2.set_xlim(0, 30)
