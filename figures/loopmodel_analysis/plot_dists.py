@@ -59,5 +59,5 @@ ax2.set_xlabel('Number of missing residues per template gap')
 
 sns.plt.tight_layout()
 
-sns.plt.savefig('nmissing_resis_distributions.pdf')
-# sns.plt.savefig('nmissing_resis_distributions.png', dpi=300)
+# sns.plt.savefig('nmissing_resis_distributions.pdf')
+sns.plt.savefig('nmissing_resis_distributions.png', dpi=300)
