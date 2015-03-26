@@ -321,9 +321,8 @@ The templates were derived from 3028 individual PDB entries and encompassed 23 d
 \begin{figure}[tbp]
     \includegraphics[width=\textwidth]{loopmodel_analysis/nmissing_resis_distributions.pdf}
     \caption{{\bf Distributions for the number of missing residues in the TK templates.}
-    The upper plot shows the distribution of the total number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling (with the {\tt loopmodel} subcommand) failed (red). The raw data points for all templates are shown as a rug plot.
-    The lower plot shows the distribution of the number of residues per template gap, normalized and smoothed using kernel density estimation. The raw data points are shown as a rug plot.
-    {\color{red}[JDC: Some ideas for cleaning this up: Either the tick marks are being misrendered in that they are not taller if there are multiple data points with the same number or the data is really funky, since I would expect there to be a few examples in some bins.  Also, is there a big drawback to making the top histogram bin size unity, since the values are integral?  I don't think transparency is needed for the histogram bars either.  We can also ditch the semilogy axis.  I would also make the x-axes for the top and bottom plots different, since the data ranges are different.  I'd see if a histogram with unit bin size might be more appropriate for the bottom plot as well---the KDE just doesn't feel right for this kind of data, since we are trying to report exact statistics from a specific example rather than estimate a general density for problems of this sort.  Finally, I like ``remodeled loop length'' or ``missing loop length'' much better than ``Number of missing residues per template gap'', which seems unnecessarily verbose.]}
+    The upper histograms show the number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling with the {\tt loopmodel} subcommand failed (red).
+    The lower histogram shows the number of residues in each missing loop, for all templates.
 }
     \label{figure:loopmodel-nmissing-residues}
 \end{figure}
