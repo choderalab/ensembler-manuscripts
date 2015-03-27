@@ -328,22 +328,20 @@ The templates were derived from 3028 individual PDB entries and encompassed 23 d
     \label{figure:loopmodel-nmissing-residues}
 \end{figure}
 
-Crystallographic structures of kinase catalytic domains generally contain a significant number of missing residues (median 11, standard deviation 13, max 102) due to the high mobility of several loops (Fig.~\ref{figure:loopmodel-nmissing-residues}, top), with a number of these missing spans being significant in length (Fig.~\ref{figure:loopmodel-nmissing-residues}, bottom).
-{\color{red}[JDC: Can you add statistics (median, stddev, max) for loop lengths too?]}
+Crystallographic structures of kinase catalytic domains generally contain a significant number of missing residues (median 11, standard deviation 13, max 102) due to the high mobility of several loops (Fig.~\ref{figure:loopmodel-nmissing-residues}, top), with a number of these missing spans being significant in length (median 5, standard deviation 6, max 82; Fig.~\ref{figure:loopmodel-nmissing-residues}, bottom).
 To reduce the reliance on the Modeller rapid model construction stage to reconstruct very long unresolved loops, unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
 Out of \num{3666} templates with one or more missing residues, \num{3134} were successfully remodeled by the Rosetta loop modeling stage (with success defined simply as program termination with out error); most remodeling failures were attributable to unsatisfiable spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues (Fig.~\ref{figure:loopmodel-nmissing-residues}, top); templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{373513} (94\%) surviving models across all TKs.
-To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data {\color{red}[JDC: State how big the solvated model PDBs are?]}, the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
+To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data (with solvated PDB coordinate files taking up about 0.9 MB each), the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
 
 The number of models which survived each stage are shown in Fig.~\ref{figpipeline}, indicating that the greatest attrition occurred during the modeling stage.
 The number of refined models for each target ranged from \num{4005} to \num{4248}, with a median of \num{4160} and standard deviation of \num{60}.
 Fig.~\ref{figpipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
 
 Each model generated about 116 KB of file data (up to and including the implicit solvent MD refinement stage), totalling 0.5 GB per TK target or 41 GB for all 90 TKs.
-The data generated per model breaks down as 39 kB for the output from the modeling stage (without saving Modeller restraints to file) and 77 kB for the implicit solvent MD refinement stage.
-{\color{red}[JDC: Can you rework this paragraph to specify total space requirements \emph{without} saving MODELLER restraint files (since this is now the default), plus how much each restraint file adds if they are retained as well?  I took a stab at it, but couldn't figure out how the numbers worked out.]}
+The data generated per model breaks down as 39 kB for the output from the modeling stage (without saving Modeller restraints files, which are about 397 kB per model) and 77 kB for the implicit solvent MD refinement stage.
 
 \subsection*{Evaluation of model quality and utility}
 
@@ -374,12 +372,12 @@ The data generated per model breaks down as 39 kB for the output from the modeli
 \begin{figure}[tbp]
     \includegraphics[width=1.0\columnwidth]{rmsddist/rmsddist2.pdf}
 
-    \caption{{\bf Distribution of RMSDs to all tyrosine kinase catalytic domain models relative to model derived from highest sequence identity template.}    
-    Distributions are averaged over all 90 tyrosine kinase catalytic domains.
-    {\color{red}[JDC: Is this accurate?]}
+    \caption{{\bf Distribution of RMSDs to all TK catalytic domain models relative to the model derived from the highest sequence identity template.}    
+    Distributions are built from data from all 90 TK targets.
     To better illustrate how conformational similarity depends on sequence identity, these were separated into three sequence identity classes: high identity (55--100\%), moderate identity (35--55\%), and remote identity (0--35\%).
     The plotted distributions have been smoothed using kernel density estimation.
     {\color{red}[JDC: Are these computed for the templates or the resulting models?]}
+    {\color{blue}[DLP: Models.]}
     {\color{red}[JDC: Can we also show the overall distribution without stratification (e.g.~in grey in a separate panel)?]}
   }
   \label{figure:rmsd-distribution-by-sequence-identity}
@@ -578,6 +576,7 @@ DLP and this work was supported in part by the generous support of a Louis V.~Ge
 
 Kinase catalytic domains are highlighted in red, and the conserved residues analyzed in the main text (Figs.~\ref{figure:src-ref-structures} and~\ref{figure:pair-distances}) are highlighted with yellow background.
 {\color{red}[JDC: Very cool!  Did you write a script to generate this, or did you have to do this by hand?]}
+{\color{blue}[DLP: The alignments come from UniProt. I did the latex formatting by hand (vi).]}
 
 \subsubsection*{Human Abl1 sequence}
 
