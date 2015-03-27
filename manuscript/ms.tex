@@ -210,6 +210,10 @@ The structure residues must also match those in the sequence file.
 Unresolved template residues can optionally be modeled into template structures with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
 Because fewer loops need to be built during the subsequent target model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
 {\color{red}[JDC: Should we cite our evidence for this with the TKs, or maybe tone back the claim a bit to say that it is possible this could make things easier?]}
+{\color{blue}[DLP: Sikander mentioned to me that someone has developed an algorithm called pokefind (or knotfind, which I think is an earlier version) which aims to find knots in proteins, of the type which encouraged us to use Rosetta to reconstruct template loops.
+DOI: 10.1093/bioinformatics/btp198
+It sounds like these algorithms have actually been implemented in Rosetta, so this could explain why Rosetta seems to do better at avoiding making these knotted structures.
+Would be useful to check this out further first, and then decide whether or not to discuss the knotted structures in the manuscript.]}
 
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residues spans are modeled in the subsequent stage.
@@ -252,6 +256,7 @@ Any of the other force fields or implicit water models implemented in OpenMM can
 The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
 {\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
 {\color{blue}[DLP: We currently just filter out models which throw exceptions or NaNs.]}
+{\color{blue}[DLP: Also note that the distribution of final energies for implicit refinement of TK models has been added in the Results section.]}
 
 \subsection*{Solvation and NPT equilibration}
 
@@ -389,6 +394,29 @@ To better understand the influence of sequence identity on the conformational si
 It is clear that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average.
 
 {\color{red}[JDC: This section looks pretty anemic.  What other kinds of analyses can we do for all the TKs?  There is so much data here!  There must be something neat we can do to examine it, right?]}
+
+We also analyzed the potential energies of the models at the end of the implicit solvent MD refinement stage.
+These ranged from -14180 kT to -3590 kT, with a median of -9533 kT and a standard deviation of 1058 kT.
+The distributions---stratified using the same sequence identity ranges as above---are plotted in Fig.~\ref{figure:energies-implicit}, indicating that higher sequence identity templates tend to result in slightly lower energy models.
+Of the \num{25457} models which failed to complete the implicit refinement MD stage, all except 9 failed within the first 1 ps of simulation.
+
+{\color{blue}[DLP: for further analysis, a good option might be to try to make a more rigorous assessment of model quality via comparison to reference crystal structures, based on features such as RMSD, phi/psi angles, H-bonds etc.
+We could also try using the Rosetta heuristic scoring function for this purpose.]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Final energies following implicit refinement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[tbp]
+    \includegraphics[width=1.0\columnwidth]{energies/energies.pdf}
+
+    \caption{{\bf Distribution of final energies from implicit solvent MD refinement of TK catalytic domain models.}
+    To illustrate how the energies are affected by sequence identity, the models are separated into three sequence identity classes: high identity (55--100\%), moderate identity (35--55\%), and remote identity (0--35\%).
+    The plotted distributions have been smoothed using kernel density estimation.
+  }
+  \label{figure:energies-implicit}
+\end{figure}
+
 
 \subsubsection*{Src and Abl1}
 
