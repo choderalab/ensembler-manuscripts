@@ -4,6 +4,7 @@ import seaborn as sns
 
 df = pd.read_csv('final_energies-implicit.csv', index_col=0)
 successful = df[df.successful == True]
+unsuccessful_with_energies = df[df.successful == False][df.has_energies == True]
 
 sns.set_context('paper', font_scale=1.)
 sns.set_style('white')
