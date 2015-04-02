@@ -242,32 +242,43 @@ Because {\bf Ensembler} treats individual chains from source PDB structures as i
 For this reason, and also to allow users to select for high diversity if they so choose, {\bf Ensembler} provides a way to filter out models that are very similar in RMSD.
 A fast clustering scheme is used to identify models differing by a user-specified minimum RMSD.
 The mdtraj~\cite{mdtraj} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation, and the leader algorithm {\color{red}[JDC: Citation for leader algorithm?]} is then used to populate clusters.
-A minimum distance cutoff (which defaults to 0.6 \AA) is used to retain only a single model per cluster.
+A minimum distance cutoff (which defaults to 0.6~\AA) is used to retain only a single model per cluster.
 
 \subsection*{Refinement of models}
 
-This stage entails the use of molecular dynamics simulations to refine the models built in the previous step.
-This helps to improve model quality and also prepares models for subsequent production simulation, including solvation with explicit water molecules, if desired.
+While the utility of comparative modeling methods has been greatly enhanced by the recent explosion in the availability of protein structural data, the structures generated are generally considered "low-resolution" in comparison to those derived using experimental techniques such as X-ray crystallography.
+RMS errors of $\sim$3~\AA for C$_\alpha$ atoms relative to a native crystal structure are typical~\cite{raval:prot:2012:long-timescale-md-refinement,maccallum:prot:2011:casp-refinement,zhang:curr-opin-struct-biol:2009:structure-prediction}.
+A number of refinement methods have been developed to help steer homology models toward more "native-like" conformations~\cite{maccallum:prot:2011:casp-refinement,zhang:curr-opin-struct-biol:2009:structure-prediction}, of which MD simulations are an important example.
+While long-timescale unrestrained MD simulations (on the order of 100 $\mu$s) have been found to be ineffective for recapitulating native-like conformations, possibly due to forcefield issues~\cite{raval:prot:2012:long-timescale-md-refinement}, even relatively short simulations can be useful for relaxing structural elements such as sidechain orientation~\cite{zhang:curr-opin-struct-biol:2009:structure-prediction}.
+
+{\bf Ensembler} thus includes a refinement module, which uses short molecular dynamics simulations to refine the models built in the previous step.
+As well improving model quality, this also prepares models for subsequent production MD simulation, including solvation with explicit water molecules, if desired.
 
 Models are first subjected to energy minimization (using the L-BFGS algorithm~\cite{lbfgs}, followed by a short molecular dynamics (MD) simulation with an implicit solvent representation.
 This is implemented using the OpenMM molecular simulation toolkit~\cite{eastman:jctc:2012:openmm}, chosen for its flexible Python API, and high performance GPU-acclerated simulation code.
-By default, the Amber99SB-ILDN force field~\cite{amber99sb-ildn} is used with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
+The simulation is run for a default of 100 ps, which in our example applications has been sufficient to filter out poor models (i.e.~those with atomic overlaps unresolved by energy minimization, which result in an unstable simulation), as well as helping to relax model conformations.
+As discussed in the Results section, our example application of the {\bf Ensembler} pipeline to the human tyrosine kinase family indicated that of the models which failed implicit solvent MD refinement, the vast majority failed within the first 1~ps of simulation.
+
+The simulation protocol and default parameter values have been chosen to represent current "best practices" for the refinement simulations carried out here.
+As such, the simulation is performed using Langevin dynamics, with a default force field choice of Amber99SB-ILDN~\cite{amber99sb-ildn}, along with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
 Any of the other force fields or implicit water models implemented in OpenMM can be specified using the {\tt -{}-ff} and {\tt -{}-water\_model} flags respectively.
-The simulation is run for a default of 100 ps to filter out poor quality models (where atomic overlaps that cannot be resolved by energy minimization would cause the simulation to explode) and help relax models for subsequent production simulation.
-{\color{red}[JDC: What criteria were applied to filter out poor models?  Do we only look for thrown exceptions or NaNs?  Or do we use an energy filtering criteria too?]}
-{\color{blue}[DLP: We currently just filter out models which throw exceptions or NaNs.]}
-{\color{blue}[DLP: Also note that the distribution of final energies for implicit refinement of TK models has been added in the Results section.]}
+The simulation length can also be controlled \emph{via} the {\tt -{}-simlength} flag, and many other important simulation parameters can be controlled from either the API or CLI (\emph{via} the {\tt -{}-api\_params} flag).
+The default values are set as follows---timestep: 2~ps; temperature: 300~K; Langevin collision rate: 20~ps$^{-1}$; pH (used by OpenMM for protonation state assignment): 7.
+We also draw attention to a recent paper which indicates that lower Langevin collision rates may result in faster phase space exploration~\cite{basconi:jctc:2013:collision-rates}.
 
 \subsection*{Solvation and NPT equilibration}
 
 While protein-only models may be sufficient for structural analysis or implicit solvent simulations, {\bf Ensembler} also provides a stage for solvating models with explicit water and performing a round of explicit-solvent MD refinement/equilibration under isothermal-isobaric (NPT) conditions.
-The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, such as the construction of MSMs.
+The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, which is important for methods such as the construction of MSMs.
 The target number of waters is selected by first solvating each model with a specified padding distance (default: 10 \AA), then taking a percentile value from the distribution (default: 68th percentile).
 This helps to prevent models with particularly long, extended loops---such as those arising from template structures with unresolved termini---from imposing very large box sizes on the entire set of models.
 The TIP3P water model~\cite{tip3p} is used by default, but any of the other explicit water models available in OpenMM, such as TIP4P-Ew~\cite{tip4p-ew}, can be specified using the {\tt -{}-water\_model} flag.
 Models are resolvated with the target number of waters by first solvating with zero padding, then incrementally increasing the box size and resolvating until the target is exceeded, then finally deleting sufficient waters to match the target value.
 The explicit solvent MD simulation is also implemented using OpenMM, using the Amber99SB-ILDN force field~\cite{amber99sb-ildn} and TIP3P water~\cite{tip3p} by default.
-The force field and water model can again be specified using the {\tt -{}-ff} and {\tt -{}-water\_model} flags respectively.
+The force field, water model, and simulation length can again be specified using the {\tt -{}-ff}, {\tt -{}-water\_model}, and {\tt -{}-simlength} flags respectively.
+Further simulation parameters can be controlled \emph{via} the API or \emph{via} the CLI {\tt -{}-api\_params} flag.
+Pressure control is performed with a Monte Carlo barostat as implemented in OpenMM, with a default pressure of 1~atm and a period of 50 timesteps.
+The remaining simulation parameters have default values set to the same as for the implicit solvent MD refinement.
 
 \subsection*{Packaging}
 
@@ -375,21 +386,25 @@ The data generated per model breaks down as 39 kB for the output from the modeli
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[tbp]
-    \includegraphics[width=1.0\columnwidth]{rmsddist/rmsddist2.pdf}
+    \centering
+    {\label{figure:rmsd-distribution-joint}%
+       \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2-joint.pdf}
+    }
+
+    {\label{figure:rmsd-distribution-by-sequence-identity}%
+       \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2.pdf}
+    }
 
     \caption{{\bf Distribution of RMSDs to all TK catalytic domain models relative to the model derived from the highest sequence identity template.}    
     Distributions are built from data from all 90 TK targets.
-    To better illustrate how conformational similarity depends on sequence identity, these were separated into three sequence identity classes: high identity (55--100\%), moderate identity (35--55\%), and remote identity (0--35\%).
+    To better illustrate how conformational similarity depends on sequence identity, the lower plot illustrates the distributions as stratified into three sequence identity classes: high identity (55--100\%), moderate identity (35--55\%), and remote identity (0--35\%).
     The plotted distributions have been smoothed using kernel density estimation.
-    {\color{red}[JDC: Are these computed for the templates or the resulting models?]}
-    {\color{blue}[DLP: Models.]}
-    {\color{red}[JDC: Can we also show the overall distribution without stratification (e.g.~in grey in a separate panel)?]}
   }
-  \label{figure:rmsd-distribution-by-sequence-identity}
+  \label{figure:rmsd-distributions}
 \end{figure}
 
 
-To evaluate the diversity of conformations captured for each target sequence, we first computed the RMSD distributions for all models for each target (relative to the model derived from the highest-identity template) are shown in Fig.~\ref{figure:rmsd-distribution-by-sequence-identity}.
+To evaluate the diversity of conformations captured for each target sequence, we first computed the RMSD distributions for all models for each target (relative to the model derived from the highest-identity template) are shown in Fig.~\ref{figure:rmsd-distributions}.
 To better understand the influence of sequence identity on the conformational similarities of resulting models, the sequence identities were stratified based on the sequence identity distribution plotted in Fig.~\ref{figure:sequence-identity-distribution}, which suggests an intuitive division into three categories, with \num{307753} models in the 0--35\% sequence identity range, \num{69922} models in the 35--55\% range, and \num{4893} models in the 55--100\% range. 
 It is clear that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average.
 
@@ -435,7 +450,7 @@ These two kinases are thus also interesting targets for MSM studies, with one re
     \caption{{\bf Superposition of clustered models of Src and Abl1.}
     Superposed renderings of nine models each for Src and Abl1, 
     giving some indication the diversity of conformations generated by Ensembler.
-    The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figure:rmsd-distribution-by-sequence-identity}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
+    The models for each target were divided into three sequence identity ranges (as in Fig. \ref{figure:rmsd-distributions}), and RMSD-based $k$-medoids clustering was performed to select three clusters from each.
     The models shown are the centroids of each cluster.
     Models are colored and given transparency based on their sequence identity, so that high sequence identity models are blue and opaque, while lower sequence identity models are transparent and red.
   }

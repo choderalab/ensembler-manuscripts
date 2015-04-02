@@ -73,7 +73,7 @@ sns.despine(left=True)
 plt.tight_layout()
 
 plt.savefig('rmsddist2.pdf')
-# plt.savefig('rmsddist2.png', dpi=300)
+plt.savefig('rmsddist2.png', dpi=300)
 
 plt.close()
 
@@ -85,3 +85,26 @@ plt.close()
 # plt.setp(plt.gca(), yticks=[])
 # plt.xlim(0,102)
 # plt.savefig('seqid_dist.png')
+
+# Plot distribution without stratification
+
+sns.set_context('paper', font_scale=1.)
+sns.set_style('white')
+fig = sns.plt.figure(figsize=(3.5,2.625))
+
+sns.kdeplot(df_has_model.rmsd*10, label=label, bw=2.5, shade=True, color='k')
+
+ax = plt.gca()
+plt.setp(ax, yticks=[])
+
+plt.xlim(0,40)
+plt.xlabel('RMSD ($\AA$)')
+sns.despine(left=True)
+
+legend = plt.legend()
+legend.set_visible(False)
+
+plt.tight_layout()
+
+plt.savefig('rmsddist2-joint.png', dpi=300)
+plt.savefig('rmsddist2-joint.pdf')
