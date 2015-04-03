@@ -44,7 +44,7 @@
 \captionsetup{singlelinecheck=off}
 
 % Pretty-printing of shell commands
-\newcommand{\shellcmd}[1]{\\\ \texttt{\scriptsize\# #1}\\}
+\newcommand{\shellcmd}[1]{\\\ \texttt{\scriptsize #1}}
 
 % The figures are in a figures/ subdirectory.
 \graphicspath{{../figures/}}
@@ -166,15 +166,15 @@ The output of this stage is a FASTA-formatted text file containing the desired t
 
 The {\tt ensembler} command-line tool allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org})~\cite{uniprot:2015}---via a UniProt search query.
 To retrieve target sequences from UniProt, the subcommand {\tt gather\_targets} us used with the {\tt -{}-query} flag followed by a UniProt query string conforming to the same syntax as the search function available on the UniProt website.
-For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
+For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND organism:"homo sapiens" AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
 In this way, the user may select a single protein, many proteins, or an entire superfamily from UniProt.
 The program outputs a FASTA file, setting the UniProt mnemonic (e.g.~{\tt SRC\_HUMAN}) as the identifier for each target protein.
 
 In many cases, it will be desirable to build models of an isolated protein domain, rather than the full-length protein.
-The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-domains} flag. 
+The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-uniprot\_domain\_regex} flag. 
 For example, the above {\tt -{}-query} flag for selecting all human protein kinases returns UniProt entries with domain annotations including "Protein kinase", "Protein kinase 1", "Protein kinase 2", "Protein kinase; truncated", "Protein kinase; inactive", "SH2", "SH3", etc.
 To select only domains of the first three types, the following regular expression could be used: {\tt`\^{}Protein kinase(?!; truncated)(?!; inactive)'}.
-In this case, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest (e.g.~{\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}).
+If the {\tt -{}-uniprot\_domain\_regex} flag is used, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest (e.g.~{\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}).
 
 Target sequences can also be defined manually (or from another program) by providing a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
@@ -196,13 +196,13 @@ Furthermore, PDB chains with less than a given percentage of resolved residues (
 Sequences are stored in a FASTA file, with identifiers of the form {\tt [UniProt mnemonic]\_D[UniProt domain index]\_[PDB ID]\_[PDB chain ID]}, e.g. {\tt SRC\_HUMAN\_D0\_2H8H\_A}.
 Matching residues then extracted from the original coordinate files and stored as PDB-format coordinate files.
 
-Selection of templates from UniProt proceeds in a similar fashion as for target selection; the {\tt -{}-query} flag is used to select full-length proteins from UniProt, while the optional {\tt -{}-domains} flag allows selection of individual domains with a regular expression string.
+Selection of templates from UniProt proceeds in a similar fashion as for target selection; the {\tt -{}-query} flag is used to select full-length proteins from UniProt, while the optional {\tt -{}-uniprot\_domain\_regex} flag allows selection of individual domains with a regular expression string.
 The returned UniProt data for each protein includes a list of associated PDB chains and their residue spans, and this information is used to select template structures, using the same method as for template selection from the PDB.
 Only structures solved by X-ray crystallography or NMR are selected, thus excluding computer-generated models available from the PDB.
-If the {\tt -{}-domains} flag is used, then templates are truncated at the start and end of the domain sequence.
+If the {\tt -{}-uniprot\_domain\_regex} flag is used, then templates are truncated at the start and end of the domain sequence.
 
 Templates can also be defined manually.
-Manual specification of templates simply requires storing the sequences and identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
+Manual specification of templates simply requires storing the sequences and arbitrary identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
 The structure residues must also match those in the sequence file.
 
 \subsection*{Template refinement}
@@ -321,7 +321,7 @@ For larger numbers of models (such as entire protein families), modeling time is
 
 \subsection*{Modeling of all human tyrosine kinase catalytic domains}
 
-As a first application of {\bf Ensembler}, we have built models for all 90 human tyrosine kinase (TK) domains listed in UniProt.
+As a first application of {\bf Ensembler}, we have built models for the human tyrosine kinase (TK) family.
 {\color{red}[JDC: Is there a complete list of these somewhere?  Maybe reference supplementary data?]}
 TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer.
 {\color{red}[JDC: CITE]}
@@ -329,9 +329,14 @@ For example, mutations of Src are associated with colon, breast, and prostate ca
 Protein kinase domains are thought to have multiple accessible metastable conformation states, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations~\cite{liu:ncb:2006:kinase-inhibitors-inactive-conformations}.
 Kinases are thus a particularly interesting subject for study with MSM methods [CITE: recent kinase MSM papers], and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
 
-We selected all available structures of protein kinase domains (of any species) as templates, for a total of 4433 (\num{398970} target-template pairs).
+We selected all 90 TK domains annotated in UniProt as targets, using the following command:
+\shellcmd{gather\_targets -{}-query `family:"tyr protein kinase family" AND organism:"homo sapiens" AND reviewed:yes' -{}-uniprot\_domain\_regex `\^{}Protein kinase(?!; truncated)(?!; inactive)'}\\
+The {\tt `reviewed:yes'} expression in the UniProt query ensured that only UniProt entries which have been reviewed by a human expert were included in the results.
+The {\tt -{}-uniprot\_domain\_regex} regular expression resulted in the selection of domains annotated "Protein kinase", "Protein kinase 1", and "Protein kinase 2", while excluding domains "Protein kinase; truncated", "Protein kinase; inactive", "Alpha-type protein kinase", and many types of non-kinase domain.
+We selected all available structures of protein kinase domains (of any species) as templates, using the following command:
+\shellcmd{gather\_templates -{}-gather\_from uniprot -{}-query `domain:"Protein kinase" AND reviewed:yes' -{}-uniprot\_domain\_regex `\^{}Protein kinase(?!; truncated)(?!; inactive)'}\\
+This returned 4433 templates, giving a total of \num{398970} target-template pairs.
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
-{\color{red}[JDC: Shouldn't we state which options we used and what Uniprot searches we used for templates and targets?  How would someone reproduce what we did here?  Can we communicate this beyond just saying ``here are the scripts''?]}
 
 \subsection*{Ensembler modeling statistics}
 
@@ -532,7 +537,7 @@ The code for {\bf Ensembler} is hosted on the collaborative open source software
 The latest release of {\bf Ensembler} can be installed via the {\tt conda} package manager for Python [\url{http://conda.pydata.org}]:
 %\shellcmd{conda install -c https://conda.binstar.org/omnia ensembler}
 \shellcmd{conda config --add channels https://conda.binstar.org/omnia}
-\shellcmd{conda ensembler}
+\shellcmd{conda ensembler}\\
 This will install all dependencies except for Modeller and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
 The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
 {\color{red}[JDC: Where does documentation reside?  And example inputs for generating the results in this paper?]}
