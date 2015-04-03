@@ -60,6 +60,10 @@
   %\email{daniel.parton@choderalab.org}
 \author{Patrick B. Grinaway}
   \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065}
+\author{Sonya M. Hanson}
+  \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065}
+\author{Kyle A. Beauchamp}
+  \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065}
   %\email{patrick.grinaway@choderalab.org}
 \author{John D. Chodera}
  \thanks{Corresponding author}
@@ -323,11 +327,10 @@ For larger numbers of models (such as entire protein families), modeling time is
 
 As a first application of {\bf Ensembler}, we have built models for the human tyrosine kinase (TK) family.
 {\color{red}[JDC: Is there a complete list of these somewhere?  Maybe reference supplementary data?]}
-TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer.
-{\color{red}[JDC: CITE]}
-For example, mutations of Src are associated with colon, breast, and prostate cancer {\color{red}[CITE: Src cancer involvement]}, while a translocation between the TK Abl1 and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia {\color{red}[CITE: Abl1 cancer involvement]}.
+TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer~\cite{krause:nejm:2005:tks-cancer}.
+For example, mutations of Src are associated with colon, breast, prostate, lung, and pancreatic cancers~\cite{kim:2009:src-cancer-review}, while a translocation between the TK Abl1 and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia~\cite{greuber:2013:abl-cancer-review}.
 Protein kinase domains are thought to have multiple accessible metastable conformation states, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations~\cite{liu:ncb:2006:kinase-inhibitors-inactive-conformations}.
-Kinases are thus a particularly interesting subject for study with MSM methods [CITE: recent kinase MSM papers], and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
+Kinases are thus a particularly interesting subject for study with MSM methods~\cite{shukla-pande:nature-commun:2014:src-activation-msm}, and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
 
 We selected all 90 TK domains annotated in UniProt as targets, using the following command:
 \shellcmd{gather\_targets -{}-query `family:"tyr protein kinase family" AND organism:"homo sapiens" AND reviewed:yes' -{}-uniprot\_domain\_regex `\^{}Protein kinase(?!; truncated)(?!; inactive)'}\\
@@ -383,9 +386,6 @@ The data generated per model breaks down as 39 kB for the output from the modeli
   \label{figure:sequence-identity-distribution}
 \end{figure}
 
-{\color{red}[JDC: DIscuss Fig.~\ref{figure:sequence-identity-distribution} first.]}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: RMSD distribution by sequence identity
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -408,17 +408,18 @@ The data generated per model breaks down as 39 kB for the output from the modeli
   \label{figure:rmsd-distributions}
 \end{figure}
 
-
-To evaluate the diversity of conformations captured for each target sequence, we first computed the RMSD distributions for all models for each target (relative to the model derived from the highest-identity template) are shown in Fig.~\ref{figure:rmsd-distributions}.
-To better understand the influence of sequence identity on the conformational similarities of resulting models, the sequence identities were stratified based on the sequence identity distribution plotted in Fig.~\ref{figure:sequence-identity-distribution}, which suggests an intuitive division into three categories, with \num{307753} models in the 0--35\% sequence identity range, \num{69922} models in the 35--55\% range, and \num{4893} models in the 55--100\% range. 
-It is clear that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average.
-
-{\color{red}[JDC: This section looks pretty anemic.  What other kinds of analyses can we do for all the TKs?  There is so much data here!  There must be something neat we can do to examine it, right?]}
+To evaluate the variety of template sequence similarities relative to each target sequence, we calculated sequence identity distributions, as shown in Fig.~\ref{figure:sequence-identity-distribution}.
+This suggests an intuitive division into three categories, with \num{307753} models in the 0--35\% sequence identity range, \num{69922} models in the 35--55\% range, and \num{4893} models in the 55--100\% range.
+We then computed the RMSD distributions for the models created for each target (relative to the model derived from the template with highest sequence identity) Fig.~\ref{figure:rmsd-distributions}, to assess the diversity of conformations captured by the modeling pipeline.
+Furthermore, to understand the influence of sequence identity on the conformational similarities of the resulting models, the RMSD distributions were stratified based on the three sequence identity categories described above.
+This analysis indicates that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average.
 
 We also analyzed the potential energies of the models at the end of the implicit solvent MD refinement stage.
 These ranged from -14180 kT to -3590 kT, with a median of -9533 kT and a standard deviation of 1058 kT.
 The distributions---stratified using the same sequence identity ranges as above---are plotted in Fig.~\ref{figure:energies-implicit}, indicating that higher sequence identity templates tend to result in slightly lower energy models.
 Of the \num{25457} models which failed to complete the implicit refinement MD stage, all except 9 failed within the first 1 ps of simulation.
+
+{\color{red}[JDC: This section looks pretty anemic.  What other kinds of analyses can we do for all the TKs?  There is so much data here!  There must be something neat we can do to examine it, right?]}
 
 {\color{blue}[DLP: for further analysis, a good option might be to try to make a more rigorous assessment of model quality via comparison to reference crystal structures, based on features such as RMSD, phi/psi angles, H-bonds etc.
 We could also try using the Rosetta heuristic scoring function for this purpose.]}
@@ -600,7 +601,7 @@ The authors are grateful to Kyle A.~Beauchamp (MSKCC), Robert McGibbon (Stanford
 The authors thank Sonya M.~Hanson (MSKCC), Nicholas M.~Levinson (University of Minnesota), Markus A.~Seeliger (Stony Brook), Diwakar Shukla (Stanford), and Avner Schlessinger (Mount Sinai) for helpful scientific feedback on modeling kinases.
 The authors are grateful to Benjamin Webb and Andrej \v{S}ali (UCSF) for help with the MODELLER package, Peter Eastman and Vijay Pande (Stanford) for assistance with OpenMM, and Marilyn Gunner (CCNY) for assistance with MCCE2.
 DLP and this work was supported in part by the generous support of a Louis V.~Gerstner Young Investigator Award.
-{\color{red}[Add PBG support statement.]}
+{\color{red}[Add PBG, SMH, KAB support statements.]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY
@@ -623,8 +624,6 @@ DLP and this work was supported in part by the generous support of a Louis V.~Ge
 \label{si:residue-numbering-schemes}
 
 Kinase catalytic domains are highlighted in red, and the conserved residues analyzed in the main text (Figs.~\ref{figure:src-ref-structures} and~\ref{figure:pair-distances}) are highlighted with yellow background.
-{\color{red}[JDC: Very cool!  Did you write a script to generate this, or did you have to do this by hand?]}
-{\color{blue}[DLP: The alignments come from UniProt. I did the latex formatting by hand (vi).]}
 
 \subsubsection*{Human Abl1 sequence}
 
