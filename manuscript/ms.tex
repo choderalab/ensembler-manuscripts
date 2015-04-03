@@ -137,7 +137,7 @@ By using these models as starting configurations for highly parallel MD simulati
 We anticipate that the tool will prove to be useful in a number of other ways.
 For example, the generated models could represent valuable data sets even without subsequent production simulation, allowing exploration of the conformational diversity present within the available structural data for a given protein family.
 Furthermore, the automation of simulation set up provides an excellent opportunity to make concrete certain "best practices", such as the choice of simulation parameters.
-{\color{red}[JDC: Can we also add the URL of where to get the code and TK models here?]}
+{\color{blue}[TODO: Add URL of where to get the code and TK models here]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DESIGN AND IMPLEMENTATION
@@ -214,7 +214,7 @@ The structure residues must also match those in the sequence file.
 Unresolved template residues can optionally be modeled into template structures with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
 Because fewer loops need to be built during the subsequent target model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
 {\color{red}[JDC: Should we cite our evidence for this with the TKs, or maybe tone back the claim a bit to say that it is possible this could make things easier?]}
-{\color{blue}[DLP: Sikander mentioned to me that someone has developed an algorithm called pokefind (or knotfind, which I think is an earlier version) which aims to find knots in proteins, of the type which encouraged us to use Rosetta to reconstruct template loops.
+{\color{blue}[DLP: Might be worth investigating an algorithm called \emph{pokefind} (or \emph{knotfind}, which I think is an earlier version) which aims to find knots in proteins, of the type which encouraged us to use Rosetta to reconstruct template loops.
 DOI: 10.1093/bioinformatics/btp198
 It sounds like these algorithms have actually been implemented in Rosetta, so this could explain why Rosetta seems to do better at avoiding making these knotted structures.
 Would be useful to check this out further first, and then decide whether or not to discuss the knotted structures in the manuscript.]}
@@ -326,7 +326,7 @@ For larger numbers of models (such as entire protein families), modeling time is
 \subsection*{Modeling of all human tyrosine kinase catalytic domains}
 
 As a first application of {\bf Ensembler}, we have built models for the human tyrosine kinase (TK) family.
-{\color{red}[JDC: Is there a complete list of these somewhere?  Maybe reference supplementary data?]}
+{\color{blue}[TODO: Add list of TK UniProt identifiers and gene names, probably in SI.]}
 TKs (and protein kinases in general) play important roles in many cellular processes and are involved in a number of types of cancer~\cite{krause:nejm:2005:tks-cancer}.
 For example, mutations of Src are associated with colon, breast, prostate, lung, and pancreatic cancers~\cite{kim:2009:src-cancer-review}, while a translocation between the TK Abl1 and the pseudokinase Bcr is closely associated with chronic myelogenous leukemia~\cite{greuber:2013:abl-cancer-review}.
 Protein kinase domains are thought to have multiple accessible metastable conformation states, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations~\cite{liu:ncb:2006:kinase-inhibitors-inactive-conformations}.
@@ -536,7 +536,7 @@ The latest release of {\bf Ensembler} can be installed via the {\tt conda} packa
 \shellcmd{conda ensembler}\\
 This will install all dependencies except for Modeller and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
 The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
-{\color{red}[JDC: Where does documentation reside?  And example inputs for generating the results in this paper?]}
+{\color{blue}[TODO: Add link to documentation. What about example inputs for generating the results in this paper? Put this in the TK model data set?]}
 
 \subsection*{Future Directions}
 
