@@ -419,11 +419,6 @@ These ranged from -14180 kT to -3590 kT, with a median of -9533 kT and a standar
 The distributions---stratified using the same sequence identity ranges as above---are plotted in Fig.~\ref{figure:energies-implicit}, indicating that higher sequence identity templates tend to result in slightly lower energy models.
 Of the \num{25457} models which failed to complete the implicit refinement MD stage, all except 9 failed within the first 1 ps of simulation.
 
-{\color{red}[JDC: This section looks pretty anemic.  What other kinds of analyses can we do for all the TKs?  There is so much data here!  There must be something neat we can do to examine it, right?]}
-
-{\color{blue}[DLP: for further analysis, a good option might be to try to make a more rigorous assessment of model quality via comparison to reference crystal structures, based on features such as RMSD, phi/psi angles, H-bonds etc.
-We could also try using the Rosetta heuristic scoring function for this purpose.]}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Final energies following implicit refinement
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -545,8 +540,6 @@ The latest source can be downloaded from the GitHub repository, which also conta
 
 \subsection*{Future Directions}
 
-{\color{red}[JDC: In the Discussion, let's be sure to talk about the limitations and what could be improved or added in the future.  For example, we don't yet handle counterions (e.g.~structural Zn$^{2+}$), prosthetic groups (e.g.~heme), or cofactors (e.g.~ATP) yet.  We don't handle post-translational modifications either (such as phosphorylation, methylation, glycosylation, etc.).  It's a good idea to suggest that this is an important first step toward enabling superfamily- and genomics-scale modeling, but there's a lot of work yet to be done.]}
-
 Comparative protein modeling and MD simulation set-up can be approached in a number of different ways, with varying degrees of complexity, and there are a number of obvious additions and improvements which we plan to implement in future versions of {\bf Ensembler}.
 
 Some amino acids can exist in different protonation states, depending on pH and on their local environment.
@@ -556,7 +549,6 @@ Currently, protonation states are assigned simply based on pH (a user-controllab
 At neutral pH, histidines have two protonation states which are approximately equally likely, and in this situation the selection is therefore made based on which state results in a better hydrogen bond.
 It would be highly desirable to instead use a method which assigns amino acid protonation states based on a rigorous assessment of the local environment.
 We thus plan to implement an interface and command-line function for assigning protonation states with MCCE2~\cite{alexov-gunner:biophys-j:1997:mcce2,georgescu-alexov-gunner:biophys-j:2002:mcce2,song-mao-gunner:j-comput-chem:2009:mcce2}, which uses electrostatics calculations combined with Monte Carlo sampling of side chain conformers to calculate pKa values.
-{\color{red}[JDC: I think we may want to consider doing that at this stage.  Let's discuss.]}
 
 Many proteins require the presence of various types of non-protein atoms and molecules for proper function, such as metal ions (e.g.~Mg$^{+2}$), cofactors (e.g.~ATP) or post-translational modifications (e.g.~phosphorylation, methylation, glycosylation, etc.), and we thus plan for {\bf Ensembler} to eventually have the capability to include such entities in the generated models.
 Binding sites for metal ions are frequently found in proteins, often playing a role in catalysis.
