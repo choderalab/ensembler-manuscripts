@@ -110,7 +110,7 @@ Drug discovery could also benefit from a more extensive consideration of protein
 Molecular dynamics (MD) simulations have the capability, in principle, to describe the time evolution of a protein in atomistic detail, and have proven themselves to be a useful tool in the study of protein dynamics.
 A number of mature software packages and forcefields are now available, and much recent progress has been driven by advances in computing architecture.
 For example, many MD packages are now able to exploit GPUs~\cite{eastman:jctc:2012:openmm,walker:jctc:2013:amber-gpu}, which provide greatly improved simulation efficiency per unit cost relative to CPUs, while distributed computing platforms such as Folding@home~\cite{shirts-pande:science:2000:fah}, Copernicus~\cite{pronk:2011:copernicus}, and GPUGrid~\cite{buch:2010:gpugrid}, allow scalability on an unprecedented level.
-In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2010:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
+In parallel, methods for building human-understandable models of protein dynamics from noisy simulation data, such as Markov state modeling (MSM) approaches, are now reaching maturity~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2011:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 MSM methods in particular have the advantage of being able to aggregate data from multiple independent MD trajectories, facilitating parallelization of production simulations and thus greatly alleviating overall computational cost.
 There also exist a number of mature software packages for comparative modeling of protein structures, in which a target protein sequence is modeled using one or more structures as templates~\cite{moult:proteins:2014:casp10,baker:science:2001:structure-prediction-review}.
 
@@ -164,7 +164,7 @@ The first stage entails the selection of a set of \emph{target} protein sequence
 This may be a single sequence---such as a full-length protein or a construct representing a single domain---or a collection of sequences, such as a particular domain from an entire family of proteins.
 The output of this stage is a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
-The {\tt ensembler} command-line tool allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org}) {\color{red}[JDC: Cite \href{http://www.uniprot.org/help/publications}{one of these UniProt citations?}]}---via a UniProt search query.
+The {\tt ensembler} command-line tool allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org})~\cite{uniprot:2015}---via a UniProt search query.
 To retrieve target sequences from UniProt, the subcommand {\tt gather\_targets} us used with the {\tt -{}-query} flag followed by a UniProt query string conforming to the same syntax as the search function available on the UniProt website.
 For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while {\tt -{}-query `domain:"Protein kinase" AND taxonomy:9606 AND reviewed:yes'} would select all human protein kinases which have been reviewed by a human curator.
 In this way, the user may select a single protein, many proteins, or an entire superfamily from UniProt.
@@ -240,8 +240,8 @@ This option is turned off by default, as the restraint files are relatively larg
 
 Because {\bf Ensembler} treats individual chains from source PDB structures as individual templates, a number of models may be generated with very similar structures if these individual chains are nearly identical in conformation.
 For this reason, and also to allow users to select for high diversity if they so choose, {\bf Ensembler} provides a way to filter out models that are very similar in RMSD.
-A fast clustering scheme is used to identify models differing by a user-specified minimum RMSD.
-The mdtraj~\cite{mdtraj} Python library is used to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation, and the leader algorithm {\color{red}[JDC: Citation for leader algorithm?]} is then used to populate clusters.
+The {\tt cluster} subcommand can thus be used to identify models which differ from other models in terms of RMSD distance by a user-specified cutoff.
+Clustering is performed using the regular spatial clustering algorithm~\cite{noe:jcp:2011:msm-review}, as implemented in the MSMBuilder Python library~\cite{msmbuilder}, which uses mdtraj~\cite{mdtraj} to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation.
 A minimum distance cutoff (which defaults to 0.6~\AA) is used to retain only a single model per cluster.
 
 \subsection*{Refinement of models}
