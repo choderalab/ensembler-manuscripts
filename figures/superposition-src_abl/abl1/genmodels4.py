@@ -1,5 +1,5 @@
 # Three seqid classes (manually chosen). RMSD clustering performed within each class, and centroids picked.
-# EDIT: manually included two models made from Abl1 structures with structured N-term helix
+# EDIT: manually included two models made from Abl1 structures with structured C-term helix
 
 import os
 import shutil
@@ -50,12 +50,12 @@ for seqid_class in seqid_classes:
 
     seqid_class_cluster_indices = clusterer.cluster_ids_
     seqid_class_cluster_indices.sort()
-    if seqid_class == [55., 101.]:
-        # XXX manually selecting two 
-        seqid_class_selected_model_indices = [11, 21]
-        seqid_class_selected_model_indices.append(list(seqid_class_df.iloc[seqid_class_cluster_indices].index)[-1])
-    else:
-        seqid_class_selected_model_indices = list(seqid_class_df.iloc[seqid_class_cluster_indices].index)
+    # if seqid_class == [55., 101.]:
+    #     # XXX manually selecting two 
+    #     seqid_class_selected_model_indices = [11, 21]
+    #     seqid_class_selected_model_indices.append(list(seqid_class_df.iloc[seqid_class_cluster_indices].index)[-1])
+    # else:
+    seqid_class_selected_model_indices = list(seqid_class_df.iloc[seqid_class_cluster_indices].index)
     # seqid_class_cluster_seqids = list(seqid_class_df.iloc[seqid_class_cluster_indices].seqid.values)
     seqid_class_cluster_seqids = list(df.loc[seqid_class_selected_model_indices].seqid.values)
     model_indices += seqid_class_selected_model_indices
