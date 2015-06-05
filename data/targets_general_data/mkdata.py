@@ -1,5 +1,5 @@
 from ensembler.initproject import GatherTargetsFromUniProt
-from ensembler.UniProt import get_uniprot_xml
+from ensembler.uniprot import get_uniprot_xml
 import pandas as pd
 
 # ============
@@ -60,8 +60,10 @@ df['UniProt recommended name'] = uniprot_recommended_names
 df['UniProt domain description'] = gtfup.domain_descriptions
 df['Organism'] = ['human'] * len(df)
 
-df.to_csv('targets_data.csv')
+df.sort(columns=['Ensembler target id'], inplace=True)
+
+df.to_csv('targets-data.csv')
 
 table_cols = ['Ensembler target id', 'UniProt entry name', 'Residue span (UniProt coords; 1-based)', 'HGNC HUGO symbol', 'UniProt recommended name', 'UniProt domain description', 'Organism']
-with open('targets_data.txt', 'w') as tablefile:
+with open('targets-data.txt', 'w') as tablefile:
     tablefile.write(df.to_string(columns=table_cols))
