@@ -21,4 +21,10 @@ Manifest
     * models.xtc - Gromacs XTC-format trajectory; each frame represents the coordinates of a model
       * only models which successfully completed the implicit solvent MD stage are included in the trajectory
     * models-data.csv - data for each model (in same order as the trajectory file), including template ID, sequence identity relative to the target sequence, and RMSD relative to the highest sequence identity model
-* commands.sh - commands used to generate the models provided in this dataset
+* commands.sh - original Ensembler commands used to generate the models provided in this dataset
+
+Links
+-----
+
+* Ensembler code - https://github.com/choderalab/ensembler
+* Ensembler documentation - http://ensembler.readthedocs.org/en/latest/

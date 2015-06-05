@@ -3,3 +3,4 @@
 *.out
 *.swp
 dataset-for-publication/models/*/*.xtc
+dataset-for-publication/dataset.tar
