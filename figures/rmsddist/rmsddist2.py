@@ -66,7 +66,7 @@ plt.setp(ax, yticks=[])
 
 legend = plt.legend(title='Sequence identity (%)', fontsize='xx-small')
 plt.setp(legend.get_title(),fontsize='x-small')
-plt.xlim(0,40)
+plt.xlim(0,30)
 plt.xlabel('RMSD ($\AA$)')
 sns.despine(left=True)
 
@@ -97,7 +97,7 @@ sns.kdeplot(df_has_model.rmsd*10, label=label, bw=2.5, shade=True, color='k')
 ax = plt.gca()
 plt.setp(ax, yticks=[])
 
-plt.xlim(0,40)
+plt.xlim(0,30)
 plt.xlabel('RMSD ($\AA$)')
 sns.despine(left=True)
 
