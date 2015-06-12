@@ -1,7 +1,6 @@
-Supporting Dataset
-========
-
-Dataset for manuscript "Ensembler: Enabling high-throughput molecular simulations at the superfamily scale" - Daniel L. Parton, Patrick B. Grinaway, Sonya M. Hanson, Kyle A. Beauchamp, John D. Chodera
+Dataset for manuscript "Ensembler: Enabling high-throughput molecular simulations at the superfamily scale"
+-----------------------------------------------------------------------------------------------------------
+\- Daniel L. Parton, Patrick B. Grinaway, Sonya M. Hanson, Kyle A. Beauchamp, John D. Chodera
 
 The dataset contains models and associated data for all 93 known human tyrosine kinase catalytic domains, generated with (Ensembler)[https://github.com/choderalab/ensembler], using all 4433 protein kinase catalytic domain structures of any species as templates.
 
