@@ -2,7 +2,7 @@ Dataset for manuscript "Ensembler: Enabling high-throughput molecular simulation
 -----------------------------------------------------------------------------------------------------------
 \- Daniel L. Parton, Patrick B. Grinaway, Sonya M. Hanson, Kyle A. Beauchamp, John D. Chodera
 
-The dataset contains models and associated data for all 93 known human tyrosine kinase catalytic domains, generated with (Ensembler)[https://github.com/choderalab/ensembler], using all 4433 protein kinase catalytic domain structures of any species as templates.
+The dataset contains models and associated data for all 93 known human tyrosine kinase catalytic domains, generated with [Ensembler](https://github.com/choderalab/ensembler), using all 4433 protein kinase catalytic domain structures of any species as templates.
 
 Templates were first subjected to loop remodeling, then used to generate models via comparative modeling. Models were then refined using 100 ps implicit solvent molecular dynamics refinement.
 
@@ -79,7 +79,7 @@ If the ```loopmodel``` function was used previously, then templates which have b
 ensembler build_models
 ```
 
-Creates models by mapping each target sequence onto each template structure, using the Modeller (automodel)[https://salilab.org/modeller/manual/node15.html] function.
+Creates models by mapping each target sequence onto each template structure, using the Modeller [automodel](https://salilab.org/modeller/manual/node15.html) function.
 
 ```
 ensembler cluster
