@@ -38,7 +38,7 @@ Models were then refined using 100 ps implicit solvent molecular dynamics refine
 
 The sequence of commands used to generate this dataset can be found in `commands.sh`.
 
-### Initialize Ensembler project.
+### Initialize Ensembler project
 
 First, we initalize an Ensembler project in the current working directory.
 This comamnd creates a number of directories and a metadata file (meta0.yaml).
@@ -54,12 +54,12 @@ Here, we extract from UniProt all human tyrosine protein kinases, and designate 
 ```
 ensembler gather_targets --query 'family:"tyr protein kinase family" AND organism:"homo sapiens" AND reviewed:yes' --uniprot_domain '^Protein kinase(?!; truncated)(?!; inactive)'
 ```
-This is specified by the `regular expression <https://docs.python.org/2/library/re.html#regular-expression-syntax>`_ ("regex") passed to the `--uniprot\_domain` flag.
+This is specified by the [regular expression](https://docs.python.org/2/library/re.html#regular-expression-syntax) ("regex") passed to the `--uniprot_domain` flag.
 The initial UniProt search returns a number of domain types, including "Protein kinase", "Protein kinase; 1", "Protein kinase; 2", "Protein kinase; truncated", and "Protein kinase; inactive". The above regex selects the first three types of domain, and excludes the latter two. Sequences are written to a fasta file: ```targets/targets.fa```.
 
 Targets are given IDs of the form ```[UniProt mnemonic]_D[domain id]```, which consists of the UniProt name for the target and an identifier for the domain (since a single target protein may contain multiple domains of interest). Example: ```ABL1_HUMAN_D0```.
 
-#### Select template structures
+### Select template structures
 
 
 Ensembler uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
@@ -72,7 +72,7 @@ The above command queries UniProt for all protein kinases (of any species), sele
 Templates are given IDs of the form ```[UniProt mnemonic]_D[domain id]_[PDB id]_[chain id]```, where the final two elements represent the PBD ID and chain identifier.
 Example: ```EGFR_HUMAN_D0_2GS7_B```.
 
-#### Reconstruct missing loops from template structure
+### Reconstruct missing loops from template structures
 
 (_Optional_)
 Reconstruct template loops which were not resolved in the original PDB structure, using _Rosetta loopmodel_.
@@ -82,7 +82,7 @@ ensembler loopmodel
 Pre-building template loops in this way, prior to the main modeling stage (with Modeller), tends to result in higher quality models.
 The reconstructed template structures are written to the directory ```templates/structures-modeled-loops```.
 
-#### Perform template-target sequence alignments
+### Perform template-target sequence alignments
 
 Conduct pairwise alignments of target sequences against template sequences.
 ```
@@ -94,14 +94,14 @@ The ```.pir``` alignment format is an ascii-based format required by ```Modeller
 If the ```loopmodel``` function was used previously, then templates which have been successfully remodeled will be selected for this alignment and the subsequent modeling steps.
 Otherwise, Ensembler defaults to using the template structures which contain only resolved residues.
 
-#### Build structural models of targets
+### Build structural models of targets
 
 Create models by mapping each target sequence onto each template structure, using the Modeller [automodel](https://salilab.org/modeller/manual/node15.html) function.
 ```
 ensembler build_models
 ```
 
-#### Cluster sturctural models
+### Cluster structural models
 
 Filter out non-unique models by clustering on RMSD. A default cutoff of 0.06 nm is used.
 ```
@@ -109,7 +109,7 @@ ensembler cluster
 ```
 Unique models are given an empty file ```unique_by_clustering``` in their model directory.
 
-#### Refine structures in implicit solvent
+### Refine structures in implicit solvent
 
 Refine models by performing an energy minimization followed by a short molecular dynamics simulation (default: 100 ps) with implicit solvent (Generalized Born surface area), using ```OpenMM```. The final structure is written to the compressed PDB file ```implicit-refined.pdb.gz```.
 ```
