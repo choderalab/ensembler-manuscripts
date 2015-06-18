@@ -36,7 +36,13 @@ Models were then refined using 100 ps implicit solvent molecular dynamics refine
 
 ## Dataset construction with Ensembler
 
-The sequence of commands used to generate this dataset can be found in `commands.sh`.
+The sequence of commands used to generate this dataset can be found in the `commands.sh` script.
+
+To install the same version of Ensembler as used to generate this dataset, the script first creates and activates a [conda environment](http://conda.pydata.org/docs/using/envs.html):
+```
+conda create -c https://conda.binstar.org/omnia -n ensembler1.0 python=2.7 ensembler=1.0 --yes
+source activate ensembler1.0
+```
 
 ### Initialize Ensembler project
 
