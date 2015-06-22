@@ -99,8 +99,6 @@ The latest release can be installed \emph{via} the {\tt conda} package manager, 
 
 \emph{Keywords: molecular dynamics simulation; comparative modeling; distributed simulation}
 
-% TODO expand to all human protein kinases?
-
 \end{abstract}
 
 \maketitle
@@ -315,10 +313,6 @@ To aid the user in tracking the provenance of each model, each pipeline function
 For users interested in simply using {\bf Ensembler} to rapidly generate a set of models for a single template sequence, {\bf Ensembler} provides a command-line tool {\tt quickmodel}, which performs the entire pipeline for a single target with a small number of templates.
 For larger numbers of models (such as entire protein families), modeling time is greatly reduced by using the main modeling pipeline, which is parallelized via MPI, distributing computation across each model (or across each template, in the case of the loop reconstruction code), and scaling (in a ``pleasantly parallel'' manner) up to the number of models generated.
 
-% TODO? The API is highly flexible, allowing control over many important parameters. Appropriate choices have been set as default values.
-
-% TODO? other tools for analyzing project etc.
-
 
 \label{section:design}
 
@@ -340,7 +334,7 @@ We selected all human TK domains annotated in UniProt as targets, and all availa
 This returned 93 target sequences and 4433 template structures, giving a total of \num{412269} target-template pairs.
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
 
-The resultant models are available as part of a supplementary dataset which can be accessed \emph{via} the digital object identifier (DOI) \href{https://dx.doi.org/10.5061/dryad.7fg32}{10.5061/dryad.7fg32}.
+The resultant models are available as part of a supplementary dataset which can be downloaded from the Dryad Digital Repository (DOI: \href{https://dx.doi.org/10.5061/dryad.7fg32}{10.5061/dryad.7fg32}).
 
 \begin{codebox*}[tbp]
 \scriptsize
@@ -598,8 +592,6 @@ In principle, such insertions could be excluded from the generated models, thoug
 We believe {\bf Ensembler} to be an important first step toward enabling computational modeling and simulation of proteins on the scale of entire protein families, and suggest that it could likely prove useful for tasks beyond its original aim of providing diverse starting configurations for MD simulations.
 The code is open source and has been developed with extensibility in mind, in order to facilitate its customization for a wide range of potential uses by the wider scientific community.
 
-
-% TODO what's on the Ensembler 2 roadmap?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ACKNOWLEDGMENTS
