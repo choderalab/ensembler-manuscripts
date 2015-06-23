@@ -271,14 +271,14 @@ As well as improving model quality, this also prepares models for subsequent pro
 
 Models are first subjected to energy minimization (using the L-BFGS algorithm~\cite{lbfgs}, followed by a short molecular dynamics (MD) simulation with an implicit solvent representation.
 This is implemented using the OpenMM molecular simulation toolkit~\cite{eastman:jctc:2012:openmm}, chosen for its flexible Python API, and high performance GPU-acclerated simulation code.
-The simulation is run for a default of 100 ps, which in our example applications has been sufficient to filter out poor models (i.e.~those with atomic overlaps unresolved by energy minimization, which result in an unstable simulation), as well as helping to relax model conformations.
+The simulation is run for a default of 100~ps, which in our example applications has been sufficient to filter out poor models (i.e.~those with atomic overlaps unresolved by energy minimization, which result in an unstable simulation), as well as helping to relax model conformations.
 As discussed in the Results section, our example application of the {\bf Ensembler} pipeline to the human tyrosine kinase family indicated that of the models which failed implicit solvent MD refinement, the vast majority failed within the first 1~ps of simulation.
 
 The simulation protocol and default parameter values have been chosen to represent current "best practices" for the refinement simulations carried out here.
 As such, the simulation is performed using Langevin dynamics, with a default force field choice of Amber99SB-ILDN~\cite{amber99sb-ildn}, along with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
 Any of the other force fields or implicit water models implemented in OpenMM can be specified using the {\tt -{}-ff} and {\tt -{}-water\_model} flags respectively.
 The simulation length can also be controlled \emph{via} the {\tt -{}-simlength} flag, and many other important simulation parameters can be controlled from either the API or CLI (\emph{via} the {\tt -{}-api\_params} flag).
-The default values are set as follows---timestep: 2~ps; temperature: 300~K; Langevin collision rate: 20~ps$^{-1}$; pH (used by OpenMM for protonation state assignment): 7.
+The default values are set as follows---timestep: 2~fs; temperature: 300~K; Langevin collision rate: 20~ps$^{-1}$; pH (used by OpenMM for protonation state assignment): 7.
 We also draw attention to a recent paper which indicates that lower Langevin collision rates may result in faster phase space exploration~\cite{basconi:jctc:2013:collision-rates}.
 
 \subsection{Solvation and NPT equilibration}
@@ -431,7 +431,7 @@ This analysis indicates that higher sequence identity templates result in models
 We also analyzed the potential energies of the models at the end of the implicit solvent MD refinement stage.
 These ranged from -14180~kT to -3160~kT, with a median of -9501~kT, mean of -9418~kT, and a standard deviation of 1198~kT (with a simulation temperature of 300~K).
 The distributions---stratified using the same sequence identity ranges as above---are plotted in Fig.~\ref{figure:energies-implicit}, indicating that higher sequence identity templates tend to result in slightly lower energy models.
-Of the \num{4973} models which failed to complete the implicit refinement MD stage, all except 9 failed within the first 1 ps of simulation.
+Of the \num{4973} models which failed to complete the implicit refinement MD stage, all except 9 failed within the first 1~ps of simulation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Final energies following implicit refinement
