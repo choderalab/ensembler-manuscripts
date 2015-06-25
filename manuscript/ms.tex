@@ -54,6 +54,9 @@
 % The figures are in a figures/ subdirectory.
 \graphicspath{{../figures/}}
 
+% Do not hyphenate the following words
+\hyphenation{MODELLER}
+
 %% DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
@@ -495,11 +498,13 @@ We use the residue numbering schemes for chicken Src (which is commonly used in 
 
 \begin{figure}[tb]
     \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/src_ref_structures}
-    
+
     \caption{{\bf Two structures of Src, indicating certain residues involved in activation.}
     In the inactive state, E310 forms a salt bridge with R409.
     During activation, the $\alpha$C-helix (green) moves and rotates, orienting E310 towards the ATP-binding site and allowing it to instead form a salt bridge with K295.
     This positions K295 in the appropriate position for catalysis.
+    Note that ANP (phosphoaminophosphonic acid-adenylate ester; an analog of ATP) is only physically present in the 2SRC structure.
+    To aid visualization of the active site in 1Y57, it has been included in the rendering by structurally aligning the surrounding homologous protein residues.
   }
   \label{figure:src-ref-structures}
 \end{figure}

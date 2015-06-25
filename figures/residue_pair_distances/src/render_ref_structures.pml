@@ -21,6 +21,7 @@ set cartoon_transparency, 0.4, 2SRC_transparent
 
 # define and color relevant motifs
 # Kinase Domain
+# (POL means polymer)
 select 1Y57_kin=(1Y57 & POL & i;258-522)
 select 2SRC_kin=(2SRC & POL & i;258-522)
 select 1Y57_transparent_kin=(1Y57_transparent & POL & i;258-522)
