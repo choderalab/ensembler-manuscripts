@@ -95,7 +95,7 @@ We demonstrate the power of this approach by constructing models for all catalyt
 
 {\bf Ensembler} is free and open source software licensed under the GNU General Public License (GPL) v2. 
 It is compatible with Linux and OS X.
-The latest release can be installed \emph{via} the {\tt conda} package manager, and the latest source can be downloaded from \url{https://github.com/choderalab/ensembler}.
+The latest release can be installed via the {\tt conda} package manager, and the latest source can be downloaded from \url{https://github.com/choderalab/ensembler}.
 
 \emph{Keywords: molecular dynamics simulation; comparative modeling; distributed simulation}
 
@@ -150,7 +150,7 @@ Furthermore, the automation of simulation set up provides an excellent opportuni
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Design and Implementation}
 
-{\bf Ensembler} is written in Python, and can be used \emph{via} a command-line tool ({\tt ensembler}) or \emph{via} a flexible Python API to allow integration of its components into other applications.
+{\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API to allow integration of its components into other applications.
 All command-line and API information in this article refers to the \href{https://github.com/choderalab/ensembler/tree/v1.0}{version 1.0 release of Ensembler}.
 Up-to-date documentation can be found at \href{http://ensembler.readthedocs.org/en/latest/}{ensembler.readthedocs.org}.
 
@@ -166,7 +166,7 @@ The various stages of this pipeline are described in detail below.
   The red labels indicate the corresponding text description provided for each stage in the Design and Implementation section.
   On the right, the number of viable models surviving each stage of the pipeline is shown for the 93 target TK domains and for two representative individual TK domains (\emph{SRC} and \emph{ABL}).
   Typical timings on a computer cluster (containing Intel Xeon E5-2665 2.4GHz hyperthreaded processors and NVIDIA GTX-680 or GTX-Titan GPUs) is reported to illustrate resource requirements per model for modeling the entire set of tyrosine kinases.
-  Note that \emph{CPU-h} denotes the number of hours consumed by the equivalent of a single CPU hyperthread and \emph{GPU-h} on a single GPU---parallel execution \emph{via} MPI reduces wall clock time nearly linearly.
+  Note that \emph{CPU-h} denotes the number of hours consumed by the equivalent of a single CPU hyperthread and \emph{GPU-h} on a single GPU---parallel execution via MPI reduces wall clock time nearly linearly.
   }
   \label{figure:pipeline}
 \end{figure*}
@@ -177,7 +177,7 @@ The first stage entails the selection of a set of \emph{target} protein sequence
 This may be a single sequence---such as a full-length protein or a construct representing a single domain---or a collection of sequences, such as a particular domain from an entire family of proteins.
 The output of this stage is a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
-The {\tt ensembler} command-line tool allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org})~\cite{uniprot:2015}---\emph{via} a UniProt search query.
+The {\tt ensembler} command-line tool allows targets to be selected from UniProt---a freely accessible resource for protein sequence and functional data (\href{http://www.uniprot.org/}{uniprot.org})~\cite{uniprot:2015}---via a UniProt search query.
 To retrieve target sequences from UniProt, the subcommand {\tt gather\_targets} is used with the {\tt -{}-query} flag followed by a UniProt query string conforming to the same syntax as the search function available on the UniProt website.
 For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length human Src sequence, while the query shown in Box~\ref{box:tk-gather-targets-templates} would select all human tyrosine protein kinases which have been reviewed by a human curator.
 In this way, the user may select a single protein, many proteins, or an entire superfamily from UniProt.
@@ -202,7 +202,7 @@ The {\tt ensembler gather\_templates} subcommand provides methods for selecting 
 Both methods select templates at the level of PDB chains---a PDB structure containing multiple chains with identical sequence spans (e.g.~for crystal unit cells with multiple asymmetric units) would thus give rise to multiple template structures.
 
 Selection of templates from the PDB simply requires passing a list of PDB IDs as a comma-separated string, e.g.~{\tt -{}-query 2H8H,1Y57}.
-Specific PDB chain IDs can optionally also be selected \emph{via} the {\tt -{}-chainids} flag.
+Specific PDB chain IDs can optionally also be selected via the {\tt -{}-chainids} flag.
 The program retrieves structures from the PDB server, as well as associated data from the SIFTS service (\href{http://www.ebi.ac.uk/pdbe/docs/sifts/}{www.ebi.ac.uk/pdbe/docs/sifts})~\cite{velankar:2013:sifts}, which provides residue-level mappings between PDB and UniProt entries.
 The SIFTS data is used to extract template sequences, retaining only residues which are resolved and match the equivalent residue in the UniProt sequence---non-wildtype residues are thus removed from the template structures.
 Furthermore, PDB chains with less than a given percentage of resolved residues (default: 70\%) are filtered out.
@@ -220,8 +220,8 @@ The structure residues must also match those in the sequence file.
 
 \subsection{Template refinement}
 
-Unresolved template residues can optionally be modeled into template structures with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided \emph{via} the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
-We expect that in certain cases, pre-building template loops with Rosetta {\tt loopmodel} prior to the main modeling stage (with Modeller) may result in improved model quality.
+Unresolved template residues can optionally be modeled into template structures with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
+We expect that in certain cases, pre-building template loops with Rosetta {\tt loopmodel} prior to the main modeling stage (with MODELLER) may result in improved model quality.
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residue spans are modeled in the subsequent stage.
 
@@ -236,21 +236,21 @@ Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues
 
 In the modeling stage, structural models of the target sequence are generated from the template structures, with the goal of modeling the target in a variety of conformations that could be significantly populated under equilibrium conditions.
 
-Modeling is performed using the automodel function of the Modeller software package~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller} to rapidly generate a single model of the target sequence from each template structure.
-Modeller uses simulated annealing cycles along with a minimal forcefield and spatial restraints---generally Gaussian interatomic probability densities extracted from the template structure with database-derived statistics determining the distribution width---to rapidly generate candidate structures of the target sequence from the provided template sequence~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
+Modeling is performed using the automodel function of the MODELLER software package~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller} to rapidly generate a single model of the target sequence from each template structure.
+MODELLER uses simulated annealing cycles along with a minimal forcefield and spatial restraints---generally Gaussian interatomic probability densities extracted from the template structure with database-derived statistics determining the distribution width---to rapidly generate candidate structures of the target sequence from the provided template sequence~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}.
 
-While Modeller's automodel function can generate its own alignments automatically, a standalone function was preferable for reasons of programming convenience.
+While MODELLER's automodel function can generate its own alignments automatically, a standalone function was preferable for reasons of programming convenience.
 As such, we implemented pairwise alignment functionality using the BioPython {\tt pairwise2} module~\cite{cock:2009:biopython}---which uses a dynamic programming algorithm---with the PAM 250 scoring matrix of Gonnet \textit{et al.}~\cite{gonnet:science:1992:exhaustive-matching}.
 The alignments are carried out with the {\tt align} subcommand, prior to the modeling step which is carried out with the {\tt build\_models} subcommand.
 The {\tt align} subcommand also writes a list of the sequence identities for each template to a text file, and this can be used to select models from a desired range of sequence identities.
 The {\tt build\_models} subcommand and all subsequent pipeline functions have a {\tt -{}-template\_seqid\_cutoff} flag which can be used to select only models with sequence identities greater than the given value.
 We also note that alternative approaches could be used for the alignment stage.
-For example, multiple sequence alignment algorithms~\cite{thompson:2011:msa-review}, allow alignments to be guided using sequence data from across the entire protein family of interest, while (multiple) structural alignment algorithms such as Modeller's {\tt salign} routine~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}, PROMALS3D~\cite{pei:2008:promals3d}, and Expresso and 3DCoffee~\cite{expresso,3dcoffee}, can additionally exploit structural data.
+For example, multiple sequence alignment algorithms~\cite{thompson:2011:msa-review}, allow alignments to be guided using sequence data from across the entire protein family of interest, while (multiple) structural alignment algorithms such as MODELLER's {\tt salign} routine~\cite{fiser:prot-sci:2000:modeller,sali:jmb:1993:modeller}, PROMALS3D~\cite{pei:2008:promals3d}, and Expresso and 3DCoffee~\cite{expresso,3dcoffee}, can additionally exploit structural data.
 {\bf Ensembler's} modular architecture facilitates the implementation of alternative alignment approaches, and we plan to implement some of these in future versions, to allow exploration of the influence of different alignment methods on model quality.
 
 Models are output as PDB-format coordinate files.
 To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip} library to apply compression to all sizeable text files from the modeling stage onwards.
-The restraints used by Modeller could potentially be used in alternative additional refinement schemes, and {\bf Ensembler} thus provides a flag ({\tt -{}-write\_modeller\_restraints\_file}) for optionally saving these restraints to file.
+The restraints used by MODELLER could potentially be used in alternative additional refinement schemes, and {\bf Ensembler} thus provides a flag ({\tt -{}-write\_modeller\_restraints\_file}) for optionally saving these restraints to file.
 This option is turned off by default, as the restraint files are relatively large (e.g.~$\sim$400 kB per model for protein kinase domain targets), and are not expected to be used by the majority of users.
 
 \subsection*{Filtering of nearly identical models}
@@ -277,7 +277,7 @@ As discussed in the Results section, our example application of the {\bf Ensembl
 The simulation protocol and default parameter values have been chosen to represent current "best practices" for the refinement simulations carried out here.
 As such, the simulation is performed using Langevin dynamics, with a default force field choice of Amber99SB-ILDN~\cite{amber99sb-ildn}, along with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
 Any of the other force fields or implicit water models implemented in OpenMM can be specified using the {\tt -{}-ff} and {\tt -{}-water\_model} flags respectively.
-The simulation length can also be controlled \emph{via} the {\tt -{}-simlength} flag, and many other important simulation parameters can be controlled from either the API or CLI (\emph{via} the {\tt -{}-api\_params} flag).
+The simulation length can also be controlled via the {\tt -{}-simlength} flag, and many other important simulation parameters can be controlled from either the API or CLI (via the {\tt -{}-api\_params} flag).
 The default values are set as follows---timestep: 2~fs; temperature: 300~K; Langevin collision rate: 20~ps$^{-1}$; pH (used by OpenMM for protonation state assignment): 7.
 We also draw attention to a recent paper which indicates that lower Langevin collision rates may result in faster phase space exploration~\cite{basconi:jctc:2013:collision-rates}.
 
@@ -291,14 +291,14 @@ The TIP3P water model~\cite{tip3p} is used by default, but any of the other expl
 Models are resolvated with the target number of waters by first solvating with zero padding, then incrementally increasing the box size and resolvating until the target is exceeded, then finally deleting sufficient waters to match the target value.
 The explicit solvent MD simulation is also implemented using OpenMM, using the Amber99SB-ILDN force field~\cite{amber99sb-ildn} and TIP3P water~\cite{tip3p} by default.
 The force field, water model, and simulation length can again be specified using the {\tt -{}-ff}, {\tt -{}-water\_model}, and {\tt -{}-simlength} flags respectively.
-Further simulation parameters can be controlled \emph{via} the API or \emph{via} the CLI {\tt -{}-api\_params} flag.
+Further simulation parameters can be controlled via the API or via the CLI {\tt -{}-api\_params} flag.
 Pressure control is performed with a Monte Carlo barostat as implemented in OpenMM, with a default pressure of 1~atm and a period of 50 timesteps.
 The remaining simulation parameters have default values set to the same as for the implicit solvent MD refinement.
 
 \subsection*{Packaging}
 
 {\bf Ensembler} provides a packaging module which can be used to prepare models for other uses.
-The {\tt package\_models} subcommand currently provides functions (specified \emph{via} the {\tt -{}-package\_for} flag) for compressing models in preparation for data transfer, or for organizing them with the appropriate directory and file structure for production simulation on the distributed computing platform Folding@home~\cite{shirts-pande:science:2000:fah}.
+The {\tt package\_models} subcommand currently provides functions (specified via the {\tt -{}-package\_for} flag) for compressing models in preparation for data transfer, or for organizing them with the appropriate directory and file structure for production simulation on the distributed computing platform Folding@home~\cite{shirts-pande:science:2000:fah}.
 The module could easily be extended to add methods for preparing models for other purposes.
 For example, production simulations could alternatively be run using Copernicus~\cite{pronk:2011:copernicus,pronk:2015:copernicus}---a framework for performing parallel adaptive MD simulations--- or GPUGrid~\cite{buch:2010:gpugrid}---a distributing computing platform which relies on computational power voluntarily donated by the owners of nondedicated GPU-equipped computers.
 
@@ -367,7 +367,7 @@ Template selection entails the selection of the sequences and structures of any 
 \end{figure}
 
 Crystallographic structures of kinase catalytic domains generally contain a significant number of missing residues (median 11, mean 14, standard deviation 13, max 102) due to the high mobility of several loops (Fig.~\ref{figure:loopmodel-nmissing-residues}, top), with a number of these missing spans being significant in length (median 5, mean 7, standard deviation 6, max 82; Fig.~\ref{figure:loopmodel-nmissing-residues}, bottom).
-To reduce the reliance on the Modeller rapid model construction stage to reconstruct very long unresolved loops, unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
+To reduce the reliance on the MODELLER rapid model construction stage to reconstruct very long unresolved loops, unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
 Out of \num{3666} templates with one or more missing residues, \num{3134} were successfully remodeled by the Rosetta loop modeling stage (with success defined simply as program termination without error); most remodeling failures were attributable to unsatisfiable spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues (Fig.~\ref{figure:loopmodel-nmissing-residues}, top); templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
 
@@ -379,7 +379,7 @@ The number of refined models for each target ranged from \num{4046} to \num{4289
 Fig.~\ref{figure:pipeline} also indicates the typical timing achieved on a cluster for each stage, showing that the {\tt build\_models} and {\tt refine\_implicit\_md} stages are by far the most compute-intensive.
 
 The files generated for each model (up to and including the implicit solvent MD refinement stage) totaled $\sim$116~kB in size, totalling 0.5~GB per TK target or 42~GB for all~93 targets.
-The data generated per model breaks down as 39~kB for the output from the modeling stage (without saving Modeller restraints files, which are about 397~kB per model) and 77~kB for the implicit solvent MD refinement stage.
+The data generated per model breaks down as 39~kB for the output from the modeling stage (without saving MODELLER restraints files, which are about 397~kB per model) and 77~kB for the implicit solvent MD refinement stage.
 
 \subsection*{Evaluation of model quality and utility}
 
@@ -508,7 +508,7 @@ Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed
 One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
 These three residues are also well conserved~\cite{kannan:jmb:2005:kinase-regulation}, and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family~\cite{shukla-pande:nature-commun:2014:src-activation-msm, foda:nat-comm:2015:src, ozkirimli:prot-sci:2008:src}.
 As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl1} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
-The models show strong coverage of regions in which either of the electrostatic interactions is fully formed (for models across all levels of target-template sequence identity), as well as a wide range of regions inbetween (mainly models with low sequence identity).
+The models show strong coverage of regions in which either of the electrostatic interactions is fully formed (for models across all levels of target-template sequence identity), as well as a wide range of regions in-between (mainly models with low sequence identity).
 We thus expect that such a set of models, if used as starting configurations for highly parallel MD simulation, could greatly aid in sampling of functionally relevant conformational states.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -543,8 +543,8 @@ We thus expect that such a set of models, if used as starting configurations for
 \subsection*{Availability}
 
 The code for {\bf Ensembler} is hosted on the collaborative open source software development platform GitHub (\href{http://github.com/choderalab/ensembler}{github.com/choderalab/ensembler}).
-The latest release can be installed \emph{via} the {\tt conda} package manager for Python (\href{http://conda.pydata.org}{conda.pydata.org}), using the two commands shown in Box~\ref{box:installation}.
-This will install all dependencies except for Modeller and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
+The latest release can be installed via the {\tt conda} package manager for Python (\href{http://conda.pydata.org}{conda.pydata.org}), using the two commands shown in Box~\ref{box:installation}.
+This will install all dependencies except for MODELLER and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
 The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
 Documentation can be found at \href{http://ensembler.readthedocs.org/en/latest/}{ensembler.readthedocs.org}.
 
@@ -580,7 +580,7 @@ For example, protein kinase domains contain two binding sites for divalent metal
 Metal ions are often not resolved in experimental structures of proteins, but by taking into account the full range of available structural data, it should be possible in many cases to include metal ions based on the structures of homologous proteins.
 We are careful to point out, however, that metal ion parameters in classical MD force fields have significant limitations, particularly in their interactions with proteins~\cite{sousa:book:2010:metal-ion-parameters-difficulties}.
 Cofactors and post-translational modifications are also often not fully resolved in experimental structures, and endogenous cofactors are frequently substituted with other molecules to facilitate experimental structural analysis.
-Again, {\bf Ensembler} could exploit structural data from a set of homologous proteins to model in these molecules, although there will be likely be a number of challenges to overcome in the design and implementation of such functionality.
+Again, {\bf Ensembler} could exploit structural data from a set of homologous proteins to model in these molecules, although there will likely be a number of challenges to overcome in the design and implementation of such functionality.
 
 Another limitation with the present version of {\bf Ensembler} involves the treatment of members of a protein family with especially long residue insertions or deletions.
 For example, the set of all human protein kinase domains listed in UniProt have a median length of 265 residues (mean 277) and a standard deviation of 45, yet the minimum and maximum lengths are 102 and 801 respectively.
