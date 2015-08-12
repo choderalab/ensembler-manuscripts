@@ -1,0 +1,45 @@
+Dear Dr Chodera, 
+
+Thank you very much for submitting your manuscript 'Ensembler: Enabling high-throughput molecular simulations at the superfamily scale' for review by PLOS Computational Biology. Your manuscript has been fully evaluated by the PLOS Computational Biology editorial team and in this case also by independent peer reviewers. The reviewers appreciated the attention to an important problem, but raised some substantial concerns about the manuscript as it currently stands. While your manuscript cannot be accepted in its present form, we are willing to consider a revised version in which the issues raised by the reviewers have been adequately addressed. We cannot, of course, promise publication at that time. 
+
+Your revisions should address the specific points made by each reviewer. Please return the revised version within the next 60 days. If you anticipate any delay in its return, we ask that you let us know the expected resubmission date by email at ploscompbiol@plos.org. Revised manuscripts received beyond 60 days may require evaluation and peer review similar to that applied to newly submitted manuscripts. 
+
+In addition, when you are ready to resubmit, please be prepared to provide the following: 
+(1) A detailed list of your responses to the review comments and the changes you have made in the manuscript. We require a file of this nature before your manuscript is passed back to the editors. 
+(2) A striking still image to accompany your article (optional). If the image is judged to be suitable by the editors, it may be featured on our website and might be chosen as the issue image for that month. These square, high-quality images should be accompanied by a short caption. Please note as well that there should be no copyright restrictions on the use of the image, so that it can be published under the Open-Access license and be subject only to appropriate attribution. 
+(3) A copy of your manuscript with the changes highlighted (encouraged). We encourage authors, if possible to show clearly where changes have been made to their manuscript e.g. by highlighting text. 
+Before you resubmit your manuscript, please consult our Submission Checklist to ensure your manuscript is formatted correctly for PLOS Computational Biology: http://www.ploscompbiol.org/static/checklist.action. Some key points to remember are: 
+
+- Figures uploaded separately as TIFF or EPS files (if you wish, your figures may remain in your main manuscript file in addition).
+- Supporting Information uploaded as separate files, titled Dataset, Figure, Table, Text, Protocol, Audio, or Video. 
+- Funding information in the 'Financial Disclosure' box in the online system. 
+
+We are sorry that we cannot be more positive about your manuscript at this stage, but if you have any concerns or questions, please do not hesitate to contact us. 
+
+Sincerely, 
+
+Andreas Prlic 
+Software Editor 
+PLOS Computational Biology
+
+
+A link appears below if there are any accompanying review attachments. If you believe any reviews to be missing, please contact ploscompbiol@plos.org immediately: 
+
+
+
+
+Reviewer's Responses to Questions
+
+Comments to the Authors: 
+Please note here if the review is uploaded as an attachment.
+
+Reviewer #1: Uploaded Review.
+
+Reviewer #2: I have uploaded the review as an attachment
+
+
+Reviewers who wish to reveal their identities to the authors and other reviewers should include their name here (optional). These names will not be published with the manuscript, should it be accepted.
+
+Reviewer #1: (No Response)
+
+Reviewer #2: (No Response)
