@@ -336,10 +336,20 @@ The remaining simulation parameters have default values set to the same as for t
 
 \subsection*{Packaging}
 
-{\bf Ensembler} provides a packaging module which can be used to prepare models for other uses.
+\color{red}
+{\bf Ensembler} provides a packaging module which can be used to prepare models for subsequent downstream use, such as the use of distributed or cluster computing resources for the generation of MSMs~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2011:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 The {\tt package\_models} subcommand currently provides functions (specified via the {\tt -{}-package\_for} flag) for compressing models in preparation for data transfer, or for organizing them with the appropriate directory and file structure for production simulation on the distributed computing platform Folding@home~\cite{shirts-pande:science:2000:fah}.
-The module could easily be extended to add methods for preparing models for other purposes.
 For example, production simulations could alternatively be run using Copernicus~\cite{pronk:2011:copernicus,pronk:2015:copernicus}---a framework for performing parallel adaptive MD simulations--- or GPUGrid~\cite{buch:2010:gpugrid}---a distributing computing platform which relies on computational power voluntarily donated by the owners of nondedicated GPU-equipped computers.
+
+The module could easily be extended to add methods for preparing models for other purposes.
+For example, models can be exported into pseudotrajectories for the purpose of performing structural analyses across model ensembles using tools like MDTraj~\cite{mdtraj}.
+\color{orange}
+[Describe how packaging for distribution of models as trajectories works?]
+
+\color{red}
+We stress that, despite evidence suggesting that there is a correspondence between solution-state dynamics and structural diversity of related template proteins~\cite{friedland:plos-comput-biol:2009:conformational-dynamics}, all models---especially those derived from low sequence identity templates---are not necessarily representative of conformations thermally accessible to the template proteins of interest.
+Care must be exercised in the use and analysis of these models.
+\color{black}
 
 \subsection*{Other features}
 
@@ -369,6 +379,9 @@ For example, a translocation between the TK Abl1 and the pseudokinase Bcr is clo
 Protein kinase domains are thought to have multiple accessible metastable conformation states, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations~\cite{liu:ncb:2006:kinase-inhibitors-inactive-conformations}.
 Kinases are thus a particularly interesting subject for study with MSM methods~\cite{shukla-pande:nature-commun:2014:src-activation-msm}, and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
 
+\color{orange}
+[JDC: I think we need a plot of the number of structures available for each kinase.  This could be sorted from most structures to fewest, shown as a bar chart.]
+\color{black}
 We selected all human TK domains annotated in UniProt as targets, and all available structures of protein kinase domains (of any species) as templates, using the commands shown in Box~\ref{box:tk-gather-targets-templates}.
 This returned 93 target sequences and 4433 template structures, giving a total of \num{412269} target-template pairs.
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
@@ -465,7 +478,9 @@ To evaluate the variety of template sequence similarities relative to each targe
 This suggests an intuitive division into three categories, with \num{355712} models in the 0--35\% sequence identity range, \num{51330} models in the 35--55\% range, and \num{5227} models in the 55--100\% range.
 We then computed the RMSD distributions for the models created for each target (relative to the model derived from the template with highest sequence identity) Fig.~\ref{figure:rmsd-distributions}, to assess the diversity of conformations captured by the modeling pipeline.
 Furthermore, to understand the influence of sequence identity on the conformational similarities of the resulting models, the RMSD distributions were stratified based on the three sequence identity categories described above.
-This analysis indicates that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average.
+\color{red}
+This analysis indicates that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average, recapitulating the observation made years ago by Chothia and Lesk~\cite{chothia-lesk:embo-j:1986:rmsd-sequence-identity-relation}.
+\color{black}
 
 We also analyzed the potential energies of the models at the end of the implicit solvent MD refinement stage.
 These ranged from -14180~kT to -3160~kT, with a median of -9501~kT, mean of -9418~kT, and a standard deviation of 1198~kT (with a simulation temperature of 300~K).
@@ -644,6 +659,13 @@ Another limitation with the present version of {\bf Ensembler} involves the trea
 For example, the set of all human protein kinase domains listed in UniProt have a median length of 265 residues (mean 277) and a standard deviation of 45, yet the minimum and maximum lengths are 102 and 801 respectively.
 The latter value corresponds to the protein kinase domain of serine/threonine-kinase \emph{greatwall}, which includes a long insertion between the two main lobes of the catalytic domain.
 In principle, such insertions could be excluded from the generated models, though a number of questions would arise as to how best to approach this.
+
+{\bf Markov state model (MSM) construction and model utility.}
+We are actively utilizing {\bf Ensembler}-generated models to seed the construction of Markov state models (MSMs)~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
+While the observation that high sequence identity templates are likely to reflect accessible solution-phase conformations suggests that a number of these models occupy thermally accessible regions of configuration space~\cite{friedland:plos-comput-biol:2009:conformational-dynamics}, many models---especially those derived from very low sequence identity templates---are likely to be highly unrepresentative of conformations populated at equilibrium by the target protein.
+It is likely that even with hundreds of microseconds to milliseconds of aggregated dynamics, many of these poor quality models will remain trapped in inaccessible and irrelevant regions of configuration space.
+Standard approaches to MSM construction now employ an \emph{ergodic trimming} step~\cite{caflisch:jpcb:2011:msm-subgraph,msmbuilder} to prune away disconnected minor regions of configuration space, and this step is expected to be essential in the successful construction of MSMs using {\bf Ensembler}-derived models.
+
 \color{black}
 
 \subsection*{Conclusion}
