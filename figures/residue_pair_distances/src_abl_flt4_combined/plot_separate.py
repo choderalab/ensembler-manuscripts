@@ -143,6 +143,6 @@ cbar = sns.plt.colorbar(mappable=ax_models, cax=cbaxes, label='sequence identity
 # fig3.subplots_adjust(hspace=0)
 # sns.plt.tight_layout()
 
-sns.plt.savefig('distances_flt3.pdf', bbox_inches='tight')
-sns.plt.savefig('distances_flt3.png', bbox_inches='tight', dpi=300)
+sns.plt.savefig('distances_flt4.pdf', bbox_inches='tight')
+sns.plt.savefig('distances_flt4.png', bbox_inches='tight', dpi=300)
 # sns.plt.savefig('distances.png', dpi=300)
