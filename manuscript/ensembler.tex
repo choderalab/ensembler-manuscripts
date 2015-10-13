@@ -271,8 +271,9 @@ To minimize file storage requirements, {\bf Ensembler} uses the Python {\tt gzip
 The restraints used by MODELLER could potentially be used in alternative additional refinement schemes, and {\bf Ensembler} thus provides a flag ({\tt -{}-write\_modeller\_restraints\_file}) for optionally saving these restraints to file.
 This option is turned off by default, as the restraint files are relatively large (e.g.~$\sim$400 kB per model for protein kinase domain targets), and are not expected to be used by the majority of users.
 
-\color{orange}
-[Clarify how nonstandard amino acids are treated at this stage.]
+\color{blue}
+At this time, the alignment and modeling functions cannot be used to model non-standard amino acids, though we plan to be able to provide this functionality in future versions.
+Note that the Ensembler functions for target and template selection only include standard amino acids which match the UniProt canonical isoform sequence, and thus any set of targets and templates selected this way should be compatible with the Ensembler alignment and modeling functions.
 \color{black}
 
 \subsection*{Filtering of nearly identical models}
@@ -282,12 +283,6 @@ For this reason, and also to allow users to select for high diversity if they so
 The {\tt cluster} subcommand can thus be used to identify models which differ from other models in terms of RMSD distance by a user-specified cutoff.
 Clustering is performed using the regular spatial clustering algorithm~\cite{noe:jcp:2011:msm-review}, as implemented in the MSMBuilder Python library~\cite{msmbuilder}, which uses mdtraj~\cite{mdtraj} to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation.
 A minimum distance cutoff (which defaults to 0.6~\AA) is used to retain only a single model per cluster.
-
-\subsection*{{\color{red} Filtering by MolProbity score}}
-
-\color{orange}
-[Insert section about optional filtering by model quality scores, such as MolProbity or DOPE.]
-\color{black}
 
 \color{red}
 \subsection{Refinement of models and filtering of poor models by simulation}
@@ -315,10 +310,14 @@ The simulation length can also be controlled via the {\tt -{}-simlength} flag, a
 The default values are set as follows---timestep: 2~fs; temperature: 300~K; Langevin collision rate: 20~ps$^{-1}$; pH (used by OpenMM for protonation state assignment): 7.
 We also draw attention to a recent paper which indicates that lower Langevin collision rates may result in faster phase space exploration~\cite{basconi:jctc:2013:collision-rates}.
 
+\color{blue}
+For some studies, it may be useful to specify the protonation states of individual amino acids, rather than rely only on automatic protonation state assignment by OpenMM.
+The user can do this by listing the residue numbers and their protonation states in a configuration file ({\tt manual\_overrides.yaml}).
+The necessary formatting for the configuration file is specified in the software documentation, and a template file is written when initializing an {\bf Ensembler} project.
+Protonation states are specified by naming the appropriate residue variant type in the force field, e.g. {\tt `ASH'} for an aspartic acid residue, as opposed to the aspartate base {\tt `ASP'}.
+Any residues which do not have specific protonation states listed in the configuration file will have protonation states assigned automatically by OpenMM.
 \color{red}
-Currently, {\bf Ensembler} only supports residue definitions provided by the forcefield definition files---it does not yet have the ability to derive new forcefield parameters for uncommon amino acids, cofactors, or ions in a consistent way.
-\color{orange}
-[Explain how user-specified overrides can be used to specify specific protonation states or alternative/non-natural residues/mutations at this stage.]
+Note that {\bf Ensembler} currently only supports residue definitions provided by the forcefield definition files---it does not yet have the ability to derive new forcefield parameters for uncommon amino acids, cofactors, or ions in a consistent way.
 \color{black}
 
 \subsection{Solvation and NPT equilibration}
@@ -335,17 +334,38 @@ Further simulation parameters can be controlled via the API or via the CLI {\tt 
 Pressure control is performed with a Monte Carlo barostat as implemented in OpenMM, with a default pressure of 1~atm and a period of 50 timesteps.
 The remaining simulation parameters have default values set to the same as for the implicit solvent MD refinement.
 
+\subsection*{{\color{blue} Model validation with MolProbity score}}
+
+\color{blue}
+{\bf Ensembler} provides a function for validating model quality using MolProbity~\cite{molprobity:2007,molprobity:2010}---a widely used tool for validation of protein models, which provides a numerical score derived from features such as steric clashes between atoms, bond geometry, Ramachandran angles, sidechain rotamer outliers, backbone deviations, and the presence of cis-peptides.
+This function is accessed via the {\tt validate} subcommand, which for a given target will output a text file containing a list of model IDs sorted by validation score.
+The optional {\tt -{}-modeling\_stage} flag specifies which of the three main Ensembler modeling stages to validate---the initial comparative modeling stage, the implicit MD refinement stage, or the explicit MD refinement stage.
+If this flag is not used, Ensembler defaults to selecting the latest stage for which models have been generated.
+The output text file can be used to filter models based on validation score, for example by using the {\tt package\_models} subcommand.
+Protein model validation is a challenging problem and an active area of research for many groups, including the developers of {\bf Ensembler}.
+We plan to implement further validation methods in future versions of Ensembler.
+
+\color{black}
+
 \subsection*{Packaging}
 
 \color{red}
 {\bf Ensembler} provides a packaging module which can be used to prepare models for subsequent downstream use, such as the use of distributed or cluster computing resources for the generation of MSMs~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,noe:jcp:2011:msm-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 The {\tt package\_models} subcommand currently provides functions (specified via the {\tt -{}-package\_for} flag) for compressing models in preparation for data transfer, or for organizing them with the appropriate directory and file structure for production simulation on the distributed computing platform Folding@home~\cite{shirts-pande:science:2000:fah}.
-For example, production simulations could alternatively be run using Copernicus~\cite{pronk:2011:copernicus,pronk:2015:copernicus}---a framework for performing parallel adaptive MD simulations--- or GPUGrid~\cite{buch:2010:gpugrid}---a distributing computing platform which relies on computational power voluntarily donated by the owners of nondedicated GPU-equipped computers.
-
 The module could easily be extended to add methods for preparing models for other purposes.
-For example, models can be exported into pseudotrajectories for the purpose of performing structural analyses across model ensembles using tools like MDTraj~\cite{mdtraj}.
-\color{orange}
-[Describe how packaging for distribution of models as trajectories works?]
+For example, production simulations could alternatively be run using Copernicus~\cite{pronk:2011:copernicus,pronk:2015:copernicus}---a framework for performing parallel adaptive MD simulations--- or GPUGrid~\cite{buch:2010:gpugrid}---a distributing computing platform which relies on computational power voluntarily donated by the owners of nondedicated GPU-equipped computers. 
+
+\color{blue}
+An important use of the packaging stage is to filter models based on model quality.
+At the current time, the available filtering options are based on either target-template sequence identity or MolProbity validation score.
+The {\tt package\_models} subcommand includes optional flags for specifying a sequence identity cutoff (so that only models with a target-template sequence identity above the specified percentage are chosen), a MolProbity validation score cutoff (to choose only models with lower validation scores, which indicate better model quality), or a MolProbity validation score percentile (to choose only models with validation scores lower than the value at the given percentile).
+
+Models can also be exported into trajectory files for the purpose of performing structural analyses across model ensembles using tools like MDTraj~\cite{mdtraj}.
+This is done using the {\tt mktraj} subcommand, which writes model coordinates for a given target to a Gromacs~\cite{berendsen:1995:gromacs,lindahl:2001:gromacs} XTC format trajectory (chosen for its wide usage and data compression).
+Each frame in the trajectory represents a single model, and  models are sorted in descending order of target-template sequence identity.
+Also output for each target are a PDB coordinate file (for use as a topology input file) and a CSV file containing model IDs (in the same order as the frames in the trajectory file) and other data such as target-template sequence identity.
+Using the {\tt -{}-modeling\_stage} flag, models can be selected from any of three Ensembler modeling stages - after the initial comparative modeling stage, after implicit MD refinement, or after explicit MD refinement.
+If this flag is not used, Ensembler defaults to selecting the latest stage for which models have been generated.
 
 \color{red}
 We stress that, despite evidence suggesting that there is a correspondence between solution-state dynamics and structural diversity of related template proteins~\cite{friedland:plos-comput-biol:2009:conformational-dynamics}, all models---especially those derived from low sequence identity templates---are not necessarily representative of conformations thermally accessible to the template proteins of interest.
@@ -380,14 +400,25 @@ For example, a translocation between the TK Abl1 and the pseudokinase Bcr is clo
 Protein kinase domains are thought to have multiple accessible metastable conformation states, and much effort is directed at developing kinase inhibitor drugs which bind to and stabilize inactive conformations~\cite{liu:ncb:2006:kinase-inhibitors-inactive-conformations}.
 Kinases are thus a particularly interesting subject for study with MSM methods~\cite{shukla-pande:nature-commun:2014:src-activation-msm}, and this approach stands to benefit greatly from the ability to exploit the full body of available genomic and structural data within the kinase family, e.g.~by generating large numbers of starting configurations to be used in highly parallel MD simulation.
 
-\color{orange}
-[JDC: I think we need a plot of the number of structures available for each kinase.  This could be sorted from most structures to fewest, shown as a bar chart.]
-\color{black}
 We selected all human TK domains annotated in UniProt as targets, and all available structures of protein kinase domains (of any species) as templates, using the commands shown in Box~\ref{box:tk-gather-targets-templates}.
 This returned 93 target sequences and 4433 template structures, giving a total of \num{412269} target-template pairs.
 The templates were derived from 3028 individual PDB entries and encompassed 23 different species, with 3634 template structures from human kinase constructs.
 
 The resultant models are available as part of a supplementary dataset which can be downloaded from the Dryad Digital Repository (DOI: \href{http://datadryad.org/review?doi=doi:10.5061/dryad.7fg32}{10.5061/dryad.7fg32}).
+
+\color{blue}
+Figure~\ref{figure:nstructures-per-tk-target} shows the number of PDB structures available for each of the 93 target TK domains. This illustrates how a wide range of structural data is available for certain TK domains, while for others there is none. {\bf Ensembler} thus helps to overcome this unequal distribution of structural information when building protein models for simulation by exploiting homologous structural data from a wider range of protein kinase domains and species.
+\color{black}
+
+\begin{figure*}[tbp]
+    \includegraphics[width=\textwidth]{nstructures_per_tk_target/nstructures_per_tk_target.pdf}
+    \caption{{\bf Number of PDB structures available for each TK target.}
+    \color{blue}
+    Data is shown for each of the 93 TK kinase domains. The labels indicate the UniProt name for the target protein plus an index for the kinase domain (three of the selected proteins have two kinase domains). Each PDB chain is counted individually, and only chains which contain the target domain are counted.
+}
+    \label{figure:nstructures-per-tk-target}
+\end{figure*}
+
 
 \begin{codebox*}[tbp]
 \scriptsize
@@ -424,9 +455,8 @@ Template selection entails the selection of the sequences and structures of any 
 Crystallographic structures of kinase catalytic domains generally contain a significant number of missing residues (median 11, mean 14, standard deviation 13, max 102) due to the high mobility of several loops (Fig.~\ref{figure:loopmodel-nmissing-residues}, top), with a number of these missing spans being significant in length (median 5, mean 7, standard deviation 6, max 82; Fig.~\ref{figure:loopmodel-nmissing-residues}, bottom).
 To reduce the reliance on the MODELLER rapid model construction stage to reconstruct very long unresolved loops, unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
 Out of \num{3666} templates with one or more missing residues, \num{3134} were successfully remodeled by the Rosetta loop modeling stage (with success defined simply as program termination without error); most remodeling failures were attributable to unsatisfiable spatial constraints imposed by the original template structure.
-\color{orange}
-There was some correlation between remodeling failures and the number of missing residues (Fig.~\ref{figure:loopmodel-nmissing-residues}, top); templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
-[JDC: Are you sure there is a correlation here?  I think the difference in median was just due to the fact that the red (failed remodeling) templates could \emph{not} have 0 remodeled residues, or else they would not have been subjected to remodeling.  Or do you mean that you already excluded the 0 remodeled residue lengths from the blue (all templates) before computing the median, in which case you should mention that here?]
+\color{blue}
+There was some correlation between remodeling failures and the number of missing residues (Fig.~\ref{figure:loopmodel-nmissing-residues}, top); templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful (when excluding templates with no missing residues).
 \color{black}
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{389067} (94\%) surviving models across all TKs.
@@ -486,11 +516,18 @@ We then computed the RMSD distributions for the models created for each target (
 Furthermore, to understand the influence of sequence identity on the conformational similarities of the resulting models, the RMSD distributions were stratified based on the three sequence identity categories described above.
 \color{red}
 This analysis indicates that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average, recapitulating the observation made years ago by Chothia and Lesk~\cite{chothia-lesk:embo-j:1986:rmsd-sequence-identity-relation}.
-\color{black}
 
+\color{blue}
+We also used the {\tt ensembler validate} subcommand to subject the refined models to analysis with MolProbity~\cite{molprobity:2007,molprobity:2010}.
+The MolProbity scores varied from 0.92 to 4.80, with a median of 3.84, a mean of 3.22, and a standard deviation of 1.07.
+Lower numbers represent better quality models.
+When stratified by the same sequence identity ranges as above, the mean scores were as follows: 2.96 (55--100\% sequence identity), 3.13 (35--55\% sequence identity), 3.24 (0--35\% sequence identity).
+This indicates that models with lower target-template sequence identities tend to be lower quality according to MolProbity analysis, as would be expected.
+
+\color{black}
 We also analyzed the potential energies of the models at the end of the implicit solvent MD refinement stage.
 These ranged from -14180~kT to -3160~kT, with a median of -9501~kT, mean of -9418~kT, and a standard deviation of 1198~kT (with a simulation temperature of 300~K).
-The distributions---stratified using the same sequence identity ranges as above---are plotted in Fig.~\ref{figure:energies-implicit}, indicating that higher sequence identity templates tend to result in slightly lower energy models.
+The distributions---stratified using the same sequence identity ranges again---are plotted in Fig.~\ref{figure:energies-implicit}, indicating that higher sequence identity templates tend to result in slightly lower energy models.
 Of the \num{4973} models which failed to complete the implicit refinement MD stage, all except 9 failed within the first 1~ps of simulation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -575,9 +612,12 @@ We use the residue numbering schemes for chicken Src (commonly employed in the l
 Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC)~\cite{xu:1999:2src} and active (PDB code: 1Y57)~\cite{cowan-jacob:2005:1y57} states.
 One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
 These three residues are also well conserved~\cite{kannan:jmb:2005:kinase-regulation}, and a number of experimental and simulation studies have suggested that this electrostatic switching process plays a role in a regulatory mechanism shared across the protein kinase family~\cite{shukla-pande:nature-commun:2014:src-activation-msm, foda:nat-comm:2015:src, ozkirimli:prot-sci:2008:src}.
-As such, we have projected the {\bf Ensembler} models for \emph{Src} and \emph{Abl1} onto a space consisting of the distances between these two residue pairs (Fig.~\ref{figure:pair-distances}).
-The models show strong coverage of regions in which either of the electrostatic interactions is fully formed (for models across all levels of target-template sequence identity), as well as a wide range of regions in-between (mainly models with low sequence identity).
+As such, we have plotted the distance between these two residue pairs for the {\bf Ensembler} models for \emph{Src} and \emph{Abl1}, as well as \emph{Flt4} (Fig.~\ref{figure:pair-distances}).
+The models all show strong coverage of regions in which either of the electrostatic interactions is fully formed (for models across all levels of target-template sequence identity), as well as a wide range of regions in-between (mainly models with low sequence identity).
 We thus expect that such a set of models, if used as starting configurations for highly parallel MD simulation, could greatly aid in sampling of functionally relevant conformational states.
+\color{blue}
+The \emph{Flt4} models are of particular note, as there are no available crystal structures of the kinase domain of this TK protein (which is involved in tumor angiogenesis and lymphangiogenesis~\cite{Su:2006:flt4cancer}), yet the models generated here include structural motifs which are conserved and of known importance to other proteins of the same family.
+\color{black}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIGURE: Residue pair distance plots
@@ -587,13 +627,17 @@ We thus expect that such a set of models, if used as starting configurations for
 
     % \includegraphics[width=1.0\columnwidth]{residue_pair_distances/src_abl_combined/distances.pdf}
     \subfloat[Src]{\label{figure:src-distances}%
-       \includegraphics[height=0.42\textwidth]{residue_pair_distances/src_abl_combined/distances_src.png}
+       \includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_src.png}
     }
     \subfloat[Abl]{\label{figure:abl-distances}%
-       \includegraphics[height=0.42\textwidth]{residue_pair_distances/src_abl_combined/distances_abl.png}
+       \includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_abl.png}
+    }
+    \subfloat[Flt4]{\label{figure:flt4-distances}%
+       \includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_flt4.png}
     }
 
-    \caption{{\bf Src and Abl1 models projected onto the distances between two conserved residue pairs, colored by sequence identity.}
+    \caption{{\bf Src, Abl1, and Flt4 models projected onto the distances between two conserved residue pairs, colored by sequence identity.}
+    \color{blue}
     Two Src structures (PDB entries 1Y57~\cite{cowan-jacob:2005:1y57} and 2SRC~\cite{xu:1999:2src}) are projected onto the plots for reference, representing active and inactive states respectively.
     These structures and the residue pairs analyzed here are depicted in Fig.~\ref{figure:src-ref-structures}.
     Distances are measured between the center of masses of the three terminal sidechain heavy atoms of each residue.
@@ -669,7 +713,7 @@ Future extensions to {\bf Ensembler} could transfer cofactor and ion coordinates
 {\bf Post-translationally modified amino acids and other molecules without forcefield parameters.}
 A major challenge in the preparation of simulations of proteins of interest is the wide variety of post-translational modifications possible that are often functionally or structurally relevant.
 Often, forcefields lack parameters for these residues, or for other cofactors or ligands that might be vital to probing the relevant structural dynamics of these systems.
-While tools such as Antechamber~\cite{gaff1,gaff2} can rapidly generate small molecule parameters in an automated manner, the parameterization of polymeric residues or covalently attached cofactors is much more challenging.
+While tools such as Antechamber~\cite{gaff,gaff2} can rapidly generate small molecule parameters in an automated manner, the parameterization of polymeric residues or covalently attached cofactors is much more challenging.
 In addition, small molecule forcefields are generally tied to specific corresponding protein and nucleic acid forcefields, meaning that different procedures may be needed to generate consistent parameters.
 
 {\bf Long insertions and deletions.}

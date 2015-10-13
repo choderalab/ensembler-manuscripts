@@ -8,6 +8,10 @@ df = pd.read_csv('loopmodel_data.csv', converters={'missing_resi_spans': literal
 successful = df[df.no_missing_residues == False][df.successful == True]
 unsuccessful = df[df.no_missing_residues == False][df.successful == False]
 
+print df.describe()
+print successful.describe()
+print unsuccessful.describe()
+
 missing_resis_spans = np.array([x for sublist in df.missing_resi_spans for x in sublist])
 
 # ====

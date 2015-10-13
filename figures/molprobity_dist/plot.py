@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 data_dir = os.path.join('..', '..', 'data')
 targets = open(os.path.join(data_dir, 'TKs.txt')).read().splitlines()
 
-# Get data from rmsds.csv and validation file, and do left join on templateid
+# Get data from rmsds.csv and validation file, and do inner join on templateid
 
 for target in targets:
     models_target_dir = os.path.join(data_dir, 'models', target)
@@ -50,6 +50,11 @@ seqid_ranges_labels = deepcopy(seqid_ranges)
 
 seqid_ranges[-1][-1] = 101.
 
+print combined_dfs.molprobity_score.describe()
+
+for seqid_range in seqid_ranges:
+    print combined_dfs[combined_dfs.seqid >= seqid_range[0]][combined_dfs.seqid < seqid_range[1]].molprobity_score.describe()
+
 # ====================
 # Plotting
 # ====================
@@ -62,7 +67,6 @@ palette = sns.color_palette('GnBu_d', n_colors=3)[::-1]
 
 for i, seqid_range in enumerate(seqid_ranges):
     df_seqid_bin = combined_dfs[combined_dfs.seqid >= seqid_range[0]][combined_dfs.seqid < seqid_range[1]]
-    print seqid_range, len(df_seqid_bin)
     label = '%.0f-%.0f ($n=$%d)' % (seqid_ranges_labels[i][0], seqid_ranges_labels[i][1], len(df_seqid_bin))
 
     sns.kdeplot(df_seqid_bin.molprobity_score, label=label, color=palette[i], shade=True)
