@@ -163,7 +163,7 @@ While the current version of {\bf Ensembler} only codifies some of these choices
 \section{Design and Implementation}
 
 {\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API to allow integration of its components into other applications.
-All command-line and API information in this article refers to the \href{https://github.com/choderalab/ensembler/tree/v1.0.2}{version 1.0.2 release of Ensembler}.
+All command-line and API information in this article refers to the \href{https://github.com/choderalab/ensembler/releases/tag/v1.0.6}{version 1.0.6 release of Ensembler}.
 Up-to-date documentation can be found at \href{http://ensembler.readthedocs.org/en/latest/}{ensembler.readthedocs.org}.
 
 The {\bf Ensembler} modeling pipeline comprises a series of stages which are performed in a defined order. 
@@ -657,8 +657,9 @@ The \emph{Flt4} models (Fig.~\ref{figure:src-ref-structures}c) are of particular
 \subsection*{Availability}
 
 The code for {\bf Ensembler} is hosted on the collaborative open source software development platform GitHub (\href{http://github.com/choderalab/ensembler}{github.com/choderalab/ensembler}).
-The latest release can be installed via the {\tt conda} package manager for Python (\href{http://conda.pydata.org}{conda.pydata.org}), using the two commands shown in Box~\ref{box:installation}.
-This will install all dependencies except for MODELLER and Rosetta, which are not available through the {\tt conda} package manager, and thus must be installed separately by the user.
+The latest release can be installed via the {\tt conda} package manager for Python (\href{http://conda.pydata.org}{conda.pydata.org}), using the commands shown in Box~\ref{box:installation}.
+This will install all required dependencies, though a license must first be obtained for MODELLER.
+The optional dependencies Rosetta and MolProbity are not available through the {\tt conda} package manager, and thus must be installed separately by the user according to the instructions for those packages..
 The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
 Documentation can be found at \href{http://ensembler.readthedocs.org/en/latest/}{ensembler.readthedocs.org}.
 
@@ -668,7 +669,9 @@ This contains the TK models described in the \ref{section:results} section, gene
 \begin{codebox}[tbp]
 \scriptsize
 \begin{Verbatim}[frame=single]
-conda config -add channels https://conda.binstar.org/omnia
+export KEY_MODELLER="Modeller license key"
+conda config -add channels https://conda.anaconda.org/omnia
+conda config -add channels https://conda.anaconda.org/salilab
 conda install ensembler
 \end{Verbatim}
 \caption{{\bf Ensembler installation using {\tt conda}.}
