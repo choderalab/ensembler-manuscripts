@@ -209,7 +209,7 @@ Target sequences can also be defined manually (or from another program) by provi
 The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
 These templates can be specified manually, or using the {\tt ensembler gather\_templates} subcommand to automatically select templates based on a search of the Protein Data Bank (PDB) or UniProt.
 \color{red}
-A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, guaranteeing homology and some degree of sequence identity between targets and templates.
+A recommended approach is to select templates from UniProt which belong to the same protein family as the targets, establishing homology and some degree of sequence identity between targets and templates.
 \color{black}
 
 The {\tt ensembler gather\_templates} subcommand provides methods for selecting template structures from either UniProt or the PDB (\url{http://www.rcsb.org/pdb}), specified by the {\tt -{}-gather\_from} flag.
@@ -334,7 +334,7 @@ Further simulation parameters can be controlled via the API or via the CLI {\tt 
 Pressure control is performed with a Monte Carlo barostat as implemented in OpenMM, with a default pressure of 1~atm and a period of 50 timesteps.
 The remaining simulation parameters have default values set to the same as for the implicit solvent MD refinement.
 
-\subsection*{{\color{blue} Model validation with MolProbity score}}
+\subsection*{{\color{red} Model validation with MolProbity score}}
 
 \color{red}
 {\bf Ensembler} provides a function for validating model quality and filtering models using MolProbity~\cite{molprobity:2007,molprobity:2010}---a widely used tool for validation of protein models, which provides a numerical score derived from features such as steric clashes between atoms, bond geometry, Ramachandran angles, sidechain rotamer outliers, backbone deviations, and the presence of cis-peptides.
@@ -674,7 +674,7 @@ conda config -add channels https://conda.anaconda.org/omnia
 conda config -add channels https://conda.anaconda.org/salilab
 conda install ensembler
 \end{Verbatim}
-\caption{{\bf Ensembler installation using {\tt conda}.}
+\caption{{\bf Ensembler installation using {\tt conda} in a {\tt bash} shell. A license for MODELLER must first be obtained, and the license key should be used in place of the text {\tt "Modeller license key"}.}
 }
 \label{box:installation}
 \end{codebox}
