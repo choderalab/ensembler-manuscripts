@@ -593,7 +593,7 @@ Conversely, the lower sequence identity models could be expected to help push a 
 \color{red}
 {\bf Comparison with known biochemically relevant conformations.}
 To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published structural biology literature on functionally relevant conformations, we have focused on two residue pair distances thought to be important order parameters for the regulation of protein kinase domain activity.
-We use the residue numbering schemes for chicken Src (commonly employed in the literature even in reference to human Src)~\cite{xu:1999:2src, cowan-jacob:2005:1y57} and human Abl1 isoform A~\cite{young:2006:2f4j, cowan-jacob:2006:2hyy, levinson:2006:2g1t} respectively; the exact numbering schemes are provided in Appendix \ref{si:residue-numbering-schemes}.
+We use the residue numbering schemes for chicken Src (commonly employed in the literature even in reference to human Src)~\cite{xu:1999:2src, cowan-jacob:2005:1y57} and human Abl1 isoform A~\cite{young:2006:2f4j, cowan-jacob:2006:2hyy, levinson:2006:2g1t} respectively; the exact numbering schemes are provided in Fig.~\ref{figure:residue-numbering-schemes}.
 \color{black}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -771,16 +771,17 @@ PBG acknowledges partial funding support from the Weill Cornell Graduate School 
 
 \onecolumngrid
 \newpage
-\appendix
-\setcounter{figure}{0}
 
-\renewcommand{\thesection}{\arabic{section}}
-\section{Sequences and residue numbering schemes for Src and Abl1}
-\label{si:residue-numbering-schemes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE: Sequences and residue numbering schemes for Src and Abl1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Kinase catalytic domains are highlighted in red, and the conserved residues analyzed in the main text (Figs.~\ref{figure:src-ref-structures} and~\ref{figure:pair-distances}) are highlighted with yellow background.
+\begin{figure}[tb]
 
-\subsubsection*{Human Abl1 sequence}
+\begin{centering}
+\emph{Human Abl1 sequence}
+
+\end{centering}
 
 \begin{alltt}
 1     MLEICLKLVG CKSKKGLSSS SSCYLEEALQ RPVASDFEPQ GLSEAARWNS KENLLAGPSE    60
@@ -804,7 +805,10 @@ Kinase catalytic domains are highlighted in red, and the conserved residues anal
 1081  FAFREAINKL ENNLRELQIC PATAGSGPAA TQDFSKLLSS VKEISDIVQR             1130
 \end{alltt}
 
-\subsubsection*{Sequences for human and chicken Src, aligned using Clustal Omega}
+\begin{centering}
+\emph{Sequences for human and chicken Src, aligned using Clustal Omega}
+
+\end{centering}
 
 \begin{alltt}
 SRC_HUMAN   1     MGSNKSKPKD ASQRRRSLEP AENVHGAGGG AFPASQTPSK PASADGHRGP SAAFAPAAAE    60
@@ -836,7 +840,10 @@ SRC_CHICK   478   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKDPEERP TFEYLQAFLE DYF}TS
                   ********** ********** ****:***** ********** ********** ******
 \end{alltt}
 
-% \section{Figures}
-
+    \caption{{\bf Sequences and residue numbering schemes for Src and Abl1.}
+Kinase catalytic domains are highlighted in red, and the conserved residues analyzed in the main text (Figs.~\ref{figure:src-ref-structures} and~\ref{figure:pair-distances}) are highlighted with yellow background.
+  }
+  \label{figure:residue-numbering-schemes}
+\end{figure}
 
 \end{document}
