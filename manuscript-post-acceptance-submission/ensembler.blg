@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d (TeX Live 2014)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: ensembler.aux
+The style file: prsty.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: ensemblerNotes.bib
+Database file #2: ensembler.bib.bib
+Warning--Warning: volume missing in entry pronk:2015:copernicus.
+Warning--Warning: pages missing in entry pronk:2015:copernicus.
+Warning--Warning: volume missing in entry mdtraj.
+Warning--Warning: pages missing in entry mdtraj.
+You've used 75 entries,
+            1909 wiz_defined-function locations,
+            949 strings with 21712 characters,
+and the built_in function-call counts, 18521 in all, are:
+= -- 526
+> -- 1436
+< -- 0
++ -- 454
+- -- 379
+* -- 1928
+:= -- 2559
+add.period$ -- 75
+call.type$ -- 75
+change.case$ -- 0
+chr.to.int$ -- 0
+cite$ -- 79
+duplicate$ -- 768
+empty$ -- 1465
+format.name$ -- 455
+if$ -- 4310
+int.to.chr$ -- 0
+int.to.str$ -- 75
+missing$ -- 0
+newline$ -- 228
+num.names$ -- 76
+pop$ -- 456
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1147
+stack$ -- 0
+substring$ -- 869
+swap$ -- 531
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 18
+warning$ -- 4
+while$ -- 153
+width$ -- 77
+write$ -- 377
+(There were 4 warnings)

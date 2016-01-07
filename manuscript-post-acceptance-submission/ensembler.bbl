@@ -1,0 +1,307 @@
+\begin{thebibliography}{10}
+
+\bibitem{craik:science:2009:trapping-moving-targets}
+G.~M. Lee and C.~S. Craik, Science {\bf 324},  213  (2009).
+
+\bibitem{eastman:jctc:2012:openmm}
+P. Eastman, M.~S. Friedrichs, J.~D. Chodera, R.~J. Radmer, C.~M. Bruns, J.~P.
+  Ku, K.~A. Beauchamp, T.~J. Lane, L.-P. Wang, D. Shukla, and V.~S. Pande, J.
+  Chem. Theory Comput. {\bf 9},  461  (2012).
+
+\bibitem{walker:jctc:2013:amber-gpu}
+R. Salomon-Ferrer, A.~W. G\"{o}tz, D. Poole, S.~L. Grand, and R.~C. Walker, J.
+  Chem. Theor. Comput. {\bf 9},  3878  (2013).
+
+\bibitem{shirts-pande:science:2000:fah}
+M. Shirts and V.~S. Pande, Science {\bf 290},  1903  (2000).
+
+\bibitem{pronk:2011:copernicus}
+S. Pronk, P. Larsson, I. Pouya, G.~R. Bowman, I.~S. Haque, K. Beauchamp, B.
+  Hess, V.~S. Pande, P.~M. Kasson, and E. Lindahl,  in {\em Proceedings of 2011
+  {International} {Conference} for {High} {Performance} {Computing},
+  {Networking}, {Storage} and {Analysis}}, {\em {SC} '11} (ACM, New York, NY,
+  USA, 2011), pp.\ 60:1--60:10.
+
+\bibitem{pronk:2015:copernicus}
+S. Pronk, I. Pouya, M. Lundborg, G. Rotskoff, B. Wes\'{e}n, P.~M. Kasson, and
+  E. Lindahl, Journal of Chemical Theory and Computation  (2015).
+
+\bibitem{buch:2010:gpugrid}
+I. Buch, M.~J. Harvey, T. Giorgino, D.~P. Anderson, and G. De~Fabritiis,
+  Journal of Chemical Information and Modeling {\bf 50},  397  (2010).
+
+\bibitem{pande-beauchamp-bowman:2010:methods:markov-model-review}
+V.~S. Pande, K. Beauchamp, and G.~R. Bowman, Methods {\bf 52},  99  (2010).
+
+\bibitem{noe:jcp:2011:msm-review}
+J.-H. Prinz, H. Wu, M. Sarich, B. Keller, M. Fischbach, M. Held, J.~D. Chodera,
+  C. Sch\"{u}tte, and F. No\'{e}, J. Chem. Phys. {\bf 134},  174105  (2011).
+
+\bibitem{chodera-noe:curr-opin-struct-biol:2014:msm-review}
+J.~D. Chodera and F. No\'{e}, Curr. Opin. Struct. Biol. {\bf 25},  135  (2014).
+
+\bibitem{moult:proteins:2014:casp10}
+J. Moult, K. Fidelis, A. Kryshtafovych, T. Schwede, and A. Tramontano,
+  Proteins: Structure, Function, and Bioinformatics {\bf 82},  1  (2014).
+
+\bibitem{baker:science:2001:structure-prediction-review}
+D. Baker and A. {\v{S}ali}, Science {\bf 294},  93  (2001).
+
+\bibitem{baker:structure:2013:rosettacm}
+Y. Song, F. {DiMaio}, R.~Y.-R. Wang, D. Kim, C. Miles, T. Brunette, J.
+  Thompson, and D. Baker, Structure {\bf 21},  1735  (2013).
+
+\bibitem{yang:nature-methods:2015:i-tasser-suite}
+J. Yang, R. Yan, A. Roy, D. Xu, J. Poisson, and Y. Zhang, Nature Methods {\bf
+  12},  7  (2015).
+
+\bibitem{daggett:structure:2010:dynameomics}
+M.~W. {van der Kamp}, R.~D. Schaeffer, A.~L. Jonsson, A.~D. Scouras, A.~M.
+  Simms, R.~D. Toofanny, N.~C. Benson, P.~C. Anderson, E.~D. Merkley, S.
+  Rysavy, D. Bromley, D.~A.~C. Beck, and V. Daggett, Structure {\bf 18},  423
+  (2010).
+
+\bibitem{friedland:plos-comput-biol:2009:conformational-dynamics}
+G.~D. Friedland, N.-A. Lakomek, C. Griesinger, J. Meiler, and T. Kortemme, PLoS
+  Comput. Biol. {\bf 5},  e1000393  (2009).
+
+\bibitem{sali:2012:allostery-modeling}
+P. Weinkam, J. Pons, and A. Sali, Proceedings of the National Academy of
+  Sciences of the United States of America {\bf 109},  4875  (2012).
+
+\bibitem{msmbuilder}
+K.~A. Beauchamp, G.~R. Bowman, T.~J. Lane, L. Maibaum, I.~S. Haque, and V.~S.
+  Pande, Journal of Chemical Theory and Computation {\bf 7},  3412  (2011).
+
+\bibitem{caflisch:jpcb:2011:msm-subgraph}
+R. Scalco and A. Caflisch, The Journal of Physical Chemistry. B {\bf 115},
+  6358  (2011).
+
+\bibitem{uniprot:2015}
+T.~U. Consortium, Nucleic Acids Research {\bf 43},  D204  (2015).
+
+\bibitem{velankar:2013:sifts}
+S. Velankar, J.~M. Dana, J. Jacobsen, G. van Ginkel, P.~J. Gane, J. Luo, T.~J.
+  Oldfield, C. O'Donovan, M.-J. Martin, and G.~J. Kleywegt, Nucleic Acids
+  Research {\bf 41},  D483  (2013).
+
+\bibitem{qian:nature:2007:modeller}
+B. Qian, S. Raman, R. Das, P. Bradley, A.~J. McCoy, R.~J. Read, and D. Baker,
+  Nature {\bf 450},  259  (2007).
+
+\bibitem{wang:jmb:2007:modeller}
+C. Wang, P. Bradley, and D. Baker, Journal of Molecular Biology {\bf 373},  503
+   (2007).
+
+\bibitem{fiser:prot-sci:2000:modeller}
+A. Fiser, R.~K.~G. Do, and A. {\v{S}ali}, Protein Science {\bf 9},  1753
+  (2000).
+
+\bibitem{sali:jmb:1993:modeller}
+A. {\v{S}ali} and T.~L. Blundell, Journal of Molecular Biology {\bf 234},  779
+  (1993).
+
+\bibitem{cock:2009:biopython}
+P.~J.~A. Cock, T. Antao, J.~T. Chang, B.~A. Chapman, C.~J. Cox, A. Dalke, I.
+  Friedberg, T. Hamelryck, F. Kauff, B. Wilczynski, and M.~J.~L. de~Hoon,
+  Bioinformatics (Oxford, England) {\bf 25},  1422  (2009).
+
+\bibitem{gonnet:science:1992:exhaustive-matching}
+G.~H. Gonnet, M.~A. Cohen, and S.~A. Brenner, Science {\bf 256},  1443  (1992).
+
+\bibitem{thompson:2011:msa-review}
+J.~D. Thompson, B. Linard, O. Lecompte, and O. Poch, PLoS ONE {\bf 6},  e18093
+  (2011).
+
+\bibitem{pei:2008:promals3d}
+J. Pei, B.-H. Kim, and N.~V. Grishin, Nucleic Acids Research {\bf 36},  2295
+  (2008).
+
+\bibitem{expresso}
+F. Armougom, S. Moretti, O. Poirot, S. Audic, P. Dumas, B. Schaeli, V. Keduas,
+  and C. Notredame, Nucleic Acids Research {\bf 34},  W604  (2006).
+
+\bibitem{3dcoffee}
+O. Poirot, K. Suhre, C. Abergel, E. O'Toole, and C. Notredame, Nucleic Acids
+  Research {\bf 32},  W37  (2004).
+
+\bibitem{mdtraj}
+R.~T. McGibbon, K.~A. Beauchamp, C.~R. Schwantes, L.-P. Wang, C.~X.
+  Hern{\'a}ndez, M.~P. Harrigan, T.~J. Lane, J.~M. Swails, and V.~S. Pande,
+  bioRxiv  (2014).
+
+\bibitem{theobald:acta-cryst-a:2005:qcp}
+D.~L. Theobald, Acta Cryst. A {\bf 61},  478  (2005).
+
+\bibitem{theobald:j-comput-chem:2010:qcp}
+P. Liu, D.~K. Agrafiotis, and D.~L. Theobald, J. Comput. Chem. {\bf 31},  1561
+  (2010).
+
+\bibitem{theobald:j-comput-chem:2011:qcp}
+P. Liu, D.~K. Agrafiotis, and D.~L. Theobald, J. Comput. Chem. {\bf 32},  185
+  (2011).
+
+\bibitem{maccallum:prot:2011:casp-refinement}
+J.~L. MacCallum, A. P{\'e}rez, M.~J. Schnieders, L. Hua, M.~P. Jacobson, and
+  K.~A. Dill, Proteins: Structure, Function, and Bioinformatics {\bf 79},  74
+  (2011).
+
+\bibitem{zhang:curr-opin-struct-biol:2009:structure-prediction}
+Y. Zhang, Current Opinion in Structural Biology {\bf 19},  145  (2009).
+
+\bibitem{raval:prot:2012:long-timescale-md-refinement}
+A. Raval, S. Piana, M.~P. Eastwood, R.~O. Dror, and D.~E. Shaw, Proteins:
+  Structure, Function, and Bioinformatics {\bf 80},  2071  (2012).
+
+\bibitem{lbfgs}
+D.~C. Liu and J. Nocedal, Mathematical Programming {\bf 45},  503  (1989).
+
+\bibitem{amber99sb-ildn}
+K. Lindorff-Larsen, S.~P. anad Kim~Palmo, P. Maragakis, J.~L. Klepeis, R.~O.
+  Dror, and D.~E. Shaw, Proteins {\bf 78},  1950  (2010).
+
+\bibitem{gbsa-obc1}
+A. Onufriev, D. Bashford, and D.~A. Case, Proteins {\bf 55},  383  (2004).
+
+\bibitem{basconi:jctc:2013:collision-rates}
+J.~E. Basconi and M.~R. Shirts, Journal of Chemical Theory and Computation {\bf
+  9},  2887  (2013).
+
+\bibitem{tip3p}
+W.~L. Jorgensen, J. Chandrasekhar, J.~D. Madura, R.~W. Impey, and M.~L. Klein,
+  Journal of Chemical Physics {\bf 79},  926  (1983).
+
+\bibitem{tip4p-ew}
+H.~W. Horn, W.~C. Swope, J.~W. Pitera, J.~D. Madura, T.~J. Dick, G.~L. Hura,
+  and T. Head-Gordon, The Journal of Chemical Physics {\bf 120},  9665  (2004).
+
+\bibitem{molprobity:2007}
+I.~W. Davis, A. Leaver-Fay, V.~B. Chen, J.~N. Block, G.~J. Kapral, X. Wang,
+  L.~W. Murray, W.~B. Arendall, J. Snoeyink, J.~S. Richardson, and D.~C.
+  Richardson, Nucleic Acids Research {\bf 35},  W375  (2007).
+
+\bibitem{molprobity:2010}
+V.~B. Chen, W.~B. Arendall, J.~J. Headd, D.~A. Keedy, R.~M. Immormino, G.~J.
+  Kapral, L.~W. Murray, J.~S. Richardson, and D.~C. Richardson, Acta
+  Crystallographica. Section D, Biological Crystallography {\bf 66},  12
+  (2010).
+
+\bibitem{berendsen:1995:gromacs}
+H.~J.~C. Berendsen, D. van~der Spoel, and R. van Drunen, Comp. Phys. Comm. {\bf
+  91},  43  (1995).
+
+\bibitem{lindahl:2001:gromacs}
+E. Lindahl, B. Hess, and D. van~der Spoel, J. Mol. Model. {\bf 7},  306
+  (2001).
+
+\bibitem{krause:nejm:2005:tks-cancer}
+D.~S. Krause and R.~A. Van~Etten, New England Journal of Medicine {\bf 353},
+  172  (2005).
+
+\bibitem{greuber:2013:abl-cancer-review}
+E.~K. Greuber, P. Smith-Pearson, J. Wang, and A.~M. Pendergast, Nature Reviews
+  Cancer {\bf 13},  559  (2013).
+
+\bibitem{kim:2009:src-cancer-review}
+L.~C. Kim, L. Song, and E.~B. Haura, Nature Reviews Clinical Oncology {\bf 6},
+  587  (2009).
+
+\bibitem{liu:ncb:2006:kinase-inhibitors-inactive-conformations}
+Y. Liu and N.~S. Gray, Nature Chemical Biology {\bf 2},  358  (2006).
+
+\bibitem{shukla-pande:nature-commun:2014:src-activation-msm}
+D. Shukla, Y. Meng, B. Roux, and V.~S. Pande, Nature Commun. {\bf 5},  3397
+  (2014).
+
+\bibitem{chothia-lesk:embo-j:1986:rmsd-sequence-identity-relation}
+C. Chothia and A.~M. Lesk, EMBO J. {\bf 5},  823  (1986).
+
+\bibitem{roux:pnas:2013:abl-imatinib}
+Y.-L. Lin, Y. Meng, W. Jiang, and B. Roux, Proc. Natl. Acad. Sci. USA {\bf
+  110},  1664  (2013).
+
+\bibitem{xu:1999:2src}
+W. Xu, A. Doshi, M. Lei, M.~J. Eck, and S.~C. Harrison, Molecular Cell {\bf 3},
+   629  (1999).
+
+\bibitem{cowan-jacob:2005:1y57}
+S.~W. Cowan-Jacob, G. Fendrich, P.~W. Manley, W. Jahnke, D. Fabbro, J.
+  Liebetanz, and T. Meyer, Structure {\bf 13},  861  (2005).
+
+\bibitem{young:2006:2f4j}
+M.~A. Young, N.~P. Shah, L.~H. Chao, M. Seeliger, Z.~V. Milanov, W.~H. Biggs,
+  D.~K. Treiber, H.~K. Patel, P.~P. Zarrinkar, D.~J. Lockhart, C.~L. Sawyers,
+  and J. Kuriyan, Cancer Research {\bf 66},  1007  (2006).
+
+\bibitem{cowan-jacob:2006:2hyy}
+S.~W. Cowan-Jacob, G. Fendrich, A. Floersheimer, P. Furet, J. Liebetanz, G.
+  Rummel, P. Rheinberger, M. Centeleghe, D. Fabbro, and P.~W. Manley, Acta
+  Crystallographica Section D: Biological Crystallography {\bf 63},  80
+  (2006).
+
+\bibitem{levinson:2006:2g1t}
+N.~M. Levinson, O. Kuchment, K. Shen, M.~A. Young, M. Koldobskiy, M. Karplus,
+  P.~A. Cole, and J. Kuriyan, PLoS Biol {\bf 4},  e144  (2006).
+
+\bibitem{kannan:jmb:2005:kinase-regulation}
+N. Kannan and A.~F. Neuwald, Journal of Molecular Biology {\bf 351},  956
+  (2005).
+
+\bibitem{foda:nat-comm:2015:src}
+Z.~H. Foda, Y. Shan, E.~T. Kim, D.~E. Shaw, and M.~A. Seeliger, Nature
+  Communications {\bf 6},  5939  (2015).
+
+\bibitem{ozkirimli:prot-sci:2008:src}
+E. Ozkirimli, S.~S. Yadav, W.~T. Miller, and C.~B. Post, Protein Science : A
+  Publication of the Protein Society {\bf 17},  1871  (2008).
+
+\bibitem{Su:2006:flt4cancer}
+J.-L. Su, P.-C. Yang, J.-Y. Shih, C.-Y. Yang, L.-H. Wei, C.-Y. Hsieh, C.-H.
+  Chou, Y.-M. Jeng, M.-Y. Wang, K.-J. Chang, M.-C. Hung, and M.-L. Kuo, Cancer
+  Cell {\bf 9},  209  (2006).
+
+\bibitem{schnieders:biophys-j:2010:x-ray-refinement}
+T.~D. Fenn, M.~J. Schnieders, A.~T. Brunger, and V.~S. Pande, Biophysical
+  Journal {\bf 98},  2984  (2010).
+
+\bibitem{schnieders:jctc:2011:space-group-pme}
+M.~J. Schnieders, T.~D. Fenn, and V.~S. Pande, Journal of Chemical Theory and
+  Computation {\bf 7},  1141  (2011).
+
+\bibitem{nagar:cell:2003:abl-1opl}
+B. Nagar, O. Hantschel, M.~A. Young, K. Scheffzek, D. Veach, W. Bornmann, B.
+  Clarkson, G. Superti-Furga, and J. Kuriyan, Cell {\bf 112},  859  (2003).
+
+\bibitem{shan:pnas:2009:abl}
+Y. Shan, M.~A. Seeliger, M.~P. Eastwood, F. Frank, H. Xu, M.~Ã. Jensen, R.~O.
+  Dror, J. Kuriyan, and D.~E. Shaw, Proceedings of the National Academy of
+  Sciences {\bf 106},  139  (2009).
+
+\bibitem{alexov-gunner:biophys-j:1997:mcce2}
+E.~G. Alexov and M.~R. Gunner, Biophys. J. {\bf 72},  2075  (1997).
+
+\bibitem{georgescu-alexov-gunner:biophys-j:2002:mcce2}
+R.~E. Georgescu, E.~G. Alexov, and M.~R. Gunner, Biophys. J. {\bf 83},  1731
+  (2002).
+
+\bibitem{song-mao-gunner:j-comput-chem:2009:mcce2}
+Y. Song, J. Mao, and M.~R. Gunner, J. Comput. Chem. {\bf 30},  2231  (2009).
+
+\bibitem{adams:prot-sci:1993:kinase-metal-ions}
+J.~A. Adams and S.~S. Taylor, Protein Science {\bf 2},  2177  (1993).
+
+\bibitem{sousa:book:2010:metal-ion-parameters-difficulties}
+S.~F. Sousa, R.~A. Fernandes, and M.~J. Ramos,  in {\em Kinetics and
+  {Dynamics}: {From} {Nano}- to {Bio}-{Scale}}, Vol.~12 of {\em Challenges and
+  {Advances} in {Computational} {Chemistry} and {Physics}}, edited by P.~a.
+  D.-D.~A. Paneth (Springer Science \& Business Media, Berlin, 2010), p.\ 530.
+
+\bibitem{gaff}
+J. Wang, R.~M. Wolf, J.~W. Caldwell, P.~A. Kollman, and D.~A. Case, J. Comput.
+  Chem. {\bf 25},  1157  (2004).
+
+\bibitem{gaff2}
+J. Wang, W. Wang, P.~A. Kollman, and D.~A. Case, J. Mol. Graph Model. {\bf 25},
+   247260  (2006).
+
+\end{thebibliography}

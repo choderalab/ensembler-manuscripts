@@ -1,0 +1,67 @@
+* Your Author Contributions will be typeset as follows.
+Conceived and designed the experiments: DLP JDC
+Performed the experiments: DLP JDC
+Analyzed the data: DLP
+Contributed reagents/materials/analysis tools: DLP PBG SMH KAB JDC
+Wrote the paper: DLP PBG SMH KAB JDC
+[Other]
+
+* Your financial disclosure will be typeset as follows: DLP PBG SMH KAB JDC: Sloan Kettering Institute (https://www.mskcc.org/research-areas/programs-centers/ski). DLP KAB JDC: NIH NCI grant P30 CA008748 (http://www.cancer.gov/). DLP JDC: Louis V. Gerstner Young Investigator Award (http://mskcc.convio.net/site/PageServer?pagename=giv_campaign_gerstner). KAB: Starr Foundation grant I8-A8-058 (http://www.starrfoundation.org/). PBG: Weill Cornell Graduate School of Medical Sciences (http://weill.cornell.edu/gradschool/). The funders had no role in study design, data collection and analysis, decision to publish, or preparation of the manuscript.
+
+* Your competing interests statement will be typeset as follows: I have read the journal's policy and the authors of this manuscript have the following competing interests:
+JDC is a member of the Scientific Advisory Board for Schrödinger.
+
+* Your data availability statement will be typeset as follows: Except for a supplementary dataset, all data is contained within the paper and Supporting Information files.
+The supplementary dataset is freely available for download from the Dryad Digital Repository: http://datadryad.org/review?doi=doi:10.5061/dryad.7fg32
+(doi:10.5061/dryad.7fg32
+
+* The details of the corresponding author will be typeset as follows: john.chodera@choderalab.org
+
+* Please check the authorship and affiliations list on the title page of your manuscript. These details will be used to index the authorship of your manuscript and therefore should be checked carefully for any errors.
+
+* Your title will be typeset from the submission system, not the manuscript file, Please check the following is correct: Ensembler: Enabling high-throughput molecular simulations at the superfamily scale
+
+Please update your manuscript with the following changes:
+
+-Please upload the DOC or DOCX version of your manuscript. If your manuscript is a LaTeX file, please upload the .tex files and formatting information. Your references should be included in your .tex file (not submitted separately as .bib or .bbl). For more information and downloadable templates, please see: http://journals.plos.org/plosgenetics/s/latex
+
+-If your paper is a LaTeX, we note that you did not use the PLOS LaTeX template. Please be sure that you are familiar with our LaTeX guidelines to help reduce the chance of typesetting errors. Our guidelines can be found here: http://journals.plos.org/plosgenetics/s/latex
+
+-Please indicate your Abstract with the Heading of “Abstract”
+- DLP DONE
+
+-Please provide an Author Summary. This should appear in your manuscript between the Abstract and the Introduction, and should be 150–200 words long. The aim should be to make your findings accessible to a wide audience that includes both scientists and non-scientists. Guidelines and sample summaries can be found here: http://www.ploscompbiol.org/static/guidelines.action#authorsummary
+- DLP DONE
+
+-Please format your manuscript to have one column and not two.
+- DLP DONE
+
+-Please do not hyperlink your references.
+- DLP DONE
+
+-Please remove all colored formatting from font in your manuscript.
+- DLP DONE
+
+-Please remove the corresponding author footnote from footnote formatting and incorporate it as text directly below the affiliations.
+- DLP DONE - kind of. I made a terrible hack, which looks ok in the pdf but not really in the tex document
+
+-Please remove the numbering from your headings and lettering from your subheadings and ensure that you refer to your headings and subheadings by name and not by number or letter.
+- DLP DONE
+
+-Please modify your submission so that it has a maximum of three heading levels with the differences clearly indicated by different font size or bolding. Please reserve italics for species names, genes/alleles, Latin terms, etc. and do not number your headings.
+- DLP DONE
+
+-The reference list should be formatted as “1.” and not “[1]”.
+Please see our Author Guidelines for further information and
+examples: http://www.ploscompbiol.org/static/guidelines#references
+- DLP TODO - I couldn't get this to work. Maybe I don't have enough knowledge of revtex.
+
+-Please cite figures in ascending numerical order within the text. If figures need to be renumbered, please ensure to update all in-text citations, legends, and affected file names accordingly.
+- DLP DONE
+
+-Please remove your figures from within your manuscript and provide them as separate figure files.
+- DLP DONE
+
+
+You will also be able to upload a Striking Image to accompany your article if one is available. If this image is judged to be suitable, it may be featured on our website. Images should ideally be high resolution, eye-catching, single panel images. If your image is from someone other than yourself, please ensure that the artist has read and agreed to the terms and conditions of the Creative Commons Attribution License. Note: we cannot publish copyrighted images.
+
