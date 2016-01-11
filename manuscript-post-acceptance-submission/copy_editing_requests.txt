@@ -26,6 +26,7 @@ Please update your manuscript with the following changes:
 -Please upload the DOC or DOCX version of your manuscript. If your manuscript is a LaTeX file, please upload the .tex files and formatting information. Your references should be included in your .tex file (not submitted separately as .bib or .bbl). For more information and downloadable templates, please see: http://journals.plos.org/plosgenetics/s/latex
 
 -If your paper is a LaTeX, we note that you did not use the PLOS LaTeX template. Please be sure that you are familiar with our LaTeX guidelines to help reduce the chance of typesetting errors. Our guidelines can be found here: http://journals.plos.org/plosgenetics/s/latex
+- DLP DONE - switched to PLOS LaTeX template.
 
 -Please indicate your Abstract with the Heading of “Abstract”
 - DLP DONE
@@ -43,7 +44,7 @@ Please update your manuscript with the following changes:
 - DLP DONE
 
 -Please remove the corresponding author footnote from footnote formatting and incorporate it as text directly below the affiliations.
-- DLP DONE - kind of. I made a terrible hack, which looks ok in the pdf but not really in the tex document
+- DLP DONE
 
 -Please remove the numbering from your headings and lettering from your subheadings and ensure that you refer to your headings and subheadings by name and not by number or letter.
 - DLP DONE
@@ -54,7 +55,7 @@ Please update your manuscript with the following changes:
 -The reference list should be formatted as “1.” and not “[1]”.
 Please see our Author Guidelines for further information and
 examples: http://www.ploscompbiol.org/static/guidelines#references
-- DLP TODO - I couldn't get this to work. Maybe I don't have enough knowledge of revtex.
+- DLP DONE
 
 -Please cite figures in ascending numerical order within the text. If figures need to be renumbered, please ensure to update all in-text citations, legends, and affected file names accordingly.
 - DLP DONE

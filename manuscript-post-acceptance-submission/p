@@ -1,6 +1,0 @@
-#!/bin/bash
-cat ~/tmp/Exported\ Items.bib >> ensembler.bib
-gsed -i '/abstract = /d' ensembler.bib
-gsed -i '/file = /d' ensembler.bib
-gsed -i '/copyright = /d' ensembler.bib
-gsed -i '/keywords = /d' ensembler.bib

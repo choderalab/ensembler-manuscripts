@@ -1,103 +1,213 @@
-% PRL look and style (easy on the eyes)
-%\documentclass[aps,pre,twocolumn,nofootinbib,superscriptaddress,linenumbers]{revtex4-1}
-% Two-column style (for submission/review/editing)
-\documentclass[aps,prl,preprint,nofootinbib,superscriptaddress,linenumbers]{revtex4-1}
+% Template for PLoS
+% Version 3.1 February 2015
+%
+% To compile to pdf, run:
+% latex plos.template
+% bibtex plos.template
+% latex plos.template
+% latex plos.template
+% dvipdf plos.template
+%
+% % % % % % % % % % % % % % % % % % % % % %
+%
+% -- IMPORTANT NOTE
+%
+% This template contains comments intended 
+% to minimize problems and delays during our production 
+% process. Please follow the template instructions
+% whenever possible.
+%
+% % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Once your paper is accepted for publication, 
+% PLEASE REMOVE ALL TRACKED CHANGES in this file and leave only
+% the final text of your manuscript.
+%
+% There are no restrictions on package use within the LaTeX files except that 
+% no packages listed in the template may be deleted.
+%
+% Please do not include colors or graphics in the text.
+%
+% Please do not create a heading level below \subsection. For 3rd level headings, use \paragraph{}.
+%
+% % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- FIGURES AND TABLES
+%
+% Please include tables/figure captions directly after the paragraph where they are first cited in the text.
+%
+% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
+% - Figures should be uploaded separately from your manuscript file. 
+% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
+% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
+% For figure citations, please use "Fig." instead of "Figure".
+% See http://www.plosone.org/static/figureGuidelines for PLOS figure guidelines.
+%
+% Tables should be cell-based and may not contain:
+% - tabs/spacing/line breaks within cells to alter layout or alignment
+% - vertically-merged cells (no tabular environments within tabular environments, do not use \multirow)
+% - colors, shading, or graphic objects
+% See http://www.plosone.org/static/figureGuidelines#tables for table guidelines.
+%
+% For tables that exceed the width of the text column, use the adjustwidth environment as illustrated in the example table in text below.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
+%
+% IMPORTANT
+% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://www.plosone.org/static/latexGuidelines
+%
+% Please be sure to include all portions of an equation in the math environment.
+%
+% Do not include text that is not math in the math environment. For example, CO2 will be CO\textsubscript{2}.
+%
+% Please add line breaks to long display equations when possible in order to fit size of the column. 
+%
+% For inline equations, please do not include punctuation (commas, etc) within the math environment unless this is part of the equation.
+%
+% % % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Please contact latex@plos.org with any questions.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
 
-\pdfoutput=1
-\usepackage[pdftex]{graphicx}
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
 
-\usepackage{alltt}
-\usepackage{fancyvrb}
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
 
-%\usepackage{palatino}
+% Use Unicode characters when possible
+\usepackage[utf8]{inputenc}
 
-%\usepackage{palatino}
-% Change to a sans serif font.
-\usepackage{sourcesanspro}
-\renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
-\usepackage[T1]{fontenc}
-%\usepackage[font=sf,justification=justified]{caption}
-\usepackage[font=sf]{floatrow}
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% fixltx2e package for \textsubscript
+\usepackage{fixltx2e}
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% rotating package for sideways tables
+\usepackage{rotating}
+
+% Remove comment for double spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Additional packages used by authors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % To allow code "Boxes" as well as figures
+\usepackage{fancyvrb}
 \usepackage{newfloat}
 \DeclareFloatingEnvironment[name={Box}]{codebox}
-
-% Rework captions to use sans serif font.
-\makeatletter
-\renewcommand\@make@capt@title[2]{%
- \@ifx@empty\float@link{\@firstofone}{\expandafter\href\expandafter{\float@link}}%
-  {\sf\textbf{#1}}\sf\@caption@fignum@sep#2\quad
-}%
-\makeatother
-
 \usepackage{listings} % For code examples
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-%\usepackage[mathbf,mathcal]{euler}
-%\usepackage{citesort}
-\usepackage[caption=false]{subfig}
-\usepackage{dcolumn}
-\usepackage{boxedminipage}
 \usepackage{verbatim}
-%\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
-\usepackage[draft]{hyperref}
-\usepackage[group-separator={,}]{siunitx}
-
-% Justification
-\captionsetup{singlelinecheck=off}
-
-% Pretty-printing of shell commands
-\newcommand{\shellcmd}[1]{\\\ \texttt{\scriptsize #1}}
-
-% The figures are in a figures/ subdirectory.
-\graphicspath{{../figures/}}
 
 % Do not hyphenate the following words
 \hyphenation{MODELLER}
 
-%% DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% For the \num command
+\usepackage[group-separator={,}]{siunitx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End additional packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Use the PLoS provided BiBTeX style
+\bibliographystyle{plos2015}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Leave date blank
+\date{}
+
+% Header and Footer with logo
+\usepackage{lastpage,fancyhdr,graphicx}
+\usepackage{epstopdf}
+\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\sf PLOS}
+
+%% Include all macros below
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+
+%% END MACROS SECTION
+
+
 \begin{document}
+\vspace*{0.35in}
 
-%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Ensembler: Enabling high-throughput molecular simulations at the superfamily scale}
-
-\author{Daniel L. Parton}
-  \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065 \\
-Corresponding author: john.chodera@choderalab.org
+% Title must be 250 characters or less.
+% Please capitalize all terms in the title except conjunctions, prepositions, and articles.
+\begin{flushleft}
+{\Large
+\textbf\newline{Ensembler: Enabling High-Throughput Molecular Simulations at the Superfamily Scale}
 }
-  %\email{daniel.parton@choderalab.org}
-\author{Patrick B. Grinaway}
-  \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065 \\
-Corresponding author: john.chodera@choderalab.org
-}
-\author{Sonya M. Hanson}
-  \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065 \\
-Corresponding author: john.chodera@choderalab.org
-}
-\author{Kyle A. Beauchamp}
-  \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065 \\
-Corresponding author: john.chodera@choderalab.org
-}
-  %\email{patrick.grinaway@choderalab.org}
-\author{John D. Chodera}
- %\thanks{Corresponding author}
- %\email{john.chodera@choderalab.org}
-  \affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065 \\
-Corresponding author: john.chodera@choderalab.org
-}
+\newline
+% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
+\\
+Daniel L. Parton\textsuperscript{1,},
+Patrick B. Grinaway\textsuperscript{1},
+Sonya M. Hansom\textsuperscript{1},
+Kyle A. Beauchamp\textsuperscript{1},
+John D. Chodera\textsuperscript{1,*},
+\\
+\bigskip
+\bf{1} Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065
+\\
+\bigskip
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ABSTRACT/pacs
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{abstract}
+% Insert additional author notes using the symbols described below. Insert symbol callouts after author names as necessary.
+% 
+% Remove or comment out the author notes below if they aren't used.
+%
 
-\maketitle
+% Use the asterisk to denote corresponding authorship and provide email address in note below.
+* john.chodera@choderalab.org
 
-\section*{abstract}
-
+\end{flushleft}
+% Please keep the abstract below 300 words
+\section*{Abstract}
 The rapidly expanding body of available genomic and protein structural data provides a rich resource for understanding protein dynamics with biomolecular simulation. 
 While computational infrastructure has grown rapidly, simulations on an \emph{omics} scale are not yet widespread, primarily because software infrastructure to enable simulations at this scale has not kept pace. 
 It should now be possible to study protein dynamics across entire (super)families, exploiting both available structural biology data and conformational similarities across homologous proteins.
@@ -113,16 +223,11 @@ We demonstrate the power of this approach by constructing models for all catalyt
 It is compatible with Linux and OS X.
 The latest release can be installed via the {\tt conda} package manager, and the latest source can be downloaded from \url{https://github.com/choderalab/ensembler}.
 
-\emph{Keywords: molecular dynamics simulation; comparative modeling; distributed simulation}
-
-% \end{abstract}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AUTHOR SUMMARY
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Please keep the Author Summary between 150 and 200 words
+% Use first person. PLOS ONE authors please skip this step. 
+% Author Summary not valid for PLOS ONE submissions.   
 \section*{Author Summary}
-\label{section:author_summary}
-
+% TODO improve
 Proteins are the workhorses of the human body, and are involved in essentially every biological process.
 Many diseases are caused by proteins malfunctioning.
 To understand how a protein functions, it is necessary to know its physical properties.
@@ -133,12 +238,9 @@ While recent advances in genomics and experimental techniques have provided a we
 To tackle this problem, we have developed a software package called {\bf Ensembler}, which allows a user to automatically select appropriate experimentally derived structures for a given protein or family of proteins, and to use them to prepare a series of simulations.
 The resultant simulation data can then used to investigate the dynamics of the protein(s) in question, and their involvement in disease.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% INTRODUCTION
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}
-\label{section:introduction}
+\linenumbers
 
+\section*{Introduction}
 Recent advances in genomics and structural biology have helped generate an enormous wealth of protein data at the level of amino-acid sequence and three-dimensional structure.
 However, proteins typically exist as an ensemble of thermally accessible conformational states, and static structures provide only a snapshot of their rich dynamical behavior.
 Many functional properties---such as the ability to bind small molecules or interact with signaling partners---require transitions between states, encompassing anything from reorganization of sidechains at binding interfaces to domain motions to large scale folding-unfolding events.
@@ -175,13 +277,15 @@ These methods essentially identify the largest subset of Markov nodes which cons
 
 We anticipate that {\bf Ensembler} will prove to be useful in a number of other ways.
 For example, the generated models could represent valuable data sets even without subsequent production simulation, allowing exploration of the conformational diversity present within the available structural data for a given protein family.
-Furthermore, automation of simulation preparation provides an excellent opportunity to make concrete certain "best practices", such as the choice of simulation parameters, approach to the treatment of protonation states, treatment of cofactors and structural ions, and pre-simulation refinement and equilibration procedures.
+Furthermore, automation of simulation preparation provides an excellent opportunity to make concrete certain ``best practices'', such as the choice of simulation parameters, approach to the treatment of protonation states, treatment of cofactors and structural ions, and pre-simulation refinement and equilibration procedures.
 While the current version of {\bf Ensembler} only codifies some of these choices as default parameters, its modular nature allows additional stages to be easily added in the future.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% DESIGN AND IMPLEMENTATION
+% Design and Implementation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Design and Implementation}
+
+\section*{Design and Implementation}
 
 {\bf Ensembler} is written in Python, and can be used via a command-line tool ({\tt ensembler}) or via a flexible Python API to allow integration of its components into other applications.
 All command-line and API information in this article refers to the \href{https://github.com/choderalab/ensembler/releases/tag/v1.0.6}{version 1.0.6 release of Ensembler}.
@@ -191,8 +295,8 @@ The {\bf Ensembler} modeling pipeline comprises a series of stages which are per
 A visual overview of the pipeline is shown in Fig.~\ref{figure:pipeline}.
 The various stages of this pipeline are described in detail below.
 
-\begin{figure*}[tb]
-    %\includegraphics[width=1.0\textwidth]{pipeline/pipeline2}
+\begin{figure}[h]
+    % \includegraphics[width=1.0\textwidth]{pipeline/pipeline2}
 
   \caption{{\bf Diagrammatic representation of the stages of the Ensembler pipeline and illustrative statistics for modeling all human tyrosine kinase catalytic domains.}
   On the left, the various stages of the {\bf Ensembler} pipeline are shown.
@@ -200,11 +304,11 @@ The various stages of this pipeline are described in detail below.
   On the right, the number of viable models surviving each stage of the pipeline is shown for the 93 target TK domains and for two representative individual TK domains (\emph{SRC} and \emph{ABL}).
   Typical timings on a computer cluster (containing Intel Xeon E5-2665 2.4GHz hyperthreaded processors and NVIDIA GTX-680 or GTX-Titan GPUs) is reported to illustrate resource requirements per model for modeling the entire set of tyrosine kinases.
   Note that \emph{CPU-h} denotes the number of hours consumed by the equivalent of a single CPU hyperthread and \emph{GPU-h} on a single GPU---parallel execution via MPI reduces wall clock time nearly linearly.
-  \label{figure:pipeline}
   }
-\end{figure*}
+  \label{figure:pipeline}
+\end{figure}
 
-\subsection{Target selection and retrieval (A)}
+\subsection*{Target selection and retrieval (A)}
 
 The first stage entails the selection of a set of \emph{target} protein sequences---the sequences for which the user is interested in generating simulation-ready structural models.
 This may be a single sequence---such as a full-length protein or a construct representing a single domain---or a collection of sequences, such as a particular domain from an entire family of proteins.
@@ -216,15 +320,36 @@ For example, {\tt -{}-query `mnemonic:SRC\_HUMAN'} would select the full-length 
 In this way, the user may select a single protein, many proteins, or an entire superfamily from UniProt.
 The program outputs a FASTA file, setting the UniProt mnemonic (e.g.~{\tt SRC\_HUMAN}) as the identifier for each target protein.
 
+\begin{codebox}[h]
+\begin{adjustwidth}{-2.25in}{0in}
+\footnotesize
+\begin{Verbatim}[frame=single]
+ensembler gather_targets --query `family:"tyr protein kinase family" AND organism:"homo sapiens" AND reviewed:yes'
+                         --uniprot_domain_regex `^Protein kinase(?!; truncated)(?!; inactive)'
+ensembler gather_templates --gather_from uniprot --query `domain:"Protein kinase" AND reviewed:yes'
+                           --uniprot_domain_regex `^Protein kinase(?!; truncated)(?!; inactive)'
+\end{Verbatim}
+\caption{{\bf Ensembler command-line functions used to select targets and templates.}
+The commands retrieve target and template data by querying UniProt.
+The query string provided to the {\tt gather\_targets} command selects all human tyrosine protein kinases which have been reviewed by a curator, while the query string provided to the {\tt gather\_templates} command selects all reviewed protein kinases of any species.
+The {\tt-{}-uniprot\_domain\_regex} flag is used to select a subset of the domains belonging to the returned UniProt protein entries, by matching the domain annotations against a given regular expression.
+In this example, domains of type `Protein kinase', `Protein kinase 1', and `Protein kinase 2' were selected, while excluding many other domain types such as `Protein kinase; truncated', `Protein kinase; inactive', `SH2', `SH3', etc.
+Target selection simply entails the selection of sequences corresponding to each matching UniProt domain.
+Template selection entails the selection of the sequences and structures of any PDB entries corresponding to the matching UniProt domains.
+}
+\label{box:tk-gather-targets-templates}
+\end{adjustwidth}
+\end{codebox}
+
 In many cases, it will be desirable to build models of an isolated protein domain, rather than the full-length protein.
 The {\tt gather\_targets} subcommand allows protein domains to be selected from UniProt data by passing a regular expression string to the {\tt -{}-uniprot\_domain\_regex} flag. 
-For example, the above {\tt -{}-query} flag for selecting all human protein kinases returns UniProt entries with domain annotations including "Protein kinase", "Protein kinase 1", "Protein kinase 2", "Protein kinase; truncated", "Protein kinase; inactive", "SH2", "SH3", etc.
+For example, the above {\tt -{}-query} flag for selecting all human protein kinases returns UniProt entries with domain annotations including `Protein kinase', `Protein kinase 1', `Protein kinase 2', `Protein kinase; truncated', `Protein kinase; inactive', `SH2', `SH3', etc.
 The regular expression shown in Box~\ref{box:tk-gather-targets-templates} selects only domains of the first three types.
 If the {\tt -{}-uniprot\_domain\_regex} flag is used, target identifiers are set with the form {\tt [UniProt mnemonic]\_D[domain index]}, where the latter part represents a 0-based index for the domain---necessary because a single target protein may contain multiple domains of interest (e.g.~{\tt JAK1\_HUMAN\_D0}, {\tt JAK1\_HUMAN\_D1}).
 
 Target sequences can also be defined manually (or from another program) by providing a FASTA-formatted text file containing the desired target sequences with corresponding arbitrary identifiers.
 
-\subsection{Template selection and retrieval (B)}
+\subsection*{Template selection and retrieval (B)}
 
 {\bf Ensembler} uses comparative modeling to build models, and as such requires a set of structures to be used as templates.
 The second stage thus entails the selection of templates and storage of associated sequences, structures, and identifiers.
@@ -251,21 +376,14 @@ Templates can also be defined manually.
 Manual specification of templates simply requires storing the sequences and arbitrary identifiers in a FASTA file, and the structures as PDB-format coordinate files with filenames matching the identifiers in the sequence file.
 The structure residues must also match those in the sequence file.
 
-\subsection{Template refinement (C)}
+\subsection*{Template refinement (C)}
 
 Unresolved template residues can optionally be modeled into template structures with the {\tt loopmodel} subcommand, which employs a kinematic closure algorithm provided via the {\tt loopmodel} tool of the Rosetta software suite~\cite{qian:nature:2007:modeller,wang:jmb:2007:modeller}.
 We expect that in certain cases, pre-building template loops with Rosetta {\tt loopmodel} prior to the main modeling stage (with MODELLER) may result in improved model quality.
 Loop remodeling may fail for a small proportion of templates due to spatial constraints imposed by the original structure; the subsequent modeling step thus automatically uses the remodeled version of a template if available, but otherwise falls back to using the non-remodeled version.
 Furthermore, the Rosetta {\tt loopmodel} program will not model missing residues at the termini of a structure---such residue spans are modeled in the subsequent stage.
 
-% Because fewer loops need to be built during the subsequent target model-building stage, we find that prebuilding template loops tends to provide higher-quality models after completion of the {\bf Ensembler} pipeline.
-% [JDC: Should we cite our evidence for this with the TKs, or maybe tone back the claim a bit to say that it is possible this could make things easier?]
-% [DLP: Might be worth investigating an algorithm called \emph{pokefind} (or \emph{knotfind}, which I think is an earlier version) which aims to find knots in proteins, of the type which encouraged us to use Rosetta to reconstruct template loops.
-% DOI: 10.1093/bioinformatics/btp198
-% It sounds like these algorithms have actually been implemented in Rosetta, so this could explain why Rosetta seems to do better at avoiding making these knotted structures.
-% Would be useful to check this out further first, and then decide whether or not to discuss the knotted structures in the manuscript.]
-
-\subsection{Alignment and comparative modeling (D)}
+\subsection*{Alignment and comparative modeling (D)}
 
 In the modeling stage, structural models of the target sequence are generated from the template structures, with the goal of modeling the target in a variety of conformations that could be significantly populated under equilibrium conditions.
 
@@ -297,9 +415,9 @@ The {\tt cluster} subcommand can thus be used to identify models which differ fr
 Clustering is performed using the regular spatial clustering algorithm~\cite{noe:jcp:2011:msm-review}, as implemented in the MSMBuilder Python library~\cite{msmbuilder}, which uses mdtraj~\cite{mdtraj} to calculate RMSD (for C$_\alpha$ atoms only) with a fast quaternion characteristic polynomial (QCP)~\cite{theobald:acta-cryst-a:2005:qcp,theobald:j-comput-chem:2010:qcp,theobald:j-comput-chem:2011:qcp} implementation.
 A minimum distance cutoff (which defaults to 0.6~\AA) is used to retain only a single model per cluster.
 
-\subsection{Refinement of models and filtering of poor models by simulation (E)}
+\subsection*{Refinement of models and filtering of poor models by simulation (E)}
 
-A number of refinement methods have been developed to help guide comparative modeling techniques toward more "native-like" and physically consistent conformations~\cite{maccallum:prot:2011:casp-refinement,zhang:curr-opin-struct-biol:2009:structure-prediction}.
+A number of refinement methods have been developed to help guide comparative modeling techniques toward more ``native-like'' and physically consistent conformations~\cite{maccallum:prot:2011:casp-refinement,zhang:curr-opin-struct-biol:2009:structure-prediction}.
 Both short~\cite{zhang:curr-opin-struct-biol:2009:structure-prediction} and long~\cite{raval:prot:2012:long-timescale-md-refinement} molecular dynamics simulations have been employed for this purpose.
 Here, we utilize short molecular dynamic simulations for two purposes: both to slightly relax the initial comparative models and to eliminate those comparative models that result in highly implausible conformations.
 This is especially critical here due to the inclusion of even very low sequence identity template structures.
@@ -314,7 +432,7 @@ This is implemented using the OpenMM molecular simulation toolkit~\cite{eastman:
 The simulation is run for a default of 100~ps, which in our example applications has been sufficient to filter out poor models (i.e.~those with atomic overlaps unresolved by energy minimization, which result in an unstable simulation), as well as helping to relax model conformations.
 As discussed in the Results section, our example application of the {\bf Ensembler} pipeline to the human tyrosine kinase family indicated that of the models which failed implicit solvent MD refinement, the vast majority failed within the first 1~ps of simulation.
 
-The simulation protocol and default parameter values have been chosen to represent current "best practices" for the refinement simulations carried out here.
+The simulation protocol and default parameter values have been chosen to represent current ``best practices'' for the refinement simulations carried out here.
 As such, the simulation is performed using Langevin dynamics, with a default force field choice of Amber99SB-ILDN~\cite{amber99sb-ildn}, along with a modified generalized Born solvent model~\cite{gbsa-obc1} as implemented in the OpenMM package~\cite{eastman:jctc:2012:openmm}.
 Any of the other force fields or implicit water models implemented in OpenMM can be specified using the {\tt -{}-ff} and {\tt -{}-water\_model} flags respectively.
 The simulation length can also be controlled via the {\tt -{}-simlength} flag, and many other important simulation parameters can be controlled from either the API or CLI (via the {\tt -{}-api\_params} flag).
@@ -328,7 +446,7 @@ Protonation states are specified by naming the appropriate residue variant type 
 Any residues which do not have specific protonation states listed in the configuration file will have protonation states assigned automatically by OpenMM.
 Note that {\bf Ensembler} currently only supports residue definitions provided by the forcefield definition files---it does not yet have the ability to derive new forcefield parameters for uncommon amino acids, cofactors, or ions not provided by the forcefield.
 
-\subsection{Solvation and NPT equilibration (F)}
+\subsection*{Solvation and NPT equilibration (F)}
 
 While protein-only models may be sufficient for structural analysis or implicit solvent simulations, {\bf Ensembler} also provides a stage for solvating models with explicit water and performing a round of explicit-solvent MD refinement/equilibration under isothermal-isobaric (NPT) conditions.
 The solvation step solvates each model for a given target with the same number of waters to facilitate the integration of data from multiple simulations, which is important for methods such as the construction of MSMs.
@@ -342,7 +460,7 @@ Further simulation parameters can be controlled via the API or via the CLI {\tt 
 Pressure control is performed with a Monte Carlo barostat as implemented in OpenMM, with a default pressure of 1~atm and a period of 50 timesteps.
 The remaining simulation parameters have default values set to the same as for the implicit solvent MD refinement.
 
-\subsection*{{Model validation with MolProbity score}}
+\subsection*{Model validation with MolProbity score}
 
 {\bf Ensembler} provides a function for validating model quality and filtering models using MolProbity~\cite{molprobity:2007,molprobity:2010}---a widely used tool for validation of protein models, which provides a numerical score derived from features such as steric clashes between atoms, bond geometry, Ramachandran angles, sidechain rotamer outliers, backbone deviations, and the presence of cis-peptides.
 This function is accessed via the {\tt validate} subcommand, which for a given target will output a text file containing a list of model IDs sorted by validation score.
@@ -375,22 +493,19 @@ Care must be exercised in the use and analysis of these models.
 
 \subsection*{Other features}
 
-\subsubsection*{Tracking provenance information}
-
+\paragraph{Tracking provenance information.}
 To aid the user in tracking the provenance of each model, each pipeline function also outputs a metadata file, which helps to link data to the software version used to generate it (both {\bf Ensembler} and its dependencies), and also provides timing and performance information, and other data such as hostname.
 
-\subsubsection*{Rapidly modeling a single template}
-
+\paragraph{Rapidly modeling a single template.}
 For users interested in simply using {\bf Ensembler} to rapidly generate a set of models for a single template sequence, {\bf Ensembler} provides a command-line tool {\tt quickmodel}, which performs the entire pipeline for a single target with a small number of templates.
 For larger numbers of models (such as entire protein families), modeling time is greatly reduced by using the main modeling pipeline, which is parallelized via MPI, distributing computation across each model (or across each template, in the case of the loop reconstruction code), and scaling (in a ``pleasantly parallel'' manner) up to the number of models generated.
-
 
 \label{section:design}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RESULTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}
+\section*{Results}
 \label{section:results}
 
 \subsection*{Modeling of all human tyrosine kinase catalytic domains}
@@ -411,52 +526,32 @@ Figure~\ref{figure:nstructures-per-tk-target} shows the number of PDB structures
 While a number of experimental structures are available for some TK domains, many TKs have few or no structures. 
 {\bf Ensembler} thus helps to overcome this unequal distribution of structural information when building protein models for simulation by exploiting homologous structural data from a wider range of protein kinase domains and species.
 
-\begin{figure*}[tbp]
-    %\includegraphics[width=\textwidth]{nstructures_per_tk_target/nstructures_per_tk_target.pdf}
+\begin{figure}[h]
+    % \includegraphics[width=\textwidth]{nstructures_per_tk_target/nstructures_per_tk_target.pdf}
     \caption{{\bf Number of PDB structures available for each TK target.}
     Data is shown for each of the 93 TK kinase domains, sorted in order of the number of available PDB structures for each domain. 
     The labels indicate the UniProt name for the target protein plus an index for the kinase domain (three of the selected proteins have two kinase domains). 
     Each PDB chain is counted individually, and only chains which contain the target domain are counted.
+}
     \label{figure:nstructures-per-tk-target}
-}
-\end{figure*}
-
-
-\begin{codebox*}[tbp]
-\scriptsize
-\begin{Verbatim}[frame=single]
-ensembler gather_targets --query `family:"tyr protein kinase family" AND organism:"homo sapiens" AND reviewed:yes'
-                         --uniprot_domain_regex `^Protein kinase(?!; truncated)(?!; inactive)'
-ensembler gather_templates --gather_from uniprot --query `domain:"Protein kinase" AND reviewed:yes'
-                           --uniprot_domain_regex `^Protein kinase(?!; truncated)(?!; inactive)'
-\end{Verbatim}
-\caption{{\bf Ensembler command-line functions used to select targets and templates.}
-The commands retrieve target and template data by querying UniProt.
-The query string provided to the {\tt gather\_targets} command selects all human tyrosine protein kinases which have been reviewed by a curator, while the query string provided to the {\tt gather\_templates} command selects all reviewed protein kinases of any species.
-The {\tt-{}-uniprot\_domain\_regex} flag is used to select a subset of the domains belonging to the returned UniProt protein entries, by matching the domain annotations against a given regular expression.
-In this example, domains of type "Protein kinase", "Protein kinase 1", and "Protein kinase 2" were selected, while excluding many other domain types such as "Protein kinase; truncated", "Protein kinase; inactive", "SH2", "SH3", etc.
-Target selection simply entails the selection of sequences corresponding to each matching UniProt domain.
-Template selection entails the selection of the sequences and structures of any PDB entries corresponding to the matching UniProt domains.
-}
-\label{box:tk-gather-targets-templates}
-\end{codebox*}
+\end{figure}
 
 \subsection*{Ensembler modeling statistics}
-
-\begin{figure}[tbp]
-    %\includegraphics[width=\textwidth]{loopmodel_analysis/nmissing_resis_distributions.pdf}
-    \caption{{\bf Distributions for the number of missing residues in the TK templates.}
-    \emph{Upper:} The number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling with the {\tt loopmodel} subcommand failed (red).
-    Templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
-    \emph{Lower:} The number of residues in each missing loop, for all templates.    
-    \label{figure:loopmodel-nmissing-residues}
-}
-\end{figure}
 
 Crystallographic structures of kinase catalytic domains generally contain a significant number of missing residues (median 11, mean 14, standard deviation 13, max 102) due to the high mobility of several loops (Fig.~\ref{figure:loopmodel-nmissing-residues}, top), with a number of these missing spans being significant in length (median 5, mean 7, standard deviation 6, max 82; Fig.~\ref{figure:loopmodel-nmissing-residues}, bottom).
 To reduce the reliance on the MODELLER rapid model construction stage to reconstruct very long unresolved loops, unresolved template residues were first remodeled using the {\tt loopmodel} subcommand.
 Out of \num{3666} templates with one or more missing residues, \num{3134} were successfully remodeled by the Rosetta loop modeling stage (with success defined simply as program termination without error); most remodeling failures were attributable to unsatisfiable spatial constraints imposed by the original template structure.
 There was some correlation between remodeling failures and the number of missing residues (Fig.~\ref{figure:loopmodel-nmissing-residues}, top); templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful (when excluding templates with no missing residues).
+
+\begin{figure}[h]
+    % \includegraphics[width=\textwidth]{loopmodel_analysis/nmissing_resis_distributions.pdf}
+    \caption{{\bf Distributions for the number of missing residues in the TK templates.}
+    \emph{Upper:} The number of missing residues per template, for all templates (blue) and for only those templates for which template remodeling with the {\tt loopmodel} subcommand failed (red).
+    Templates for which remodeling failed had a median of 20 missing residues, compared to a median of 14 missing residues for templates for which remodeling was successful.
+    \emph{Lower:} The number of residues in each missing loop, for all templates.    
+}
+    \label{figure:loopmodel-nmissing-residues}
+\end{figure}
 
 Following loop remodeling, the {\bf Ensembler} pipeline was performed up to and including the implicit solvent MD refinement stage, which completed with \num{389067} (94\%) surviving models across all TKs.
 To obtain statistics for the solvation stage without generating a sizeable amount of coordinate data (with solvated PDB coordinate files taking up about 0.9 MB each), the {\tt solvate} subcommand was performed for two representative individual kinases (\emph{Src} and \emph{Abl1}).
@@ -470,8 +565,7 @@ The data generated per model breaks down as 39~kB for the output from the modeli
 
 \subsection*{Evaluation of model quality and utility}
 
-\subsubsection*{All tyrosine kinases}
-
+\paragraph{All tyrosine kinases.}
 
 To evaluate the variety of template sequence similarities relative to each target sequence, we calculated sequence identity distributions, as shown in Fig.~\ref{figure:sequence-identity-distribution}.
 This suggests an intuitive division into three categories, with \num{355712} models in the 0--35\% sequence identity range, \num{51330} models in the 35--55\% range, and \num{5227} models in the 55--100\% range.
@@ -479,43 +573,35 @@ We then computed the RMSD distributions for the models created for each target (
 Furthermore, to understand the influence of sequence identity on the conformational similarities of the resulting models, the RMSD distributions were stratified based on the three sequence identity categories described above.
 This analysis indicates that higher sequence identity templates result in models with lower RMSDs, while templates with remote sequence identities result in larger RMSDs on average, recapitulating the observation made years ago by Chothia and Lesk~\cite{chothia-lesk:embo-j:1986:rmsd-sequence-identity-relation}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Sequence identity distribution
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tb]
-    %\includegraphics[width=1.0\columnwidth]{seqid_dist/seqid_dist.pdf}
+We also used the {\tt ensembler validate} subcommand to subject the refined models to analysis with MolProbity~\cite{molprobity:2007,molprobity:2010}.
+\begin{figure}[h]
+    % \includegraphics[width=1.0\columnwidth]{seqid_dist/seqid_dist.pdf}
 
     \caption{{\bf Template-target sequence identity distribution for human tyrosine kinase catalytic domains.}
     Sequence identities are calculated from all pairwise target-template alignments, where targets are human kinase catalytic domain sequences and templates are all kinase catalytic domains from any organism with structures in the PDB, as described in the text.
     A kernel density estimate of the target-template sequence identity probability density function is shown as a solid line with shaded region, while the corresponding cumulative distribution function is shown as a dashed line.
-  \label{figure:sequence-identity-distribution}
     }
+  \label{figure:sequence-identity-distribution}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: RMSD distribution by sequence identity
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+    % \centering
+    % {\label{figure:rmsd-distribution-joint}%
+    %    \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2-joint.pdf}
+    % }
 
-\begin{figure}[tbp]
-    \centering
-    {\label{figure:rmsd-distribution-joint}%
-       %\includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2-joint.pdf}
-    }
-
-    {\label{figure:rmsd-distribution-by-sequence-identity}%
-       %\includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2.pdf}
-    }
+    % {\label{figure:rmsd-distribution-by-sequence-identity}%
+    %    \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2.pdf}
+    % }
 
     \caption{{\bf Distribution of RMSDs to all TK catalytic domain models relative to the model derived from the highest sequence identity template.}    
     Distributions are built from data from all 93 TK domain targets.
     To better illustrate how conformational similarity depends on sequence identity, the lower plot illustrates the distributions as stratified into three sequence identity classes: high identity (55--100\%), moderate identity (35--55\%), and remote identity (0--35\%).
     The plotted distributions have been smoothed using kernel density estimation.
-  \label{figure:rmsd-distributions}
   }
+  \label{figure:rmsd-distributions}
 \end{figure}
 
-We also used the {\tt ensembler validate} subcommand to subject the refined models to analysis with MolProbity~\cite{molprobity:2007,molprobity:2010}.
 The MolProbity scores varied from 0.92 to 4.80, with a median of 3.84, a mean of 3.22, and a standard deviation of 1.07.
 Lower numbers represent better quality models.
 When stratified by the same sequence identity ranges as above, the mean scores were as follows: 2.96 (55--100\% sequence identity), 3.13 (35--55\% sequence identity), 3.24 (0--35\% sequence identity).
@@ -526,35 +612,43 @@ These ranged from -14180~kT to -3160~kT, with a median of -9501~kT, mean of -941
 The distributions---stratified using the same sequence identity ranges again---are plotted in Fig.~\ref{figure:energies-implicit}, indicating that higher sequence identity templates tend to result in slightly lower energy models.
 Of the \num{4973} models which failed to complete the implicit refinement MD stage, all except 9 failed within the first 1~ps of simulation.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Final energies following implicit refinement
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tbp]
-    %\includegraphics[width=1.0\columnwidth]{energies/energies.pdf}
+\begin{figure}[h]
+    % \includegraphics[width=1.0\columnwidth]{energies/energies.pdf}
 
     \caption{{\bf Distribution of final energies from implicit solvent MD refinement of TK catalytic domain models.}
     To illustrate how the energies are affected by sequence identity, the models are separated into three sequence identity classes: high identity (55--100\%), moderate identity (35--55\%), and remote identity (0--35\%).
     The plotted distributions have been smoothed using kernel density estimation.
     Refinement simulations were carried out at the default temperature of 300~K.
-  \label{figure:energies-implicit}
   }
+  \label{figure:energies-implicit}
 \end{figure}
 
-
-\subsubsection*{Src and Abl1}
+\paragraph{Src and Abl1.}
 
 To provide a more detailed evaluation of the variety and utility of generated models, we have analyzed two specific TKs (\emph{Src} and \emph{Abl1}) in depth.
 Due to their importance in cancer, these kinases have been the subject of numerous detailed structural and simulation studies.
 In terms of structural data, a large number of crystal structures have been solved (with or without ligands such as nucleotide substrate mimetics or small-molecule inhibitors), revealing a variety of conformations accessible to these kinases.
 A recent large-scale MSM study has also studied the activation pathway of Src~\cite{shukla-pande:nature-commun:2014:src-activation-msm}, while a separate study employed biased sampling techniques to dissect the role of conformational changes in selectivity and affinity of imatinib recognition of Abl~\cite{roux:pnas:2013:abl-imatinib}.
 
-{\bf Visualizing model structural diversity.}
+\paragraph{Visualizing model structural diversity.}
 Fig.~\ref{figure:superposition} shows a superposition of a set of representative models of \emph{Src} and \emph{Abl1}.
 Models were first stratified into three ranges, based on the structure of the sequence identity distribution (Fig.~\ref{figure:sequence-identity-distribution}), then subjected to RMSD-based $k$-medoids clustering (using the msmbuilder clustering package~\cite{msmbuilder}) to pick three representative models from each sequence identity range.
 Each model is colored and given a transparency based on the sequence identity between the target and template sequence.
 The figure gives an idea of the variance present in the generated models.
 High sequence identity models (in opaque blue) tend to be quite structurally similar, with some variation in loops or changes in domain orientation.
+
+\begin{figure}[h]
+    % \includegraphics[width=1.0\columnwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
+    
+    \caption{{\bf Superposition of clustered models of Src and Abl1.}
+    Superposed renderings of nine models each for Src and Abl1, 
+    giving some indication the diversity of conformations generated by Ensembler.
+    The models for each target were divided into three sequence identity ranges (as in Fig.~\ref{figure:rmsd-distributions}), and RMSD-based $k$-medoids clustering was performed (using the msmbuilder clustering package~\cite{msmbuilder}) to select three clusters from each.
+    The models shown are the centroids of each cluster.
+    Models are colored and given transparency based on their sequence identity, so that high sequence identity models are blue and opaque, while lower sequence identity models are transparent and red.
+  }
+  \label{figure:superposition}
+\end{figure}
 
 The Abl1 renderings in Fig.~\ref{figure:superposition} indicate one high sequence identity model with a long unstructured region at one of the termini, which was unresolved in the original template structure.
 While such models are not necessarily incorrect or undesirable, it is important to be aware of the effects they may have on production simulations performed under periodic boundary conditions, as long unstructured termini can be prone to interact with a protein's periodic image.
@@ -563,26 +657,9 @@ We believe the mix of high and low sequence identity models to be particularly u
 The high sequence identity models could be considered to be the most likely to accurately represent true metastable states.
 Conversely, the lower sequence identity models could be expected to help push a simulation into regions of conformation space which might take intractably long to reach if starting a single metastable conformation.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Superposition of Src and Abl1 sequence identity classes
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tb]
-    %\includegraphics[width=1.0\columnwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
-    
-    \caption{{\bf Superposition of clustered models of Src and Abl1.}
-    Superposed renderings of nine models each for Src and Abl1, 
-    giving some indication the diversity of conformations generated by Ensembler.
-    The models for each target were divided into three sequence identity ranges (as in Fig.~\ref{figure:rmsd-distributions}), and RMSD-based $k$-medoids clustering was performed (using the msmbuilder clustering package~\cite{msmbuilder}) to select three clusters from each.
-    The models shown are the centroids of each cluster.
-    Models are colored and given transparency based on their sequence identity, so that high sequence identity models are blue and opaque, while lower sequence identity models are transparent and red.
-  \label{figure:superposition}
-  }
-\end{figure}
-
-{\bf Comparison with known biochemically relevant conformations.}
+\paragraph{Comparison with known biochemically relevant conformations.}
 To evaluate the models of \emph{Src} and \emph{Abl1} in the context of the published structural biology literature on functionally relevant conformations, we have focused on two residue pair distances thought to be important order parameters for the regulation of protein kinase domain activity.
-We use the residue numbering schemes for chicken Src (commonly employed in the literature even in reference to human Src)~\cite{xu:1999:2src, cowan-jacob:2005:1y57} and human Abl1 isoform A~\cite{young:2006:2f4j, cowan-jacob:2006:2hyy, levinson:2006:2g1t} respectively; the exact numbering schemes are provided in Fig.~\ref{figure:residue-numbering-schemes}.
+We use the residue numbering schemes for chicken Src (commonly employed in the literature even in reference to human Src)~\cite{xu:1999:2src, cowan-jacob:2005:1y57} and human Abl1 isoform A~\cite{young:2006:2f4j, cowan-jacob:2006:2hyy, levinson:2006:2g1t} respectively; see \nameref{S1_Text} for the exact sequences and numbering schemes used.
 
 Fig.~\ref{figure:src-ref-structures} shows two structures of \emph{Src} believed to represent inactive (PDB code: 2SRC)~\cite{xu:1999:2src} and active (PDB code: 1Y57)~\cite{cowan-jacob:2005:1y57} states.
 One notable feature which distinguishes the two structures is the transfer of an electrostatic interaction of E310 from R409 (in the inactive state) to K295 (in the active state), brought about by a rotation of the $\alpha$C-helix.
@@ -592,12 +669,8 @@ The models all show strong coverage of regions in which either of the electrosta
 We thus expect that such a set of models, if used as starting configurations for highly parallel MD simulation, could greatly aid in sampling of functionally relevant conformational states.
 The \emph{Flt4} models (Fig.~\ref{figure:src-ref-structures}c) are of particular note, as there are no available crystal structures of the kinase domain of this TK protein (which is involved in tumor angiogenesis and lymphangiogenesis~\cite{Su:2006:flt4cancer}), yet the models generated here include structural motifs which are conserved and of known importance to other proteins of the same family.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Reference structures for Src
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tb]
-    %\includegraphics[width=1.0\textwidth]{residue_pair_distances/src/src_ref_structures}
+\begin{figure}[h]
+    % \includegraphics[width=1.0\textwidth]{residue_pair_distances/src/src_ref_structures}
 
     \caption{{\bf Two structures of Src, indicating certain residues involved in activation.}
     In the inactive state, E310 forms a salt bridge with R409.
@@ -605,40 +678,32 @@ The \emph{Flt4} models (Fig.~\ref{figure:src-ref-structures}c) are of particular
     This positions K295 in the appropriate position for catalysis.
     Note that ANP (phosphoaminophosphonic acid-adenylate ester; an analog of ATP) is only physically present in the 2SRC structure.
     To aid visualization of the active site in 1Y57, it has been included in the rendering by structurally aligning the surrounding homologous protein residues.
-  \label{figure:src-ref-structures}
   }
+  \label{figure:src-ref-structures}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Residue pair distance plots
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
 
-\begin{figure*}
-
-    % \includegraphics[width=1.0\columnwidth]{residue_pair_distances/src_abl_combined/distances.pdf}
-    \subfloat[Src]{\label{figure:src-distances}%
-       %\includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_src.png}
-    }
-    \subfloat[Abl]{\label{figure:abl-distances}%
-       %\includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_abl.png}
-    }
-    \subfloat[Flt4]{\label{figure:flt4-distances}%
-       %\includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_flt4.png}
-    }
+    % \subfloat[Src]{\label{figure:src-distances}%
+    %    \includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_src.png}
+    % }
+    % \subfloat[Abl]{\label{figure:abl-distances}%
+    %    \includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_abl.png}
+    % }
+    % \subfloat[Flt4]{\label{figure:flt4-distances}%
+    %    \includegraphics[height=0.31\textwidth]{residue_pair_distances/src_abl_flt4_combined/distances_flt4.png}
+    % }
 
     \caption{{\bf Src, Abl1, and Flt4 models projected onto the distances between two conserved residue pairs, colored by sequence identity.}
     Two Src structures (PDB entries 1Y57~\cite{cowan-jacob:2005:1y57} and 2SRC~\cite{xu:1999:2src}) are projected onto the plots for reference, representing active and inactive states respectively.
     These structures and the residue pairs analyzed here are depicted in Fig.~\ref{figure:src-ref-structures}.
     Distances are measured between the center of masses of the three terminal sidechain heavy atoms of each residue.
     The atom names for these atoms, according to the PDB coordinate files for both reference structures, are---Lys: NZ, CD, CE (ethylamine); Glu: OE1, CD, OE2 (carboxylate); Arg: NH1, CZ, NH2 (part of guanidine).
-  \label{figure:pair-distances}
     }
-\end{figure*}
+  \label{figure:pair-distances}
+\end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% DISCUSSION
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Availability and Future Directions}
+\section*{Availability and Future Directions}
 \label{section:availability}
 
 \subsection*{Availability}
@@ -650,11 +715,9 @@ The optional dependencies Rosetta and MolProbity are not available through the {
 The latest source can be downloaded from the GitHub repository, which also contains up-to-date instructions for building and installing the code.
 Documentation can be found at \href{http://ensembler.readthedocs.org/en/latest/}{ensembler.readthedocs.org}.
 
-A supplementary dataset can also be downloaded from the Dryad Digital Repository (DOI: \href{https://dx.doi.org/10.5061/dryad.7fg32}{10.5061/dryad.7fg32}).
-This contains the TK models described in the Results section, general information on the targets and templates, plus a script and instructions for regenerating the same dataset.
-
-\begin{codebox}[tbp]
-\scriptsize
+\begin{codebox}[h]
+\begin{adjustwidth}{-2.25in}{0in}
+\footnotesize
 \begin{Verbatim}[frame=single]
 export KEY_MODELLER="Modeller license key"
 conda config -add channels https://conda.anaconda.org/omnia
@@ -664,7 +727,11 @@ conda install ensembler
 \caption{{\bf Ensembler installation using {\tt conda} in a {\tt bash} shell. A license for MODELLER must first be obtained, and the license key should be used in place of the text {\tt "Modeller license key"}.}
 }
 \label{box:installation}
+\end{adjustwidth}
 \end{codebox}
+
+A supplementary dataset can also be downloaded from the Dryad Digital Repository (DOI: \href{https://dx.doi.org/10.5061/dryad.7fg32}{10.5061/dryad.7fg32}).
+This contains the TK models described in the \ref{section:results} section, general information on the targets and templates, plus a script and instructions for regenerating the same dataset.
 
 \subsection*{Future Directions}
 
@@ -672,18 +739,18 @@ We recognize that the current version of {\bf Ensembler} has a number of limitat
 Nevertheless, there are a great number of use cases for this first version of an automated tool for simulation preparation at the superfamily scale.
 To expand this domain of applicability, there are a number of obvious additions and improvements which we plan to implement in future versions of {\bf Ensembler}.
 
-{\bf Template remodeling.}
+\paragraph{Template remodeling.}
 The lack of crystallographically-resolved regions of template structures presents a challenge to deriving structures from these templates by comparative modeling, especially in kinases, where loops are frequently unresolved.
 Improvements over the Rosetta-based strategy described here are likely possible, especially given the number of modeling failures observed in the template refinement stage (Fig.~\ref{figure:loopmodel-nmissing-residues}).
 An alternative approach could be to re-refine complete-chain template structures to the experimentally-derived electron density or scattering data deposited in the RCSB using methods capable of exploiting the scattering data and crystallographic symmetry~\cite{schnieders:biophys-j:2010:x-ray-refinement}.
 Even if definitive placement of these unresolved regions is impossible, plausible locations constrained by weak scattering data and strong steric exclusion of crystallographic neighbors may provide a great deal of useful information, especially when combined with forcefield priors~\cite{schnieders:jctc:2011:space-group-pme}.
 
-{\bf Comparative modeling.}
+\paragraph{Comparative modeling.}
 Comparative protein modeling can be approached in a number of different ways, with varying degrees of complexity.
 The comparative modeling stage of {\bf Ensembler} currently uses MODELLER, but a number of excellent alternatives---such as RosettaCM~\cite{baker:structure:2013:rosettacm} and the I-TASSER Suite~\cite{yang:nature-methods:2015:i-tasser-suite}---can be added as user-selectable alternative choices.
 Additional options could be added to allow more expensive loop-modeling approaches to be employed to handle long insertions.
 
-{\bf Protonation states.}
+\paragraph{Protonation states.}
 Some amino acids can exist in different protonation states, depending on pH and on their local environment.
 These protonation states can have important effects on biological processes.
 For example, long timescale MD simulations have suggested that the conformation of the DFG motif of the TK Abl1---believed to be an important regulatory mechanism~\cite{nagar:cell:2003:abl-1opl}---is controlled by protonation of the aspartate~\cite{shan:pnas:2009:abl}.
@@ -692,7 +759,7 @@ At neutral pH, histidines have two protonation states which are approximately eq
 It would be highly desirable to instead use a method which assigns amino acid protonation states based on a rigorous assessment of the local environment.
 We thus plan to implement an interface and command-line function for assigning protonation states with MCCE2~\cite{alexov-gunner:biophys-j:1997:mcce2,georgescu-alexov-gunner:biophys-j:2002:mcce2,song-mao-gunner:j-comput-chem:2009:mcce2}, which uses electrostatics calculations combined with Monte Carlo sampling of side chain conformers to calculate pKa values.
 
-{\bf Cofactors, structural ions, and ligands.}
+\paragraph{Cofactors, structural ions, and ligands.}
 Many proteins require the presence of various types of non-protein atoms and molecules for proper function, such as metal ions (e.g.~Mg$^{+2}$), cofactors (e.g.~ATP) or post-translational modifications (e.g.~phosphorylation, methylation, glycosylation, etc.), and we thus plan for {\bf Ensembler} to eventually have the capability to include such entities in the generated models.
 Binding sites for metal ions are frequently found in proteins, often playing a role in catalysis.
 For example, protein kinase domains contain two binding sites for divalent metal cations, and display significantly increased activity in the presence of Mg$^{2+}$~\cite{adams:prot-sci:1993:kinase-metal-ions}, the divalent cation with highest concentration in mammalian cells.
@@ -701,19 +768,19 @@ We are careful to point out, however, that metal ion parameters in classical MD 
 Cofactors and post-translational modifications are also often not fully resolved in experimental structures, and endogenous cofactors are frequently substituted with other molecules to facilitate experimental structural analysis.
 Future extensions to {\bf Ensembler} could transfer cofactor and ion coordinates from homologous proteins in which these components are resolved.
 
-{\bf Post-translationally modified amino acids and other molecules without forcefield parameters.}
+\paragraph{Post-translationally modified amino acids and other molecules without forcefield parameters.}
 A major challenge in the preparation of simulations of proteins of interest is the wide variety of post-translational modifications possible that are often functionally or structurally relevant.
 Often, forcefields lack parameters for these residues, or for other cofactors or ligands that might be vital to probing the relevant structural dynamics of these systems.
 While tools such as Antechamber~\cite{gaff,gaff2} can rapidly generate small molecule parameters in an automated manner, the parameterization of polymeric residues or covalently attached cofactors is much more challenging.
 In addition, small molecule forcefields are generally tied to specific corresponding protein and nucleic acid forcefields, meaning that different procedures may be needed to generate consistent parameters.
 
-{\bf Long insertions and deletions.}
+\paragraph{Long insertions and deletions.}
 Another limitation with the present version of {\bf Ensembler} involves the treatment of members of a protein family with especially long residue insertions or deletions.
 For example, the set of all human protein kinase domains listed in UniProt have a median length of 265 residues (mean 277) and a standard deviation of 45, yet the minimum and maximum lengths are 102 and 801 respectively.
 The latter value corresponds to the protein kinase domain of serine/threonine-kinase \emph{greatwall}, which includes a long insertion between the two main lobes of the catalytic domain.
 In principle, such insertions could be excluded from the generated models, though a number of questions would arise as to how best to approach this.
 
-{\bf Markov state model (MSM) construction and model utility.}
+\paragraph{Markov state model (MSM) construction and model utility.}
 We are actively utilizing {\bf Ensembler}-generated models to seed the construction of Markov state models (MSMs)~\cite{pande-beauchamp-bowman:2010:methods:markov-model-review,chodera-noe:curr-opin-struct-biol:2014:msm-review}.
 While the observation that high sequence identity templates are likely to reflect accessible solution-phase conformations suggests that a number of these models occupy thermally accessible regions of configuration space~\cite{friedland:plos-comput-biol:2009:conformational-dynamics}, many models---especially those derived from very low sequence identity templates---are likely to be highly unrepresentative of conformations populated at equilibrium by the target protein.
 It is likely that even with hundreds of microseconds to milliseconds of aggregated dynamics, many of these poor quality models will remain trapped in inaccessible and irrelevant regions of configuration space.
@@ -725,10 +792,27 @@ We believe {\bf Ensembler} to be an important first step toward enabling computa
 The code is open source and has been developed with extensibility in mind, in order to facilitate its customization for a wide range of potential uses by the wider scientific community.
 
 
+
+
+
+
+
+
+
+
+
+Sed non aliquet felis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris commodo justo ac dui pretium imperdiet. Sed suscipit iaculis mi at feugiat. Ut neque ipsum, luctus id lacus ut, laoreet scelerisque urna. Phasellus venenatis, tortor nec vestibulum mattis, massa tortor interdum felis, nec pellentesque metus tortor nec nisl. Ut ornare mauris tellus, vel dapibus arcu suscipit sed. Nam condimentum sem eget mollis euismod. Nullam dui urna, gravida venenatis dui et, tincidunt sodales ex. Nunc est dui, sodales sed mauris nec, auctor sagittis leo. Aliquam tincidunt, ex in facilisis elementum, libero lectus luctus est, non vulputate nisl augue at dolor. For more information, see \nameref{S1_Text}.
+
+\section*{Supporting Information}
+
+\subsection*{S1 Text}
+\label{S1_Text}
+{\bf Sequences and residue numbering schemes for Src and Abl1.}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ACKNOWLEDGMENTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Acknowledgments}
+\section*{Acknowledgments}
 \label{section:acknowledgments}
 
 The authors are grateful to Robert McGibbon (Stanford) and Arien S. Rustenburg (MSKCC) for many excellent software engineering suggestions.
@@ -740,398 +824,479 @@ JDC and DLP also acknowledge the generous support of a Louis V.~Gerstner Young I
 KAB was also supported in part by Starr Foundation grant I8-A8-058.
 PBG acknowledges partial funding support from the Weill Cornell Graduate School of Medical Sciences.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% BIBLIOGRAPHY
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\nolinenumbers
+
+%\section*{References}
+% Either type in your references using
+% \begin{thebibliography}{}
+% \bibitem{}
+% Text
+% \end{thebibliography}
+%
+% OR
+%
+% Compile your BiBTeX database using our plos2015.bst
+% style file and paste the contents of your .bbl file
+% here.
+% 
+
+% DONE - when ready, comment line below and uncomment subsequent lines. Then paste in formatted bibliography from ensembler.bbl
+% \bibliography{ensembler.bib}
 
 \begin{thebibliography}{100}
 
 \bibitem{craik:science:2009:trapping-moving-targets}
-G.~M. Lee and C.~S. Craik, Science {\bf 324},  213  (2009).
+Lee GM, Craik CS.
+\newblock Trapping moving targets with small molecules.
+\newblock Science. 2009;324:213.
 
 \bibitem{eastman:jctc:2012:openmm}
-P. Eastman, M.~S. Friedrichs, J.~D. Chodera, R.~J. Radmer, C.~M. Bruns, J.~P.
-  Ku, K.~A. Beauchamp, T.~J. Lane, L.-P. Wang, D. Shukla, and V.~S. Pande, J.
-  Chem. Theory Comput. {\bf 9},  461  (2012).
+Eastman P, Friedrichs MS, Chodera JD, Radmer RJ, Bruns CM, Ku JP, et~al.
+\newblock {OpenMM} 4: A Reusable, Extensible, Hardware Independent Library for
+  High Performance Molecular Simulation.
+\newblock J Chem Theory Comput. 2012;9(1):461--469.
 
 \bibitem{walker:jctc:2013:amber-gpu}
-R. Salomon-Ferrer, A.~W. G\"{o}tz, D. Poole, S.~L. Grand, and R.~C. Walker, J.
-  Chem. Theor. Comput. {\bf 9},  3878  (2013).
+Salomon-Ferrer R, G\"{o}tz AW, Poole D, Grand SL, Walker RC.
+\newblock Routine microsecond molecular dynamics simulations with {AMBER} on
+  {GPUs}. 2. Explicit solvent particle mesh {Ewald}.
+\newblock J Chem Theor Comput. 2013;9(9):3878--3888.
 
 \bibitem{shirts-pande:science:2000:fah}
-M. Shirts and V.~S. Pande, Science {\bf 290},  1903  (2000).
+Shirts M, Pande VS.
+\newblock Screen {Savers} of the {World} {Unite}!
+\newblock Science. 2000 Dec;290(5498):1903--1904.
 
 \bibitem{pronk:2011:copernicus}
-S. Pronk, P. Larsson, I. Pouya, G.~R. Bowman, I.~S. Haque, K. Beauchamp, B.
-  Hess, V.~S. Pande, P.~M. Kasson, and E. Lindahl,  in {\em Proceedings of 2011
-  {International} {Conference} for {High} {Performance} {Computing},
-  {Networking}, {Storage} and {Analysis}}, {\em {SC} '11} (ACM, New York, NY,
-  USA, 2011), pp.\ 60:1--60:10.
+Pronk S, Larsson P, Pouya I, Bowman GR, Haque IS, Beauchamp K, et~al.
+\newblock Copernicus: {A} {New} {Paradigm} for {Parallel} {Adaptive}
+  {Molecular} {Dynamics}.
+\newblock In: Proceedings of 2011 {International} {Conference} for {High}
+  {Performance} {Computing}, {Networking}, {Storage} and {Analysis}. {SC} '11.
+  New York, NY, USA: ACM; 2011. p. 60:1--60:10.
 
 \bibitem{pronk:2015:copernicus}
-S. Pronk, I. Pouya, M. Lundborg, G. Rotskoff, B. Wes\'{e}n, P.~M. Kasson, and
-  E. Lindahl, Journal of Chemical Theory and Computation  (2015).
+Pronk S, Pouya I, Lundborg M, Rotskoff G, Wes\'{e}n B, Kasson PM, et~al.
+\newblock Molecular {Simulation} {Workflows} as {Parallel} {Algorithms}: {The}
+  {Execution} {Engine} of {Copernicus}, a {Distributed} {High}-{Performance}
+  {Computing} {Platform}.
+\newblock Journal of Chemical Theory and Computation. 2015 Apr;.
 
 \bibitem{buch:2010:gpugrid}
-I. Buch, M.~J. Harvey, T. Giorgino, D.~P. Anderson, and G. De~Fabritiis,
-  Journal of Chemical Information and Modeling {\bf 50},  397  (2010).
+Buch I, Harvey MJ, Giorgino T, Anderson DP, De~Fabritiis G.
+\newblock High-{Throughput} {All}-{Atom} {Molecular} {Dynamics} {Simulations}
+  {Using} {Distributed} {Computing}.
+\newblock Journal of Chemical Information and Modeling. 2010
+  Mar;50(3):397--403.
 
 \bibitem{pande-beauchamp-bowman:2010:methods:markov-model-review}
-V.~S. Pande, K. Beauchamp, and G.~R. Bowman, Methods {\bf 52},  99  (2010).
+Pande VS, Beauchamp K, Bowman GR.
+\newblock Everything you wanted to know about {Markov State Models} but were
+  afraid to ask.
+\newblock Methods. 2010;52:99--105.
 
 \bibitem{noe:jcp:2011:msm-review}
-J.-H. Prinz, H. Wu, M. Sarich, B. Keller, M. Fischbach, M. Held, J.~D. Chodera,
-  C. Sch\"{u}tte, and F. No\'{e}, J. Chem. Phys. {\bf 134},  174105  (2011).
+Prinz JH, Wu H, Sarich M, Keller B, Fischbach M, Held M, et~al.
+\newblock Markov models of molecular kinetics: Generation and validation.
+\newblock J Chem Phys. 2011;134:174105.
 
 \bibitem{chodera-noe:curr-opin-struct-biol:2014:msm-review}
-J.~D. Chodera and F. No\'{e}, Curr. Opin. Struct. Biol. {\bf 25},  135  (2014).
+Chodera JD, No\'{e} F.
+\newblock Markov state models of biomolecular conformational dynamics.
+\newblock Curr Opin Struct Biol. 2014;25:135--144.
 
 \bibitem{moult:proteins:2014:casp10}
-J. Moult, K. Fidelis, A. Kryshtafovych, T. Schwede, and A. Tramontano,
-  Proteins: Structure, Function, and Bioinformatics {\bf 82},  1  (2014).
+Moult J, Fidelis K, Kryshtafovych A, Schwede T, Tramontano A.
+\newblock Critical assessment of methods of protein structure prediction
+  ({CASP}) — round x.
+\newblock Proteins: Structure, Function, and Bioinformatics. 2014 Feb;82:1--6.
 
 \bibitem{baker:science:2001:structure-prediction-review}
-D. Baker and A. {\v{S}ali}, Science {\bf 294},  93  (2001).
+Baker D, {\v{S}ali} A.
+\newblock Protein {Structure} {Prediction} and {Structural} {Genomics}.
+\newblock Science. 2001 Oct;294(5540):93--96.
 
 \bibitem{baker:structure:2013:rosettacm}
-Y. Song, F. {DiMaio}, R.~Y.-R. Wang, D. Kim, C. Miles, T. Brunette, J.
-  Thompson, and D. Baker, Structure {\bf 21},  1735  (2013).
+Song Y, {DiMaio} F, Wang RYR, Kim D, Miles C, Brunette T, et~al.
+\newblock High-resolution comparative modeling with {RosettaCM}.
+\newblock Structure. 2013;21:1735--1742.
 
 \bibitem{yang:nature-methods:2015:i-tasser-suite}
-J. Yang, R. Yan, A. Roy, D. Xu, J. Poisson, and Y. Zhang, Nature Methods {\bf
-  12},  7  (2015).
+Yang J, Yan R, Roy A, Xu D, Poisson J, Zhang Y.
+\newblock The {I-TASSER Suite}: Protein structure and function prediction.
+\newblock Nature Methods. 2015;12:7.
 
 \bibitem{daggett:structure:2010:dynameomics}
-M.~W. {van der Kamp}, R.~D. Schaeffer, A.~L. Jonsson, A.~D. Scouras, A.~M.
-  Simms, R.~D. Toofanny, N.~C. Benson, P.~C. Anderson, E.~D. Merkley, S.
-  Rysavy, D. Bromley, D.~A.~C. Beck, and V. Daggett, Structure {\bf 18},  423
-  (2010).
+{van der Kamp} MW, Schaeffer RD, Jonsson AL, Scouras AD, Simms AM, Toofanny RD,
+  et~al.
+\newblock Dynameomics: A comprehensive database of protein dynamics.
+\newblock Structure. 2010;18:423--435.
 
 \bibitem{friedland:plos-comput-biol:2009:conformational-dynamics}
-G.~D. Friedland, N.-A. Lakomek, C. Griesinger, J. Meiler, and T. Kortemme, PLoS
-  Comput. Biol. {\bf 5},  e1000393  (2009).
+Friedland GD, Lakomek NA, Griesinger C, Meiler J, Kortemme T.
+\newblock A correspondence between solution-state dynamics of an individual
+  protein and the sequence and conformational diversity of its family.
+\newblock PLoS Comput Biol. 2009;5:e1000393.
 
 \bibitem{sali:2012:allostery-modeling}
-P. Weinkam, J. Pons, and A. Sali, Proceedings of the National Academy of
-  Sciences of the United States of America {\bf 109},  4875  (2012).
+Weinkam P, Pons J, Sali A.
+\newblock Structure-based model of allostery predicts coupling between distant
+  sites.
+\newblock Proceedings of the National Academy of Sciences of the United States
+  of America. 2012 Mar;109(13):4875--4880.
 
 \bibitem{msmbuilder}
-K.~A. Beauchamp, G.~R. Bowman, T.~J. Lane, L. Maibaum, I.~S. Haque, and V.~S.
-  Pande, Journal of Chemical Theory and Computation {\bf 7},  3412  (2011).
+Beauchamp KA, Bowman GR, Lane TJ, Maibaum L, Haque IS, Pande VS.
+\newblock {MSMBuilder}2: {Modeling} {Conformational} {Dynamics} on the
+  {Picosecond} to {Millisecond} {Scale}.
+\newblock Journal of Chemical Theory and Computation. 2011
+  Oct;7(10):3412--3419.
 
 \bibitem{caflisch:jpcb:2011:msm-subgraph}
-R. Scalco and A. Caflisch, The Journal of Physical Chemistry. B {\bf 115},
-  6358  (2011).
+Scalco R, Caflisch A.
+\newblock Equilibrium distribution from distributed computing (simulations of
+  protein folding).
+\newblock The Journal of Physical Chemistry B. 2011 May;115(19):6358--6365.
 
 \bibitem{uniprot:2015}
-T.~U. Consortium, Nucleic Acids Research {\bf 43},  D204  (2015).
+Consortium TU.
+\newblock {UniProt}: a hub for protein information.
+\newblock Nucleic Acids Research. 2015 Jan;43(D1):D204--D212.
 
 \bibitem{velankar:2013:sifts}
-S. Velankar, J.~M. Dana, J. Jacobsen, G. van Ginkel, P.~J. Gane, J. Luo, T.~J.
-  Oldfield, C. O'Donovan, M.-J. Martin, and G.~J. Kleywegt, Nucleic Acids
-  Research {\bf 41},  D483  (2013).
+Velankar S, Dana JM, Jacobsen J, van Ginkel G, Gane PJ, Luo J, et~al.
+\newblock {SIFTS}: {Structure} {Integration} with {Function}, {Taxonomy} and
+  {Sequences} resource.
+\newblock Nucleic Acids Research. 2013 Jan;41(D1):D483--D489.
 
 \bibitem{qian:nature:2007:modeller}
-B. Qian, S. Raman, R. Das, P. Bradley, A.~J. McCoy, R.~J. Read, and D. Baker,
-  Nature {\bf 450},  259  (2007).
+Qian B, Raman S, Das R, Bradley P, McCoy AJ, Read RJ, et~al.
+\newblock High-resolution structure prediction and the crystallographic phase
+  problem.
+\newblock Nature. 2007 Nov;450(7167):259--264.
 
 \bibitem{wang:jmb:2007:modeller}
-C. Wang, P. Bradley, and D. Baker, Journal of Molecular Biology {\bf 373},  503
-   (2007).
+Wang C, Bradley P, Baker D.
+\newblock Protein–{Protein} {Docking} with {Backbone} {Flexibility}.
+\newblock Journal of Molecular Biology. 2007 Oct;373(2):503--519.
 
 \bibitem{fiser:prot-sci:2000:modeller}
-A. Fiser, R.~K.~G. Do, and A. {\v{S}ali}, Protein Science {\bf 9},  1753
-  (2000).
+Fiser A, Do RKG, {\v{S}ali} A.
+\newblock Modeling of loops in protein structures.
+\newblock Protein Science. 2000 Jan;9(9):1753--1773.
 
 \bibitem{sali:jmb:1993:modeller}
-A. {\v{S}ali} and T.~L. Blundell, Journal of Molecular Biology {\bf 234},  779
-  (1993).
+{\v{S}ali} A, Blundell TL.
+\newblock Comparative {Protein} {Modelling} by {Satisfaction} of {Spatial}
+  {Restraints}.
+\newblock Journal of Molecular Biology. 1993 Dec;234(3):779--815.
 
 \bibitem{cock:2009:biopython}
-P.~J.~A. Cock, T. Antao, J.~T. Chang, B.~A. Chapman, C.~J. Cox, A. Dalke, I.
-  Friedberg, T. Hamelryck, F. Kauff, B. Wilczynski, and M.~J.~L. de~Hoon,
-  Bioinformatics (Oxford, England) {\bf 25},  1422  (2009).
+Cock PJA, Antao T, Chang JT, Chapman BA, Cox CJ, Dalke A, et~al.
+\newblock Biopython: freely available {Python} tools for computational
+  molecular biology and bioinformatics.
+\newblock Bioinformatics (Oxford, England). 2009 Jun;25(11):1422--1423.
 
 \bibitem{gonnet:science:1992:exhaustive-matching}
-G.~H. Gonnet, M.~A. Cohen, and S.~A. Brenner, Science {\bf 256},  1443  (1992).
+Gonnet GH, Cohen MA, Brenner SA.
+\newblock Exhaustive matching of the entire protein sequence database.
+\newblock Science. 1992;256:1443--1445.
 
 \bibitem{thompson:2011:msa-review}
-J.~D. Thompson, B. Linard, O. Lecompte, and O. Poch, PLoS ONE {\bf 6},  e18093
-  (2011).
+Thompson JD, Linard B, Lecompte O, Poch O.
+\newblock A {Comprehensive} {Benchmark} {Study} of {Multiple} {Sequence}
+  {Alignment} {Methods}: {Current} {Challenges} and {Future} {Perspectives}.
+\newblock PLoS ONE. 2011 Mar;6(3):e18093.
 
 \bibitem{pei:2008:promals3d}
-J. Pei, B.-H. Kim, and N.~V. Grishin, Nucleic Acids Research {\bf 36},  2295
-  (2008).
+Pei J, Kim BH, Grishin NV.
+\newblock {PROMALS}3D: a tool for multiple protein sequence and structure
+  alignments.
+\newblock Nucleic Acids Research. 2008 Apr;36(7):2295--2300.
 
 \bibitem{expresso}
-F. Armougom, S. Moretti, O. Poirot, S. Audic, P. Dumas, B. Schaeli, V. Keduas,
-  and C. Notredame, Nucleic Acids Research {\bf 34},  W604  (2006).
+Armougom F, Moretti S, Poirot O, Audic S, Dumas P, Schaeli B, et~al.
+\newblock Expresso: automatic incorporation of structural information in
+  multiple sequence alignments using 3D-{Coffee}.
+\newblock Nucleic Acids Research. 2006 Jul;34(Web Server issue):W604--608.
 
 \bibitem{3dcoffee}
-O. Poirot, K. Suhre, C. Abergel, E. O'Toole, and C. Notredame, Nucleic Acids
-  Research {\bf 32},  W37  (2004).
+Poirot O, Suhre K, Abergel C, O'Toole E, Notredame C.
+\newblock 3DCoffee@igs: a web server for combining sequences and structures
+  into a multiple sequence alignment.
+\newblock Nucleic Acids Research. 2004 Jul;32(Web Server issue):W37--40.
 
 \bibitem{mdtraj}
-R.~T. McGibbon, K.~A. Beauchamp, C.~R. Schwantes, L.-P. Wang, C.~X.
-  Hern{\'a}ndez, M.~P. Harrigan, T.~J. Lane, J.~M. Swails, and V.~S. Pande,
-  bioRxiv  (2014).
+McGibbon RT, Beauchamp KA, Schwantes CR, Wang LP, Hern{\'a}ndez CX, Harrigan
+  MP, et~al.
+\newblock MDTraj: a modern, open library for the analysis of molecular dynamics
+  trajectories.
+\newblock bioRxiv. 2014;.
 
 \bibitem{theobald:acta-cryst-a:2005:qcp}
-D.~L. Theobald, Acta Cryst. A {\bf 61},  478  (2005).
+Theobald DL.
+\newblock Rapid calculation of {RMSDs} using a quaternion-based characteristic
+  polynomial.
+\newblock Acta Cryst A. 2005;61:478--480.
 
 \bibitem{theobald:j-comput-chem:2010:qcp}
-P. Liu, D.~K. Agrafiotis, and D.~L. Theobald, J. Comput. Chem. {\bf 31},  1561
-  (2010).
+Liu P, Agrafiotis DK, Theobald DL.
+\newblock Fast determination of the optimal rotation matrix for macromolecular
+  superpositions.
+\newblock J Comput Chem. 2010;31:1561--1563.
 
 \bibitem{theobald:j-comput-chem:2011:qcp}
-P. Liu, D.~K. Agrafiotis, and D.~L. Theobald, J. Comput. Chem. {\bf 32},  185
-  (2011).
+Liu P, Agrafiotis DK, Theobald DL.
+\newblock Reply to comment on ``Fast determination of the optimal rotation
+  matrix for macromolecular superpositions''.
+\newblock J Comput Chem. 2011;32:185--186.
 
 \bibitem{maccallum:prot:2011:casp-refinement}
-J.~L. MacCallum, A. P{\'e}rez, M.~J. Schnieders, L. Hua, M.~P. Jacobson, and
-  K.~A. Dill, Proteins: Structure, Function, and Bioinformatics {\bf 79},  74
-  (2011).
+MacCallum JL, P{\'e}rez A, Schnieders MJ, Hua L, Jacobson MP, Dill KA.
+\newblock Assessment of protein structure refinement in {CASP}9.
+\newblock Proteins: Structure, Function, and Bioinformatics. 2011
+  Jan;79(S10):74--90.
 
 \bibitem{zhang:curr-opin-struct-biol:2009:structure-prediction}
-Y. Zhang, Current Opinion in Structural Biology {\bf 19},  145  (2009).
+Zhang Y.
+\newblock Protein structure prediction: when is it useful?
+\newblock Current Opinion in Structural Biology. 2009 Apr;19(2):145--155.
 
 \bibitem{raval:prot:2012:long-timescale-md-refinement}
-A. Raval, S. Piana, M.~P. Eastwood, R.~O. Dror, and D.~E. Shaw, Proteins:
-  Structure, Function, and Bioinformatics {\bf 80},  2071  (2012).
+Raval A, Piana S, Eastwood MP, Dror RO, Shaw DE.
+\newblock Refinement of protein structure homology models via long, all-atom
+  molecular dynamics simulations.
+\newblock Proteins: Structure, Function, and Bioinformatics. 2012
+  Aug;80(8):2071--2079.
 
 \bibitem{lbfgs}
-D.~C. Liu and J. Nocedal, Mathematical Programming {\bf 45},  503  (1989).
+Liu DC, Nocedal J.
+\newblock On the Limited Memory {BFGS} Method For Large Scale Optimization.
+\newblock Mathematical Programming. 1989;45:503--528.
 
 \bibitem{amber99sb-ildn}
-K. Lindorff-Larsen, S.~P. anad Kim~Palmo, P. Maragakis, J.~L. Klepeis, R.~O.
-  Dror, and D.~E. Shaw, Proteins {\bf 78},  1950  (2010).
+Lindorff-Larsen K, anad Kim~Palmo SP, Maragakis P, Klepeis JL, Dror RO, Shaw
+  DE.
+\newblock Improved side-chain torsion potentials for the {Amber} {ff99SB}
+  protein force field.
+\newblock Proteins. 2010;78:1950--1958.
 
 \bibitem{gbsa-obc1}
-A. Onufriev, D. Bashford, and D.~A. Case, Proteins {\bf 55},  383  (2004).
+Onufriev A, Bashford D, Case DA.
+\newblock Exploring protein native states and large-scale conformational
+  changes with a modified generalized {Born} model.
+\newblock Proteins. 2004;55(22):383--394.
 
 \bibitem{basconi:jctc:2013:collision-rates}
-J.~E. Basconi and M.~R. Shirts, Journal of Chemical Theory and Computation {\bf
-  9},  2887  (2013).
+Basconi JE, Shirts MR.
+\newblock Effects of {Temperature} {Control} {Algorithms} on {Transport}
+  {Properties} and {Kinetics} in {Molecular} {Dynamics} {Simulations}.
+\newblock Journal of Chemical Theory and Computation. 2013 Jul;9(7):2887--2899.
 
 \bibitem{tip3p}
-W.~L. Jorgensen, J. Chandrasekhar, J.~D. Madura, R.~W. Impey, and M.~L. Klein,
-  Journal of Chemical Physics {\bf 79},  926  (1983).
+Jorgensen WL, Chandrasekhar J, Madura JD, Impey RW, Klein ML.
+\newblock Comparison of simple potential functions for simulating liquid water.
+\newblock Journal of Chemical Physics. 1983;79:926--935.
 
 \bibitem{tip4p-ew}
-H.~W. Horn, W.~C. Swope, J.~W. Pitera, J.~D. Madura, T.~J. Dick, G.~L. Hura,
-  and T. Head-Gordon, The Journal of Chemical Physics {\bf 120},  9665  (2004).
+Horn HW, Swope WC, Pitera JW, Madura JD, Dick TJ, Hura GL, et~al.
+\newblock Development of an improved four-site water model for biomolecular
+  simulations: {TIP}4P-{Ew}.
+\newblock The Journal of Chemical Physics. 2004 May;120(20):9665--9678.
 
 \bibitem{molprobity:2007}
-I.~W. Davis, A. Leaver-Fay, V.~B. Chen, J.~N. Block, G.~J. Kapral, X. Wang,
-  L.~W. Murray, W.~B. Arendall, J. Snoeyink, J.~S. Richardson, and D.~C.
-  Richardson, Nucleic Acids Research {\bf 35},  W375  (2007).
+Davis IW, Leaver-Fay A, Chen VB, Block JN, Kapral GJ, Wang X, et~al.
+\newblock {MolProbity}: all-atom contacts and structure validation for proteins
+  and nucleic acids.
+\newblock Nucleic Acids Research. 2007 Jul;35(suppl 2):W375--W383.
 
 \bibitem{molprobity:2010}
-V.~B. Chen, W.~B. Arendall, J.~J. Headd, D.~A. Keedy, R.~M. Immormino, G.~J.
-  Kapral, L.~W. Murray, J.~S. Richardson, and D.~C. Richardson, Acta
-  Crystallographica. Section D, Biological Crystallography {\bf 66},  12
-  (2010).
+Chen VB, Arendall WB, Headd JJ, Keedy DA, Immormino RM, Kapral GJ, et~al.
+\newblock {MolProbity}: all-atom structure validation for macromolecular
+  crystallography.
+\newblock Acta Crystallographica Section D, Biological Crystallography. 2010
+  Jan;66(Pt 1):12--21.
 
 \bibitem{berendsen:1995:gromacs}
-H.~J.~C. Berendsen, D. van~der Spoel, and R. van Drunen, Comp. Phys. Comm. {\bf
-  91},  43  (1995).
+Berendsen HJC, van~der Spoel D, van Drunen R.
+\newblock {GROMACS}: {A} message-passing parallel molecular dynamics
+  implementation.
+\newblock Comp Phys Comm. 1995 Sep;91(1-3):43--56.
 
 \bibitem{lindahl:2001:gromacs}
-E. Lindahl, B. Hess, and D. van~der Spoel, J. Mol. Model. {\bf 7},  306
-  (2001).
+Lindahl E, Hess B, van~der Spoel D.
+\newblock {GROMACS} 3.0: a package for molecular simulation and trajectory
+  analysis.
+\newblock J Mol Model. 2001;7:306--317.
 
 \bibitem{krause:nejm:2005:tks-cancer}
-D.~S. Krause and R.~A. Van~Etten, New England Journal of Medicine {\bf 353},
-  172  (2005).
+Krause DS, Van~Etten RA.
+\newblock Tyrosine {Kinases} as {Targets} for {Cancer} {Therapy}.
+\newblock New England Journal of Medicine. 2005 Jul;353(2):172--187.
 
 \bibitem{greuber:2013:abl-cancer-review}
-E.~K. Greuber, P. Smith-Pearson, J. Wang, and A.~M. Pendergast, Nature Reviews
-  Cancer {\bf 13},  559  (2013).
+Greuber EK, Smith-Pearson P, Wang J, Pendergast AM.
+\newblock Role of {ABL} family kinases in cancer: from leukaemia to solid
+  tumours.
+\newblock Nature Reviews Cancer. 2013 Aug;13(8):559--571.
 
 \bibitem{kim:2009:src-cancer-review}
-L.~C. Kim, L. Song, and E.~B. Haura, Nature Reviews Clinical Oncology {\bf 6},
-  587  (2009).
+Kim LC, Song L, Haura EB.
+\newblock Src kinases as therapeutic targets for cancer.
+\newblock Nature Reviews Clinical Oncology. 2009 Oct;6(10):587--595.
 
 \bibitem{liu:ncb:2006:kinase-inhibitors-inactive-conformations}
-Y. Liu and N.~S. Gray, Nature Chemical Biology {\bf 2},  358  (2006).
+Liu Y, Gray NS.
+\newblock Rational design of inhibitors that bind to inactive kinase
+  conformations.
+\newblock Nature Chemical Biology. 2006 Jul;2(7):358--364.
 
 \bibitem{shukla-pande:nature-commun:2014:src-activation-msm}
-D. Shukla, Y. Meng, B. Roux, and V.~S. Pande, Nature Commun. {\bf 5},  3397
-  (2014).
+Shukla D, Meng Y, Roux B, Pande VS.
+\newblock Activation pathway of {Src} kinase reveals intermediate states as
+  targets for drug design.
+\newblock Nature Commun. 2014;5:3397.
 
 \bibitem{chothia-lesk:embo-j:1986:rmsd-sequence-identity-relation}
-C. Chothia and A.~M. Lesk, EMBO J. {\bf 5},  823  (1986).
+Chothia C, Lesk AM.
+\newblock The relation between the divergence of sequence and structure in
+  proteins.
+\newblock EMBO J. 1986;5:823--826.
 
 \bibitem{roux:pnas:2013:abl-imatinib}
-Y.-L. Lin, Y. Meng, W. Jiang, and B. Roux, Proc. Natl. Acad. Sci. USA {\bf
-  110},  1664  (2013).
+Lin YL, Meng Y, Jiang W, Roux B.
+\newblock Explaining why {Gleevec} is a specific and potent inhibitor of {Abl}
+  kinase.
+\newblock Proc Natl Acad Sci USA. 2013;110:1664.
 
 \bibitem{xu:1999:2src}
-W. Xu, A. Doshi, M. Lei, M.~J. Eck, and S.~C. Harrison, Molecular Cell {\bf 3},
-   629  (1999).
+Xu W, Doshi A, Lei M, Eck MJ, Harrison SC.
+\newblock Crystal {Structures} of c-{Src} {Reveal} {Features} of {Its}
+  {Autoinhibitory} {Mechanism}.
+\newblock Molecular Cell. 1999 May;3(5):629--638.
 
 \bibitem{cowan-jacob:2005:1y57}
-S.~W. Cowan-Jacob, G. Fendrich, P.~W. Manley, W. Jahnke, D. Fabbro, J.
-  Liebetanz, and T. Meyer, Structure {\bf 13},  861  (2005).
+Cowan-Jacob SW, Fendrich G, Manley PW, Jahnke W, Fabbro D, Liebetanz J, et~al.
+\newblock The {Crystal} {Structure} of a c-{Src} {Complex} in an {Active}
+  {Conformation} {Suggests} {Possible} {Steps} in c-{Src} {Activation}.
+\newblock Structure. 2005 Jun;13(6):861--871.
 
 \bibitem{young:2006:2f4j}
-M.~A. Young, N.~P. Shah, L.~H. Chao, M. Seeliger, Z.~V. Milanov, W.~H. Biggs,
-  D.~K. Treiber, H.~K. Patel, P.~P. Zarrinkar, D.~J. Lockhart, C.~L. Sawyers,
-  and J. Kuriyan, Cancer Research {\bf 66},  1007  (2006).
+Young MA, Shah NP, Chao LH, Seeliger M, Milanov ZV, Biggs WH, et~al.
+\newblock Structure of the {Kinase} {Domain} of an {Imatinib}-{Resistant} {Abl}
+  {Mutant} in {Complex} with the {Aurora} {Kinase} {Inhibitor} {VX}-680.
+\newblock Cancer Research. 2006 Jan;66(2):1007--1014.
 
 \bibitem{cowan-jacob:2006:2hyy}
-S.~W. Cowan-Jacob, G. Fendrich, A. Floersheimer, P. Furet, J. Liebetanz, G.
-  Rummel, P. Rheinberger, M. Centeleghe, D. Fabbro, and P.~W. Manley, Acta
-  Crystallographica Section D: Biological Crystallography {\bf 63},  80
-  (2006).
+Cowan-Jacob SW, Fendrich G, Floersheimer A, Furet P, Liebetanz J, Rummel G,
+  et~al.
+\newblock Structural biology contributions to the discovery of drugs to treat
+  chronic myelogenous leukaemia.
+\newblock Acta Crystallographica Section D: Biological Crystallography. 2006
+  Dec;63(Pt 1):80--93.
 
 \bibitem{levinson:2006:2g1t}
-N.~M. Levinson, O. Kuchment, K. Shen, M.~A. Young, M. Koldobskiy, M. Karplus,
-  P.~A. Cole, and J. Kuriyan, PLoS Biol {\bf 4},  e144  (2006).
+Levinson NM, Kuchment O, Shen K, Young MA, Koldobskiy M, Karplus M, et~al.
+\newblock A {Src}-{Like} {Inactive} {Conformation} in the {Abl} {Tyrosine}
+  {Kinase} {Domain}.
+\newblock PLoS Biol. 2006 May;4(5):e144.
 
 \bibitem{kannan:jmb:2005:kinase-regulation}
-N. Kannan and A.~F. Neuwald, Journal of Molecular Biology {\bf 351},  956
-  (2005).
+Kannan N, Neuwald AF.
+\newblock Did {Protein} {Kinase} {Regulatory} {Mechanisms} {Evolve} {Through}
+  {Elaboration} of a {Simple} {Structural} {Component}?
+\newblock Journal of Molecular Biology. 2005 Sep;351(5):956--972.
 
 \bibitem{foda:nat-comm:2015:src}
-Z.~H. Foda, Y. Shan, E.~T. Kim, D.~E. Shaw, and M.~A. Seeliger, Nature
-  Communications {\bf 6},  5939  (2015).
+Foda ZH, Shan Y, Kim ET, Shaw DE, Seeliger MA.
+\newblock A dynamically coupled allosteric network underlies binding
+  cooperativity in {Src} kinase.
+\newblock Nature Communications. 2015 Jan;6:5939.
 
 \bibitem{ozkirimli:prot-sci:2008:src}
-E. Ozkirimli, S.~S. Yadav, W.~T. Miller, and C.~B. Post, Protein Science : A
-  Publication of the Protein Society {\bf 17},  1871  (2008).
+Ozkirimli E, Yadav SS, Miller WT, Post CB.
+\newblock An electrostatic network and long-range regulation of {Src} kinases.
+\newblock Protein Science : A Publication of the Protein Society. 2008
+  Nov;17(11):1871--1880.
 
 \bibitem{Su:2006:flt4cancer}
-J.-L. Su, P.-C. Yang, J.-Y. Shih, C.-Y. Yang, L.-H. Wei, C.-Y. Hsieh, C.-H.
-  Chou, Y.-M. Jeng, M.-Y. Wang, K.-J. Chang, M.-C. Hung, and M.-L. Kuo, Cancer
-  Cell {\bf 9},  209  (2006).
+Su JL, Yang PC, Shih JY, Yang CY, Wei LH, Hsieh CY, et~al.
+\newblock The {VEGF}-{C}/{Flt}-4 axis promotes invasion and metastasis of
+  cancer cells.
+\newblock Cancer Cell. 2006 Mar;9(3):209--223.
 
 \bibitem{schnieders:biophys-j:2010:x-ray-refinement}
-T.~D. Fenn, M.~J. Schnieders, A.~T. Brunger, and V.~S. Pande, Biophysical
-  Journal {\bf 98},  2984  (2010).
+Fenn TD, Schnieders MJ, Brunger AT, Pande VS.
+\newblock Polarizable {Atomic} {Multipole} {X}-{Ray} {Refinement}: {Hydration}
+  {Geometry} and {Application} to {Macromolecules}.
+\newblock Biophysical Journal. 2010 Jun;98(12):2984--2992.
 
 \bibitem{schnieders:jctc:2011:space-group-pme}
-M.~J. Schnieders, T.~D. Fenn, and V.~S. Pande, Journal of Chemical Theory and
-  Computation {\bf 7},  1141  (2011).
+Schnieders MJ, Fenn TD, Pande VS.
+\newblock Polarizable {Atomic} {Multipole} {X}-{Ray} {Refinement}: {Particle}
+  {Mesh} {Ewald} {Electrostatics} for {Macromolecular} {Crystals}.
+\newblock Journal of Chemical Theory and Computation. 2011 Apr;7(4):1141--1156.
 
 \bibitem{nagar:cell:2003:abl-1opl}
-B. Nagar, O. Hantschel, M.~A. Young, K. Scheffzek, D. Veach, W. Bornmann, B.
-  Clarkson, G. Superti-Furga, and J. Kuriyan, Cell {\bf 112},  859  (2003).
+Nagar B, Hantschel O, Young MA, Scheffzek K, Veach D, Bornmann W, et~al.
+\newblock Structural {Basis} for the {Autoinhibition} of c-{Abl} {Tyrosine}
+  {Kinase}.
+\newblock Cell. 2003 Mar;112(6):859--871.
 
 \bibitem{shan:pnas:2009:abl}
-Y. Shan, M.~A. Seeliger, M.~P. Eastwood, F. Frank, H. Xu, M.~Ã. Jensen, R.~O.
-  Dror, J. Kuriyan, and D.~E. Shaw, Proceedings of the National Academy of
-  Sciences {\bf 106},  139  (2009).
+Shan Y, Seeliger MA, Eastwood MP, Frank F, Xu H, Jensen M{\O}, et~al.
+\newblock A conserved protonation-dependent switch controls drug binding in the
+  {Abl} kinase.
+\newblock Proceedings of the National Academy of Sciences. 2009
+  Jan;106(1):139--144.
 
 \bibitem{alexov-gunner:biophys-j:1997:mcce2}
-E.~G. Alexov and M.~R. Gunner, Biophys. J. {\bf 72},  2075  (1997).
+Alexov EG, Gunner MR.
+\newblock Incorporating protein conformational flexibility into the calculation
+  of {pH}-dependent protein properties.
+\newblock Biophys J. 1997;72:2075--2093.
 
 \bibitem{georgescu-alexov-gunner:biophys-j:2002:mcce2}
-R.~E. Georgescu, E.~G. Alexov, and M.~R. Gunner, Biophys. J. {\bf 83},  1731
-  (2002).
+Georgescu RE, Alexov EG, Gunner MR.
+\newblock Combining conformational flexibility and continuum electrostatics for
+  calculating p$K_a$s in proteins.
+\newblock Biophys J. 2002;83:1731--1748.
 
 \bibitem{song-mao-gunner:j-comput-chem:2009:mcce2}
-Y. Song, J. Mao, and M.~R. Gunner, J. Comput. Chem. {\bf 30},  2231  (2009).
+Song Y, Mao J, Gunner MR.
+\newblock {MCCE2}: Improving protein p$K_a$ calculations with extensive
+  sidechain rotamer sampling.
+\newblock J Comput Chem. 2009;30:2231--2247.
 
 \bibitem{adams:prot-sci:1993:kinase-metal-ions}
-J.~A. Adams and S.~S. Taylor, Protein Science {\bf 2},  2177  (1993).
+Adams JA, Taylor SS.
+\newblock Divalent metal ions influence catalysis and active-site accessibility
+  in the {cAMP}-dependent protein kinase.
+\newblock Protein Science. 1993 Dec;2(12):2177--2186.
 
 \bibitem{sousa:book:2010:metal-ion-parameters-difficulties}
-S.~F. Sousa, R.~A. Fernandes, and M.~J. Ramos,  in {\em Kinetics and
-  {Dynamics}: {From} {Nano}- to {Bio}-{Scale}}, Vol.~12 of {\em Challenges and
-  {Advances} in {Computational} {Chemistry} and {Physics}}, edited by P.~a.
-  D.-D.~A. Paneth (Springer Science \& Business Media, Berlin, 2010), p.\ 530.
+Sousa SF, Fernandes RA, Ramos MJ.
+\newblock Molecular {Dynamics} {Simulations}: {Difficulties}, {Solutions} and
+  {Strategies} for {Treating} {Metalloenzymes}.
+\newblock In: Paneth PaDDA, editor. Kinetics and {Dynamics}: {From} {Nano}- to
+  {Bio}-{Scale}. vol.~12 of Challenges and {Advances} in {Computational}
+  {Chemistry} and {Physics}. Berlin: Springer Science \& Business Media; 2010.
+  p. 530.
 
 \bibitem{gaff}
-J. Wang, R.~M. Wolf, J.~W. Caldwell, P.~A. Kollman, and D.~A. Case, J. Comput.
-  Chem. {\bf 25},  1157  (2004).
+Wang J, Wolf RM, Caldwell JW, Kollman PA, Case DA.
+\newblock Development and testing of a general {AMBER} force field.
+\newblock J Comput Chem. 2004;25:1157--1174.
 
 \bibitem{gaff2}
-J. Wang, W. Wang, P.~A. Kollman, and D.~A. Case, J. Mol. Graph Model. {\bf 25},
-   247260  (2006).
+Wang J, Wang W, Kollman PA, Case DA.
+\newblock Automatic atom type and bond type perception in molecular mechanics
+  calculations.
+\newblock J Mol Graph Model. 2006;25:247260.
 
 \end{thebibliography}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% APPENDICES
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\onecolumngrid
-\newpage
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE: Sequences and residue numbering schemes for Src and Abl1
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tb]
-
-\begin{centering}
-\emph{Human Abl1 sequence}
-
-\end{centering}
-
-\begin{alltt}
-1     MLEICLKLVG CKSKKGLSSS SSCYLEEALQ RPVASDFEPQ GLSEAARWNS KENLLAGPSE    60
-61    NDPNLFVALY DFVASGDNTL SITKGEKLRV LGYNHNGEWC EAQTKNGQGW VPSNYITPVN   120
-121   SLEKHSWYHG PVSRNAAEYL LSSGINGSFL VRESESSPGQ RSISLRYEGR VYHYRINTAS   180
-181   DGKLYVSSES RFNTLAELVH HHSTVADGLI TTLHYPAPKR NKPTVYGVSP NYDKWEMERT   240
-241   D{\color{red}ITMKHKLGG GQYGEVYEGV WKKYSLTVAV {\setlength{\fboxsep}{0pt}\colorbox{yellow}{K}}TLKEDTMEV EEFLK{\setlength{\fboxsep}{0pt}\colorbox{yellow}{E}}AAVM KEIKHPNLVQ}   300
-301   {\color{red}LLGVCTREPP FYIITEFMTY GNLLDYLREC NRQEVNAVVL LYMATQISSA MEYLEKKNFI}   360
-361   {\color{red}HRDLAARNCL VGENHLVKVA DFGLS{\setlength{\fboxsep}{0pt}\colorbox{yellow}{R}}LMTG DTYTAHAGAK FPIKWTAPES LAYNKFSIKS}   420
-421   {\color{red}DVWAFGVLLW EIATYGMSPY PGIDLSQVYE LLEKDYRMER PEGCPEKVYE LMRACWQWNP}   480
-481   {\color{red}SDRPSFAEIH QAF}ETMFQES SISDEVEKEL GKQGVRGAVS TLLQAPELPT KTRTSRRAAE   540
-541   HRDTTDVPEM PHSKGQGESD PLDHEPAVSP LLPRKERGPP EGGLNEDERL LPKDKKTNLF   600
-601   SALIKKKKKT APTPPKRSSS FREMDGQPER RGAGEEEGRD ISNGALAFTP LDTADPAKSP   660
-661   KPSNGAGVPN GALRESGGSG FRSPHLWKKS STLTSSRLAT GEEEGGGSSS KRFLRSCSAS   720
-721   CVPHGAKDTE WRSVTLPRDL QSTGRQFDSS TFGGHKSEKP ALPRKRAGEN RSDQVTRGTV   780
-781   TPPPRLVKKN EEAADEVFKD IMESSPGSSP PNLTPKPLRR QVTVAPASGL PHKEEAGKGS   840
-841   ALGTPAAAEP VTPTSKAGSG APGGTSKGPA EESRVRRHKH SSESPGRDKG KLSRLKPAPP   900
-901   PPPAASAGKA GGKPSQSPSQ EAAGEAVLGA KTKATSLVDA VNSDAAKPSQ PGEGLKKPVL   960
-961   PATPKPQSAK PSGTPISPAP VPSTLPSASS ALAGDQPSST AFIPLISTRV SLRKTRQPPE  1020
-1021  RIASGAITKG VVLDSTEALC LAISRNSEQM ASHSAVLEAG KNLYTFCVSY VDSIQQMRNK  1080
-1081  FAFREAINKL ENNLRELQIC PATAGSGPAA TQDFSKLLSS VKEISDIVQR             1130
-\end{alltt}
-
-\begin{centering}
-\emph{Sequences for human and chicken Src, aligned using Clustal Omega}
-
-\end{centering}
-
-\begin{alltt}
-SRC_HUMAN   1     MGSNKSKPKD ASQRRRSLEP AENVHGAGGG AFPASQTPSK PASADGHRGP SAAFAPAAAE    60
-SRC_CHICK   1     MGSSKSKPKD PSQRRRSLEP PDSTH---HG GFPASQTPNK TAAPDTHRTP SRSFGTVATE    57
-                  ***.******  *********  :..*    * .*******.*  *: * ** * * :*. .*:*  
-SRC_HUMAN   61    PKLFGGFNSS DTVTSPQRAG PLAGGVTTFV ALYDYESRTE TDLSFKKGER LQIVNNTEGD   120
-SRC_CHICK   58    PKLFGGFNTS DTVTSPQRAG ALAGGVTTFV ALYDYESRTE TDLSFKKGER LQIVNNTEGD   117
-                  ********:* **********  ********* ********** ********** **********  
-SRC_HUMAN   121   WWLAHSLSTG QTGYIPSNYV APSDSIQAEE WYFGKITRRE SERLLLNAEN PRGTFLVRES   180
-SRC_CHICK   118   WWLAHSLTTG QTGYIPSNYV APSDSIQAEE WYFGKITRRE SERLLLNPEN PRGTFLVRES   177
-                  *******:** ********** ********** ********** ******* ** **********  
-SRC_HUMAN   181   ETTKGAYCLS VSDFDNAKGL NVKHYKIRKL DSGGFYITSR TQFNSLQQLV AYYSKHADGL   240
-SRC_CHICK   178   ETTKGAYCLS VSDFDNAKGL NVKHYKIRKL DSGGFYITSR TQFSSLQQLV AYYSKHADGL   237
-                  ********** ********** ********** ********** ***.****** **********  
-SRC_HUMAN   241   CHRLTTVCPT SKPQTQGLAK DAWEIPRES{\color{red}L RLEVKLGQGC FGEVWMGTWN GTTRVAI{\setlength{\fboxsep}{0pt}\colorbox{yellow}{K}}TL}   300
-SRC_CHICK   238   CHRLTNVCPT SKPQTQGLAK DAWEIPRES{\color{red}L RLEVKLGQGC FGEVWMGTWN GTTRVAI{\setlength{\fboxsep}{0pt}\colorbox{yellow}{K}}TL}   297
-                  *****.**** ********** ********** ********** ********** **********  
-SRC_HUMAN   301   {\color{red}KPGTMSPEAF LQ{\setlength{\fboxsep}{0pt}\colorbox{yellow}{E}}AQVMKKL RHEKLVQLYA VVSEEPIYIV TEYMSKGSLL DFLKGETGKY}   360
-SRC_CHICK   298   {\color{red}KPGTMSPEAF LQ{\setlength{\fboxsep}{0pt}\colorbox{yellow}{E}}AQVMKKL RHEKLVQLYA VVSEEPIYIV TEYMSKGSLL DFLKGEMGKY}   357
-                  ********** ********** ********** ********** ********** ****** ***  
-SRC_HUMAN   361   {\color{red}LRLPQLVDMA AQIASGMAYV ERMNYVHRDL RAANILVGEN LVCKVADFGL A{\setlength{\fboxsep}{0pt}\colorbox{yellow}{R}}LIEDNEYT}   420
-SRC_CHICK   358   {\color{red}LRLPQLVDMA AQIASGMAYV ERMNYVHRDL RAANILVGEN LVCKVADFGL A{\setlength{\fboxsep}{0pt}\colorbox{yellow}{R}}LIEDNEYT}   417
-                  ********** ********** ********** ********** ********** **********  
-SRC_HUMAN   421   {\color{red}ARQGAKFPIK WTAPEAALYG RFTIKSDVWS FGILLTELTT KGRVPYPGMV NREVLDQVER}   480
-SRC_CHICK   418   {\color{red}ARQGAKFPIK WTAPEAALYG RFTIKSDVWS FGILLTELTT KGRVPYPGMV NREVLDQVER}   477
-                  ********** ********** ********** ********** ********** **********  
-SRC_HUMAN   481   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKEPEERP TFEYLQAFLE DYF}TSTEPQY QPGENL       536
-SRC_CHICK   478   {\color{red}GYRMPCPPEC PESLHDLMCQ CWRKDPEERP TFEYLQAFLE DYF}TSTEPQY QPGENL       533
-                  ********** ********** ****:***** ********** ********** ******
-\end{alltt}
-
-    \caption{{\bf Sequences and residue numbering schemes for Src and Abl1.}
-Kinase catalytic domains are highlighted in red, and the conserved residues analyzed in the main text (Figs.~\ref{figure:src-ref-structures} and~\ref{figure:pair-distances}) are highlighted with yellow background.
-  }
-  \label{figure:residue-numbering-schemes}
-\end{figure}
 
 \end{document}
+

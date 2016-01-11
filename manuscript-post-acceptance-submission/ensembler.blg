@@ -1,54 +1,126 @@
 This is BibTeX, Version 0.99d (TeX Live 2014)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: ensembler.aux
-The style file: prsty.bst
-Reallocated singl_function (elt_size=4) to 100 items from 50.
-Reallocated singl_function (elt_size=4) to 100 items from 50.
-Database file #1: ensemblerNotes.bib
-Database file #2: ensembler.bib.bib
-Warning--Warning: volume missing in entry pronk:2015:copernicus.
-Warning--Warning: pages missing in entry pronk:2015:copernicus.
-Warning--Warning: volume missing in entry mdtraj.
-Warning--Warning: pages missing in entry mdtraj.
-You've used 75 entries,
-            1909 wiz_defined-function locations,
-            949 strings with 21712 characters,
-and the built_in function-call counts, 18521 in all, are:
-= -- 526
-> -- 1436
+The style file: plos2015.bst
+I found no \bibdata command---while reading file ensembler.aux
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--I didn't find a database entry for "craik:science:2009:trapping-moving-targets"
+Warning--I didn't find a database entry for "eastman:jctc:2012:openmm"
+Warning--I didn't find a database entry for "walker:jctc:2013:amber-gpu"
+Warning--I didn't find a database entry for "shirts-pande:science:2000:fah"
+Warning--I didn't find a database entry for "pronk:2011:copernicus"
+Warning--I didn't find a database entry for "pronk:2015:copernicus"
+Warning--I didn't find a database entry for "buch:2010:gpugrid"
+Warning--I didn't find a database entry for "pande-beauchamp-bowman:2010:methods:markov-model-review"
+Warning--I didn't find a database entry for "noe:jcp:2011:msm-review"
+Warning--I didn't find a database entry for "chodera-noe:curr-opin-struct-biol:2014:msm-review"
+Warning--I didn't find a database entry for "moult:proteins:2014:casp10"
+Warning--I didn't find a database entry for "baker:science:2001:structure-prediction-review"
+Warning--I didn't find a database entry for "baker:structure:2013:rosettacm"
+Warning--I didn't find a database entry for "yang:nature-methods:2015:i-tasser-suite"
+Warning--I didn't find a database entry for "daggett:structure:2010:dynameomics"
+Warning--I didn't find a database entry for "friedland:plos-comput-biol:2009:conformational-dynamics"
+Warning--I didn't find a database entry for "sali:2012:allostery-modeling"
+Warning--I didn't find a database entry for "msmbuilder"
+Warning--I didn't find a database entry for "caflisch:jpcb:2011:msm-subgraph"
+Warning--I didn't find a database entry for "uniprot:2015"
+Warning--I didn't find a database entry for "velankar:2013:sifts"
+Warning--I didn't find a database entry for "qian:nature:2007:modeller"
+Warning--I didn't find a database entry for "wang:jmb:2007:modeller"
+Warning--I didn't find a database entry for "fiser:prot-sci:2000:modeller"
+Warning--I didn't find a database entry for "sali:jmb:1993:modeller"
+Warning--I didn't find a database entry for "cock:2009:biopython"
+Warning--I didn't find a database entry for "gonnet:science:1992:exhaustive-matching"
+Warning--I didn't find a database entry for "thompson:2011:msa-review"
+Warning--I didn't find a database entry for "pei:2008:promals3d"
+Warning--I didn't find a database entry for "expresso"
+Warning--I didn't find a database entry for "3dcoffee"
+Warning--I didn't find a database entry for "mdtraj"
+Warning--I didn't find a database entry for "theobald:acta-cryst-a:2005:qcp"
+Warning--I didn't find a database entry for "theobald:j-comput-chem:2010:qcp"
+Warning--I didn't find a database entry for "theobald:j-comput-chem:2011:qcp"
+Warning--I didn't find a database entry for "maccallum:prot:2011:casp-refinement"
+Warning--I didn't find a database entry for "zhang:curr-opin-struct-biol:2009:structure-prediction"
+Warning--I didn't find a database entry for "raval:prot:2012:long-timescale-md-refinement"
+Warning--I didn't find a database entry for "lbfgs"
+Warning--I didn't find a database entry for "amber99sb-ildn"
+Warning--I didn't find a database entry for "gbsa-obc1"
+Warning--I didn't find a database entry for "basconi:jctc:2013:collision-rates"
+Warning--I didn't find a database entry for "tip3p"
+Warning--I didn't find a database entry for "tip4p-ew"
+Warning--I didn't find a database entry for "molprobity:2007"
+Warning--I didn't find a database entry for "molprobity:2010"
+Warning--I didn't find a database entry for "berendsen:1995:gromacs"
+Warning--I didn't find a database entry for "lindahl:2001:gromacs"
+Warning--I didn't find a database entry for "krause:nejm:2005:tks-cancer"
+Warning--I didn't find a database entry for "greuber:2013:abl-cancer-review"
+Warning--I didn't find a database entry for "kim:2009:src-cancer-review"
+Warning--I didn't find a database entry for "liu:ncb:2006:kinase-inhibitors-inactive-conformations"
+Warning--I didn't find a database entry for "shukla-pande:nature-commun:2014:src-activation-msm"
+Warning--I didn't find a database entry for "chothia-lesk:embo-j:1986:rmsd-sequence-identity-relation"
+Warning--I didn't find a database entry for "roux:pnas:2013:abl-imatinib"
+Warning--I didn't find a database entry for "xu:1999:2src"
+Warning--I didn't find a database entry for "cowan-jacob:2005:1y57"
+Warning--I didn't find a database entry for "young:2006:2f4j"
+Warning--I didn't find a database entry for "cowan-jacob:2006:2hyy"
+Warning--I didn't find a database entry for "levinson:2006:2g1t"
+Warning--I didn't find a database entry for "kannan:jmb:2005:kinase-regulation"
+Warning--I didn't find a database entry for "foda:nat-comm:2015:src"
+Warning--I didn't find a database entry for "ozkirimli:prot-sci:2008:src"
+Warning--I didn't find a database entry for "Su:2006:flt4cancer"
+Warning--I didn't find a database entry for "schnieders:biophys-j:2010:x-ray-refinement"
+Warning--I didn't find a database entry for "schnieders:jctc:2011:space-group-pme"
+Warning--I didn't find a database entry for "nagar:cell:2003:abl-1opl"
+Warning--I didn't find a database entry for "shan:pnas:2009:abl"
+Warning--I didn't find a database entry for "alexov-gunner:biophys-j:1997:mcce2"
+Warning--I didn't find a database entry for "georgescu-alexov-gunner:biophys-j:2002:mcce2"
+Warning--I didn't find a database entry for "song-mao-gunner:j-comput-chem:2009:mcce2"
+Warning--I didn't find a database entry for "adams:prot-sci:1993:kinase-metal-ions"
+Warning--I didn't find a database entry for "sousa:book:2010:metal-ion-parameters-difficulties"
+Warning--I didn't find a database entry for "gaff"
+Warning--I didn't find a database entry for "gaff2"
+You've used 0 entries,
+            3170 wiz_defined-function locations,
+            713 strings with 6467 characters,
+and the built_in function-call counts, 30 in all, are:
+= -- 0
+> -- 0
 < -- 0
-+ -- 454
-- -- 379
-* -- 1928
-:= -- 2559
-add.period$ -- 75
-call.type$ -- 75
++ -- 0
+- -- 0
+* -- 2
+:= -- 19
+add.period$ -- 0
+call.type$ -- 0
 change.case$ -- 0
 chr.to.int$ -- 0
-cite$ -- 79
-duplicate$ -- 768
-empty$ -- 1465
-format.name$ -- 455
-if$ -- 4310
+cite$ -- 0
+duplicate$ -- 0
+empty$ -- 1
+format.name$ -- 0
+if$ -- 1
 int.to.chr$ -- 0
-int.to.str$ -- 75
+int.to.str$ -- 0
 missing$ -- 0
-newline$ -- 228
-num.names$ -- 76
-pop$ -- 456
+newline$ -- 3
+num.names$ -- 0
+pop$ -- 0
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 1147
+skip$ -- 1
 stack$ -- 0
-substring$ -- 869
-swap$ -- 531
+substring$ -- 0
+swap$ -- 0
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 18
-warning$ -- 4
-while$ -- 153
-width$ -- 77
-write$ -- 377
-(There were 4 warnings)
+type$ -- 0
+warning$ -- 0
+while$ -- 0
+width$ -- 0
+write$ -- 2
+(There was 1 error message)
