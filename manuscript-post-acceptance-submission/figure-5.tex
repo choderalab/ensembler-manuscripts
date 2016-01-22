@@ -4,6 +4,7 @@
 \usepackage[active,tightpage]{preview}
 
 \pdfoutput=1
+\usepackage[textwidth=3.75in]{geometry}
 \usepackage[pdftex]{graphicx}
 
 % The figures are in a figures/ subdirectory.
@@ -42,29 +43,23 @@
 %  \label{figure:sequence-identity-distribution}
 %\end{figure}
 %
-%\begin{figure}[h]
-%    % \centering
-%    % {\label{figure:rmsd-distribution-joint}%
-%    %    \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2-joint.pdf}
-%    % }
-%
-%    % {\label{figure:rmsd-distribution-by-sequence-identity}%
-%    %    \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2.pdf}
-%    % }
-%
-%    \caption{{\bf Distribution of RMSDs to all TK catalytic domain models relative to the model derived from the highest sequence identity template.}    
-%    Distributions are built from data from all 93 TK domain targets.
-%    To better illustrate how conformational similarity depends on sequence identity, the lower plot illustrates the distributions as stratified into three sequence identity classes: high identity (55--100\%), moderate identity (35--55\%), and remote identity (0--35\%).
-%    The plotted distributions have been smoothed using kernel density estimation.
-%  }
-%  \label{figure:rmsd-distributions}
-%\end{figure}
-%
 \begin{figure}[h]
-    \includegraphics[width=1.0\columnwidth]{energies/energies.pdf}
-  \label{figure:energies-implicit}
+     \centering
+    {\label{figure:rmsd-distribution-joint}%
+        \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2-joint.pdf}
+     }
+
+     {\label{figure:rmsd-distribution-by-sequence-identity}%
+        \includegraphics[height=0.6\textwidth]{rmsddist/rmsddist2.pdf}
+     }
+  \label{figure:rmsd-distributions}
 \end{figure}
 %
+%\begin{figure}[h]
+%    \includegraphics[width=1.0\columnwidth]{energies/energies.pdf}
+%  \label{figure:energies-implicit}
+%\end{figure}
+%%
 %begin{figure}[h]
 %    % \includegraphics[width=1.0\columnwidth]{superposition-src_abl/superposed-seqid_classes-clustered-one_fig}
 %    
